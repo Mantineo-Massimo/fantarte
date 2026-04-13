@@ -338,6 +338,7 @@ export default function LeaderboardsPage() {
                                                 </div>
                                                 <span className="text-xl font-black text-white/40">{artist.totalScore} <span className="text-[10px]">pt</span></span>
                                             </div>
+                                        ))}
                                     </div>
                                 </section>
 
