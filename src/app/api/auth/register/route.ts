@@ -1,3 +1,9 @@
+import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import bcrypt from "bcrypt";
+import crypto from "crypto";
+import { sendEmail } from "@/lib/email";
+import { verificationEmail } from "@/lib/email-templates";
 import { checkRateLimit, sanitizeInput, isBot } from "@/lib/security";
 
 export async function POST(req: Request) {

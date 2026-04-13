@@ -1,3 +1,7 @@
+import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import crypto from "crypto";
+import { sendEmail } from "@/lib/email";
 import { checkRateLimit } from "@/lib/security";
 
 export async function POST(req: Request) {
