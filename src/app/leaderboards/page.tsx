@@ -172,10 +172,10 @@ export default function LeaderboardsPage() {
                                                 onClick={() => setSelectedTeam(t)}
                                                 className="hover:bg-white/[0.03] transition-all cursor-pointer group"
                                             >
-                                                <td className="px-10 py-8">
-                                                    <div className="flex items-center gap-4">
+                                                <td className="px-4 py-6 md:px-10 md:py-8">
+                                                    <div className="flex items-center gap-2 md:gap-4">
                                                         {index < 3 ? (
-                                                            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-black text-xl shadow-lg ${
+                                                            <div className={`w-8 h-8 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center font-black text-sm md:text-xl shadow-lg flex-shrink-0 ${
                                                                 index === 0 ? "bg-gradient-to-br from-yellow-300 to-oro text-blunotte" :
                                                                 index === 1 ? "bg-gradient-to-br from-gray-200 to-gray-400 text-blunotte" :
                                                                 "bg-gradient-to-br from-amber-600 to-ocra text-white"
@@ -183,7 +183,7 @@ export default function LeaderboardsPage() {
                                                                 {index + 1}
                                                             </div>
                                                         ) : (
-                                                            <span className="font-black text-2xl text-white/5 ml-4 group-hover:text-white/20 transition-colors">#{index + 1}</span>
+                                                            <span className="font-black text-lg md:text-2xl text-white/5 md:ml-4 group-hover:text-white/20 transition-colors">#{index + 1}</span>
                                                         )}
                                                     </div>
                                                 </td>
