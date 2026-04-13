@@ -78,8 +78,8 @@ export default function LoginPage() {
                             required
                         />
                     </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Password</label>
+                    <div className="flex flex-col gap-2">
+                        <label className="block text-sm font-medium text-gray-300">Password</label>
                         <input
                             type="password"
                             value={data.password}
@@ -87,13 +87,18 @@ export default function LoginPage() {
                             className="w-full bg-[#0a0f1c] border border-gray-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-oro focus:ring-1 focus:ring-oro transition-all"
                             required
                         />
+                        <div className="text-right">
+                            <Link href="/auth/forgot-password" size="sm" className="text-xs text-gray-500 hover:text-oro transition-colors font-medium">
+                                Password dimenticata?
+                            </Link>
+                        </div>
                     </div>
 
-                    {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+                    {error && <p className="text-red-500 text-sm text-center font-bold bg-red-900/10 py-2 rounded-xl border border-red-500/20">{error}</p>}
 
                     <button
                         type="submit"
-                        className="w-full py-3.5 rounded-xl bg-gradient-to-r from-ocra to-oro text-blunotte font-bold text-lg hover:opacity-90 transition-opacity shadow-[0_0_15px_rgba(204,119,34,0.3)] mt-4"
+                        className="w-full py-3.5 rounded-xl bg-gradient-to-r from-ocra to-oro text-blunotte font-bold text-lg hover:opacity-90 transition-opacity shadow-[0_0_15px_rgba(204,119,34,0.3)] mt-2"
                     >
                         Entra
                     </button>
