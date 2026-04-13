@@ -24,8 +24,8 @@ function SponsorItem({ sponsor }: { sponsor: Sponsor }) {
                         onError={() => setImgError(true)}
                     />
                 ) : (
-                    <div className="px-6 py-4 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center">
-                         <span className="text-oro font-black uppercase tracking-widest text-[10px] text-center leading-tight">
+                    <div className="px-6 py-4 rounded-xl border border-white/30 bg-white/20 flex items-center justify-center shadow-[0_15px_40px_rgba(0,0,0,0.6)] group-hover:border-oro/60 transition-all backdrop-blur-md">
+                         <span className="text-oro font-black uppercase tracking-widest text-xs text-center leading-tight">
                             {sponsor.name}
                          </span>
                     </div>

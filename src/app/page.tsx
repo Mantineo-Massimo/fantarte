@@ -38,7 +38,7 @@ export default function Home() {
 
         <motion.div 
           style={{ y: y1 }}
-          className="relative z-10 w-full max-w-7xl px-6 flex flex-col items-center text-center space-y-12"
+          className="relative z-10 w-full max-w-7xl px-6 flex flex-col items-center text-center space-y-6 md:space-y-8"
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
@@ -50,9 +50,9 @@ export default function Home() {
             <Image
               src="/fanta-logo.png"
               alt="FantaPiazza Logo"
-              width={800}
-              height={300}
-              className="w-full max-w-3xl mx-auto drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] glow-oro group-hover:scale-105 transition-transform duration-700"
+              width={500}
+              height={180}
+              className="w-full max-w-[280px] md:max-w-md lg:max-w-lg mx-auto drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] glow-oro group-hover:scale-105 transition-transform duration-700"
               priority
             />
           </motion.div>
@@ -78,7 +78,7 @@ export default function Home() {
               transition={{ delay: 0.7, duration: 0.5 }}
               className="glass px-10 py-8 rounded-[3rem] border-white/5 shadow-2xl relative"
             >
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-oro text-blunotte text-[10px] font-black px-4 py-1 rounded-full uppercase tracking-widest shadow-lg">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-oro text-blunotte text-[9px] font-black px-3 py-0.5 rounded-full uppercase tracking-widest shadow-lg">
                 Chiusura Mercato
               </div>
               <CountdownTimer targetDate={deadline} />
@@ -89,7 +89,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1, duration: 0.8 }}
-            className="flex flex-col sm:flex-row gap-6 pt-10 items-center justify-center w-full"
+            className="flex flex-col sm:flex-row gap-3 pt-4 items-center justify-center w-full"
           >
             {session ? (
               <>
@@ -106,7 +106,7 @@ export default function Home() {
                 </Link>
                 <Link
                   href="/leaderboards"
-                  className="px-12 py-5 rounded-2xl bg-white/5 border border-white/10 text-white font-black text-xl flex items-center gap-3 hover:bg-white/10 transition-all hover:-translate-y-1"
+                  className="px-10 py-4 rounded-2xl bg-white/5 border border-white/10 text-white font-black text-lg flex items-center gap-3 hover:bg-white/10 transition-all hover:-translate-y-1"
                 >
                   <FiAward className="text-oro" />
                   Ranking
@@ -118,7 +118,7 @@ export default function Home() {
                   <>
                     <Link
                       href="/auth/register"
-                      className="group relative overflow-hidden px-12 py-5 rounded-2xl bg-gradient-to-r from-oro to-ocra text-blunotte font-black text-xl shadow-[0_20px_40px_rgba(255,215,0,0.2)] hover:shadow-[0_25px_60px_rgba(255,215,0,0.3)] hover:-translate-y-1 transition-all"
+                      className="group relative overflow-hidden px-10 py-4 rounded-2xl bg-gradient-to-r from-oro to-ocra text-blunotte font-black text-lg shadow-[0_20px_40px_rgba(255,215,0,0.2)] hover:shadow-[0_25px_60px_rgba(255,215,0,0.3)] hover:-translate-y-1 transition-all"
                     >
                       Partecipa Ora
                     </Link>
