@@ -6,7 +6,7 @@ import Image from "next/image";
 interface Sponsor {
     id: string;
     name: string;
-    logo: string;
+    logoUrl: string;
 }
 
 function SponsorItem({ sponsor }: { sponsor: Sponsor }) {
@@ -15,9 +15,9 @@ function SponsorItem({ sponsor }: { sponsor: Sponsor }) {
     return (
         <div className="flex-shrink-0 flex flex-col items-center justify-center grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-500 group">
             <div className="relative h-12 md:h-20 w-32 md:w-56 flex items-center justify-center">
-                {!imgError && sponsor.logo ? (
+                {!imgError && sponsor.logoUrl ? (
                     <Image
-                        src={sponsor.logo}
+                        src={sponsor.logoUrl}
                         alt={sponsor.name}
                         fill
                         className="object-contain"
