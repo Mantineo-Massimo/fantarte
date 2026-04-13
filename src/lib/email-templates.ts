@@ -6,7 +6,7 @@
 const APP_COLOR_GOLD = "#bc9c5d";
 const APP_COLOR_DARK_BLUE = "#0a0f1c";
 
-const BASE_URL = process.env.NEXTAUTH_URL || "https://fantapiazza.it";
+const BASE_URL = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_SITE_URL || "https://fantapiazza.it";
 
 /**
  * Modern HTML wrapper for all FantaPiazza emails.
