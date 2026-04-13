@@ -18,6 +18,12 @@ export async function GET() {
                                 name: true,
                                 image: true,
                                 captainId: true,
+                                user: {
+                                    select: {
+                                        name: true,
+                                        surname: true
+                                    }
+                                },
                                 artists: {
                                     select: {
                                         id: true,

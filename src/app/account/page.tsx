@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { FiUser, FiMail, FiLock, FiCheck, FiX, FiActivity, FiShield, FiSave, FiCamera } from "react-icons/fi";
 import ImageCropper from "@/components/ImageCropper";
 import Image from "next/image";

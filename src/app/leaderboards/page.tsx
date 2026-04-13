@@ -30,6 +30,10 @@ type TeamResult = {
         image?: string | null;
         artists: Artist[];
         captainId?: string | null;
+        user?: {
+            name: string | null;
+            surname: string | null;
+        };
     };
 };
 
@@ -194,7 +198,13 @@ export default function LeaderboardsPage() {
                                                         </div>
                                                         <div>
                                                             <h3 className="text-xl font-black group-hover:text-oro transition-colors">{t.team.name}</h3>
-                                                            <span className="text-[10px] uppercase font-black tracking-widest text-white/20">Team Manager</span>
+                                                            {t.team.user ? (
+                                                                <span className="text-[10px] uppercase font-black tracking-widest text-oro/60">
+                                                                    {t.team.user.name} {t.team.user.surname}
+                                                                </span>
+                                                            ) : (
+                                                                <span className="text-[10px] uppercase font-black tracking-widest text-white/20">Manager d&apos;Elite</span>
+                                                            )}
                                                         </div>
                                                     </div>
                                                 </td>
@@ -288,7 +298,9 @@ export default function LeaderboardsPage() {
                                     </div>
                                     <div>
                                         <h2 className="text-4xl font-black">{selectedTeam.team.name}</h2>
-                                        <span className="text-oro font-black uppercase tracking-widest text-[10px]">Profilo Squadra</span>
+                                        <span className="text-oro font-black uppercase tracking-widest text-[10px]">
+                                            {selectedTeam.team.user ? `${selectedTeam.team.user.name} ${selectedTeam.team.user.surname}` : 'Profilo Squadra'}
+                                        </span>
                                     </div>
                                 </div>
                                 <button onClick={() => setSelectedTeam(null)} className="p-3 bg-white/5 rounded-full hover:bg-white/10 transition-all text-gray-400 hover:text-white">
