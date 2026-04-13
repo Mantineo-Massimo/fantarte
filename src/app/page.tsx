@@ -32,9 +32,20 @@ export default function Home() {
     <main className="min-h-screen bg-blunotte selection:bg-oro/30 selection:text-white">
       {/* --- HERO SECTION --- */}
       <section className="relative min-h-screen flex flex-col items-center justify-center pt-20 pb-40">
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+           <Image 
+             src="/background.png" 
+             alt="Hero Background" 
+             fill 
+             className="object-cover opacity-30 mix-blend-overlay"
+             priority 
+           />
+           <div className="absolute inset-0 bg-gradient-to-b from-blunotte/0 via-blunotte/50 to-blunotte"></div>
+        </div>
+
         {/* Animated Orbs for depth */}
-        <div className="absolute top-[20%] left-[-5%] w-[40%] h-[40%] bg-viola/20 rounded-full blur-[150px] pointer-events-none"></div>
-        <div className="absolute bottom-[20%] right-[-5%] w-[40%] h-[40%] bg-oro/10 rounded-full blur-[150px] pointer-events-none"></div>
+        <div className="absolute top-[20%] left-[-5%] w-[40%] h-[40%] bg-viola/20 rounded-full blur-[150px] animate-pulse pointer-events-none"></div>
+        <div className="absolute bottom-[20%] right-[-5%] w-[40%] h-[40%] bg-oro/10 rounded-full blur-[150px] animate-pulse pointer-events-none" style={{ animationDelay: '2s' }}></div>
 
         <motion.div 
           style={{ y: y1 }}
