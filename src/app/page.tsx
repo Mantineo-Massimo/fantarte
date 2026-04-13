@@ -31,7 +31,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-blunotte selection:bg-oro/30 selection:text-white">
       {/* --- HERO SECTION --- */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center pt-20 overflow-hidden">
+      <section className="relative min-h-screen flex flex-col items-center justify-center pt-20 pb-40">
         {/* Animated Orbs for depth */}
         <div className="absolute top-[20%] left-[-5%] w-[40%] h-[40%] bg-viola/20 rounded-full blur-[150px] animate-pulse pointer-events-none"></div>
         <div className="absolute bottom-[20%] right-[-5%] w-[40%] h-[40%] bg-oro/10 rounded-full blur-[150px] animate-pulse pointer-events-none" style={{ animationDelay: '2s' }}></div>
@@ -118,7 +118,7 @@ export default function Home() {
                   <>
                     <Link
                       href="/auth/register"
-                      className="group relative overflow-hidden px-10 py-4 rounded-2xl bg-gradient-to-r from-oro to-ocra text-blunotte font-black text-lg shadow-[0_20px_40px_rgba(255,215,0,0.2)] hover:shadow-[0_25px_60px_rgba(255,215,0,0.3)] hover:-translate-y-1 transition-all"
+                      className="group relative px-10 py-4 rounded-2xl bg-gradient-to-r from-oro to-ocra text-blunotte font-black text-lg shadow-[0_20px_40px_rgba(255,215,0,0.2)] hover:shadow-[0_25px_60px_rgba(255,215,0,0.3)] hover:-translate-y-1 transition-all"
                     >
                       Partecipa Ora
                     </Link>
