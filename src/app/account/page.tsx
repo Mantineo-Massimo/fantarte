@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { motion } from "framer-motion";
-import { FiUser, FiMail, FiLock, FiCheck, FiX, FiActivity } from "react-icons/fi";
+import { FiUser, FiMail, FiLock, FiCheck, FiX, FiActivity, FiShield, FiSave } from "react-icons/fi";
 
 export default function AccountPage() {
     const { data: session, update } = useSession();
@@ -65,9 +65,7 @@ export default function AccountPage() {
                 throw new Error(await res.text() || "Errore durante l'aggiornamento");
             }
 
-            // Update session
             await update({ name: `${profile.name} ${profile.surname}`.trim() });
-
             setSuccess("Profilo aggiornato con successo!");
             setTimeout(() => setSuccess(""), 4000);
         } catch (err: any) {
@@ -99,10 +97,10 @@ export default function AccountPage() {
             });
 
             if (!res.ok) {
-                throw new Error(await res.text() || "Errore durante il cambio password");
+                throw new Error(await res.text() || "Errore nel cambio password");
             }
 
-            setSuccess("Password cambiata con successo!");
+            setSuccess("Sicurezza aggiornata!");
             setPasswords({
                 currentPassword: "",
                 newPassword: "",
@@ -119,183 +117,192 @@ export default function AccountPage() {
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center text-white">
-                <div className="flex flex-col items-center gap-4">
+                <div className="flex flex-col items-center gap-6">
                     <div className="w-12 h-12 border-4 border-oro/20 border-t-oro rounded-full animate-spin"></div>
-                    <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">Caricamento Account...</p>
+                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-600">Accesso Profilo...</span>
                 </div>
             </div>
         );
     }
 
     return (
-        <main className="min-h-screen text-white p-6 md:p-12 pt-56 md:pt-44 pb-32">
-            <div className="max-w-4xl mx-auto">
-
-                <header className="mb-12 text-center md:text-left">
-                    <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-4">
-                        Il tuo <span className="text-oro drop-shadow-[0_0_15px_rgba(255,215,0,0.5)]">Account</span>
-                    </h1>
-                    <p className="text-gray-400 text-lg max-w-2xl">
-                        Gestisci le tue informazioni personali e le credenziali di accesso.
+        <main className="min-h-screen pt-44 pb-32 selection:bg-oro/30">
+            <div className="max-w-7xl mx-auto px-6">
+                
+                <header className="mb-24 text-center space-y-4">
+                    <motion.span 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="text-oro font-black uppercase tracking-[0.4em] text-[10px]"
+                    >
+                        Configurazione Manager
+                    </motion.span>
+                    <motion.h1 
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-5xl md:text-8xl font-black uppercase tracking-tighter"
+                    >
+                        Il Tuo <span className="text-gradient-oro">Dossier</span>
+                    </motion.h1>
+                    <p className="text-gray-400 max-w-xl mx-auto font-light text-lg">
+                        Controlla la tua identità digitale nella Piazza e mantieni elevati i tuoi standard di sicurezza.
                     </p>
                 </header>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+                    
+                    {/* PROFILE SETTINGS */}
+                    <div className="lg:col-span-12 xl:col-span-7">
+                        <motion.section
+                            initial={{ opacity: 0, scale: 0.98 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            className="glass p-10 md:p-16 rounded-[4rem] border-white/5 relative overflow-hidden"
+                        >
+                            <div className="absolute top-0 right-10 text-white/[0.03] font-black text-8xl pointer-events-none">USER</div>
+                            
+                            <div className="relative z-10 space-y-12">
+                                <div className="flex items-center gap-6 pb-8 border-b border-white/5">
+                                    <div className="w-16 h-16 rounded-2xl bg-oro/10 flex items-center justify-center text-oro border border-oro/20 shadow-xl">
+                                        <FiUser size={32} />
+                                    </div>
+                                    <h2 className="text-4xl font-black uppercase tracking-tighter">Profilo <span className="text-oro">Elite</span></h2>
+                                </div>
 
-                    {/* Profile Section */}
-                    <motion.section
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="bg-[#131d36]/80 backdrop-blur-xl rounded-3xl p-8 border border-gray-800 shadow-2xl space-y-8"
-                    >
-                        <h2 className="text-2xl font-bold flex items-center gap-3">
-                            <FiUser className="text-oro" /> Informazioni Personali
-                        </h2>
+                                <form onSubmit={handleProfileUpdate} className="space-y-8">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4">Nome</label>
+                                            <input
+                                                type="text"
+                                                value={profile.name}
+                                                onChange={e => setProfile({ ...profile, name: e.target.value })}
+                                                className="w-full bg-white/[0.03] border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-oro transition-all font-bold placeholder:text-white/10"
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4">Cognome</label>
+                                            <input
+                                                type="text"
+                                                value={profile.surname}
+                                                onChange={e => setProfile({ ...profile, surname: e.target.value })}
+                                                className="w-full bg-white/[0.03] border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-oro transition-all font-bold placeholder:text-white/10"
+                                            />
+                                        </div>
+                                    </div>
 
-                        <form onSubmit={handleProfileUpdate} className="space-y-6">
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Nome</label>
-                                    <div className="relative">
-                                        <FiUser className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" />
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4 flex items-center gap-2"><FiActivity size={12} /> Contatto Rapido</label>
                                         <input
-                                            type="text"
-                                            value={profile.name}
-                                            onChange={e => setProfile({ ...profile, name: e.target.value })}
-                                            placeholder="Nome"
-                                            className="w-full bg-[#0a0f1c] border border-gray-800 rounded-xl pl-12 pr-4 py-3 text-white focus:outline-none focus:border-oro transition-colors"
+                                            type="tel"
+                                            value={profile.phone}
+                                            onChange={e => setProfile({ ...profile, phone: e.target.value })}
+                                            placeholder="+39..."
+                                            className="w-full bg-white/[0.03] border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-oro transition-all font-bold"
                                         />
                                     </div>
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Cognome</label>
-                                    <div className="relative">
-                                        <FiUser className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" />
+
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4 flex items-center gap-2"><FiMail size={12} /> Email d&apos;Accesso</label>
                                         <input
-                                            type="text"
-                                            value={profile.surname}
-                                            onChange={e => setProfile({ ...profile, surname: e.target.value })}
-                                            placeholder="Cognome"
-                                            className="w-full bg-[#0a0f1c] border border-gray-800 rounded-xl pl-12 pr-4 py-3 text-white focus:outline-none focus:border-oro transition-colors"
+                                            type="email"
+                                            value={profile.email}
+                                            onChange={e => setProfile({ ...profile, email: e.target.value })}
+                                            className="w-full bg-white/[0.03] border border-white/10 rounded-2xl px-6 py-4 text-white/40 focus:outline-none border-dashed"
+                                            readOnly
                                         />
                                     </div>
+
+                                    <button
+                                        type="submit"
+                                        disabled={saving}
+                                        className="w-full md:w-auto px-12 py-5 bg-gradient-to-r from-oro to-ocra text-blunotte font-black rounded-2xl shadow-xl hover:-translate-y-1 transition-all uppercase tracking-widest text-sm flex items-center justify-center gap-3 disabled:opacity-50"
+                                    >
+                                        <FiSave /> {saving ? "Aggiornamento..." : "Salva Dossier"}
+                                    </button>
+                                </form>
+                            </div>
+                        </motion.section>
+                    </div>
+
+                    {/* SECURITY SETTINGS */}
+                    <div className="lg:col-span-12 xl:col-span-5">
+                         <motion.section
+                            initial={{ opacity: 0, scale: 0.98 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.1 }}
+                            className="glass p-10 md:p-12 rounded-[3.5rem] border-white/5 relative overflow-hidden"
+                        >
+                            <div className="relative z-10 space-y-10">
+                                <div className="flex items-center gap-4 pb-6 border-b border-white/5">
+                                    <div className="w-12 h-12 rounded-xl bg-white/[0.03] flex items-center justify-center text-oro border border-white/10">
+                                        <FiShield size={24} />
+                                    </div>
+                                    <h2 className="text-2xl font-black uppercase tracking-tighter">Protocolli <span className="text-oro">Sicurezza</span></h2>
                                 </div>
+
+                                <form onSubmit={handlePasswordUpdate} className="space-y-6">
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4">Chiave Attuale</label>
+                                        <input
+                                            type="password"
+                                            value={passwords.currentPassword}
+                                            onChange={e => setPasswords({ ...passwords, currentPassword: e.target.value })}
+                                            className="w-full bg-white/[0.03] border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-oro transition-all"
+                                            placeholder="••••••••"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-4 pt-4">
+                                        <div className="space-y-2">
+                                             <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4">Nuova Chiave</label>
+                                             <input
+                                                type="password"
+                                                value={passwords.newPassword}
+                                                onChange={e => setPasswords({ ...passwords, newPassword: e.target.value })}
+                                                className="w-full bg-white/[0.02] border border-white/5 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-oro transition-all"
+                                                placeholder="Nuova password..."
+                                            />
+                                        </div>
+                                        <input
+                                            type="password"
+                                            value={passwords.confirmPassword}
+                                            onChange={e => setPasswords({ ...passwords, confirmPassword: e.target.value })}
+                                            className="w-full bg-white/[0.01] border border-white/5 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-oro transition-all"
+                                            placeholder="Conferma nuova password..."
+                                        />
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        disabled={saving}
+                                        className="w-full py-5 bg-white/5 hover:bg-white/10 text-white font-black rounded-2xl border border-white/10 transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-3"
+                                    >
+                                        <FiLock /> {saving ? "Criptazione..." : "Aggiorna Chiavi"}
+                                    </button>
+                                </form>
+
+                                {(error || success) && (
+                                    <motion.div 
+                                        initial={{ opacity: 0, y: 10 }} 
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className={`p-4 rounded-2xl text-[10px] font-black uppercase tracking-widest text-center border ${
+                                            error ? "bg-red-500/10 border-red-500/20 text-red-500" : "bg-green-500/10 border-green-500/20 text-green-500"
+                                        }`}
+                                    >
+                                        {error || success}
+                                    </motion.div>
+                                )}
                             </div>
-
-                            <div className="space-y-2">
-                                <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Numero di Telefono</label>
-                                <div className="relative">
-                                    <FiActivity className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" />
-                                    <input
-                                        type="tel"
-                                        value={profile.phone}
-                                        onChange={e => setProfile({ ...profile, phone: e.target.value })}
-                                        placeholder="+39..."
-                                        className="w-full bg-[#0a0f1c] border border-gray-800 rounded-xl pl-12 pr-4 py-3 text-white focus:outline-none focus:border-oro transition-colors"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="space-y-2">
-                                <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Email</label>
-                                <div className="relative">
-                                    <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" />
-                                    <input
-                                        type="email"
-                                        value={profile.email}
-                                        onChange={e => setProfile({ ...profile, email: e.target.value })}
-                                        className="w-full bg-[#0a0f1c] border border-gray-800 rounded-xl pl-12 pr-4 py-3 text-white focus:outline-none focus:border-oro transition-colors"
-                                    />
-                                </div>
-                            </div>
-
-                            <button
-                                type="submit"
-                                disabled={saving}
-                                className="w-full py-4 bg-gradient-to-r from-oro to-ocra text-blunotte font-black rounded-2xl transform active:scale-95 transition-all shadow-lg hover:shadow-oro/20 disabled:opacity-50 uppercase tracking-widest"
-                            >
-                                {saving ? "Salvataggio..." : "Aggiorna Profilo"}
-                            </button>
-                        </form>
-                    </motion.section>
-
-                    {/* Password Section */}
-                    <motion.section
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 }}
-                        className="bg-[#131d36]/80 backdrop-blur-xl rounded-3xl p-8 border border-gray-800 shadow-2xl space-y-8"
-                    >
-                        <h2 className="text-2xl font-bold flex items-center gap-3">
-                            <FiLock className="text-oro" /> Sicurezza & Password
-                        </h2>
-
-                        <form onSubmit={handlePasswordUpdate} className="space-y-4">
-                            <div className="space-y-2">
-                                <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Password Corrente</label>
-                                <div className="relative">
-                                    <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" />
-                                    <input
-                                        type="password"
-                                        value={passwords.currentPassword}
-                                        onChange={e => setPasswords({ ...passwords, currentPassword: e.target.value })}
-                                        placeholder="••••••••"
-                                        className="w-full bg-[#0a0f1c] border border-gray-800 rounded-xl pl-12 pr-4 py-3 text-white focus:outline-none focus:border-oro transition-colors"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="space-y-2 pt-4">
-                                <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Nuova Password</label>
-                                <div className="relative">
-                                    <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" />
-                                    <input
-                                        type="password"
-                                        value={passwords.newPassword}
-                                        onChange={e => setPasswords({ ...passwords, newPassword: e.target.value })}
-                                        placeholder="Nuova password..."
-                                        className="w-full bg-[#0a0f1c] border border-gray-800 rounded-xl pl-12 pr-4 py-3 text-white focus:outline-none focus:border-oro transition-colors"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="space-y-2">
-                                <input
-                                    type="password"
-                                    value={passwords.confirmPassword}
-                                    onChange={e => setPasswords({ ...passwords, confirmPassword: e.target.value })}
-                                    placeholder="Conferma nuova password..."
-                                    className="w-full bg-[#0a0f1c] border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-oro transition-colors"
-                                />
-                            </div>
-
-                            <button
-                                type="submit"
-                                disabled={saving}
-                                className="w-full py-4 bg-gray-800 hover:bg-gray-700 text-white font-black rounded-2xl transform active:scale-95 transition-all border border-gray-600 disabled:opacity-50 uppercase tracking-widest"
-                            >
-                                {saving ? "Modifica..." : "Cambia Password"}
-                            </button>
-                        </form>
-                    </motion.section>
+                        </motion.section>
+                    </div>
                 </div>
 
-                {/* Status Messages */}
-                <div className="mt-8">
-                    {error && (
-                        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="p-4 bg-red-900/40 border border-red-500 text-red-200 rounded-2xl flex items-center gap-3">
-                            <FiX size={20} className="shrink-0" />
-                            {error}
-                        </motion.div>
-                    )}
-                    {success && (
-                        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="p-4 bg-green-900/40 border border-green-500 text-green-200 rounded-2xl flex items-center gap-3">
-                            <FiCheck size={20} className="shrink-0" />
-                            {success}
-                        </motion.div>
-                    )}
+                {/* Footer Insight */}
+                <div className="mt-24 text-center">
+                    <p className="text-gray-600 text-[10px] font-black uppercase tracking-[0.4em]">
+                        Your identity is protected by sprint fortress release 2.0
+                    </p>
                 </div>
-
             </div>
         </main>
     );
