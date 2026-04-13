@@ -197,14 +197,14 @@ export default function LeaderboardsPage() {
                                                                 className="object-cover group-hover:scale-110 transition-transform duration-500"
                                                             />
                                                         </div>
-                                                        <div className="min-w-0">
-                                                            <h3 className="text-sm md:text-xl font-black group-hover:text-oro transition-colors truncate md:whitespace-normal">{t.team.name}</h3>
+                                                        <div className="flex-1 min-w-0">
+                                                            <h3 className="text-sm md:text-xl font-black group-hover:text-oro transition-colors whitespace-normal break-words leading-tight">{t.team.name}</h3>
                                                             {t.team.user ? (
-                                                                <span className="text-[8px] md:text-[10px] uppercase font-black tracking-widest text-oro/60 block truncate">
+                                                                <span className="text-[8px] md:text-[10px] uppercase font-black tracking-widest text-oro/60 block mt-1">
                                                                     {t.team.user.name} {t.team.user.surname}
                                                                 </span>
                                                             ) : (
-                                                                <span className="text-[8px] md:text-[10px] uppercase font-black tracking-widest text-white/20 block">Manager d&apos;Elite</span>
+                                                                <span className="text-[8px] md:text-[10px] uppercase font-black tracking-widest text-white/20 block mt-1">Manager d&apos;Elite</span>
                                                             )}
                                                         </div>
                                                     </div>
@@ -249,9 +249,9 @@ export default function LeaderboardsPage() {
                                                                 className="object-cover group-hover:scale-110 transition-transform duration-500"
                                                             />
                                                         </div>
-                                                        <div className="min-w-0">
-                                                            <h3 className="text-sm md:text-xl font-black group-hover:text-oro transition-colors truncate md:whitespace-normal">{artist.name}</h3>
-                                                            <span className="text-[8px] md:text-[10px] uppercase font-black tracking-widest text-oro/40 block truncate">
+                                                        <div className="flex-1 min-w-0">
+                                                            <h3 className="text-sm md:text-xl font-black group-hover:text-oro transition-colors whitespace-normal break-words leading-tight">{artist.name}</h3>
+                                                            <span className="text-[8px] md:text-[10px] uppercase font-black tracking-widest text-oro/40 block mt-1">
                                                                 {artist.category || "Artista d'Elite"}
                                                             </span>
                                                         </div>
