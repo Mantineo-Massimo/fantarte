@@ -10,7 +10,7 @@ export async function POST(req: Request) {
         const ip = req.headers.get("x-forwarded-for") || "127.0.0.1";
         
         // Rate limit: 5 team actions per hour per IP
-        const allowed = await checkRateLimit(ip, "team_action", 5, 60 * 60 * 1000);
+        const allowed = await checkRateLimit(ip, "team_action", 100, 60 * 60 * 1000);
         if (!allowed) {
             return NextResponse.json({ error: "Troppe operazioni. Riprova più tardi." }, { status: 429 });
         }
@@ -158,7 +158,7 @@ export async function PUT(req: Request) {
         const ip = req.headers.get("x-forwarded-for") || "127.0.0.1";
         
         // Rate limit: 5 team actions per hour per IP
-        const allowed = await checkRateLimit(ip, "team_action", 5, 60 * 60 * 1000);
+        const allowed = await checkRateLimit(ip, "team_action", 100, 60 * 60 * 1000);
         if (!allowed) {
             return NextResponse.json({ error: "Troppe operazioni. Riprova più tardi." }, { status: 429 });
         }
