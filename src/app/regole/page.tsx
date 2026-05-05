@@ -56,7 +56,7 @@ export default function RegolePage() {
     };
 
     return (
-        <main className="min-h-screen text-white bg-blunotte relative overflow-hidden">
+        <main className="min-h-screen text-white relative overflow-hidden">
 
             <div className="relative z-10 pt-32 md:pt-44 px-6 pb-32">
                 <div className="max-w-6xl mx-auto">
