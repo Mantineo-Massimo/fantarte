@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -21,6 +22,15 @@ const stagger = {
 };
 
 export default function Home() {
+  const [sponsors, setSponsors] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch("/api/sponsors")
+      .then(res => res.json())
+      .then(data => setSponsors(data))
+      .catch(err => console.error("Failed to load sponsors", err));
+  }, []);
+
   return (
     <main className="min-h-screen text-white overflow-hidden">
       
@@ -138,41 +148,41 @@ export default function Home() {
         </section>
 
         {/* Sponsors & Partners Section */}
-        <section className="py-24 px-6 max-w-7xl mx-auto">
-          <motion.div 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <p className="text-oro text-[10px] font-black uppercase tracking-[0.4em] mb-4">In Collaborazione Con</p>
-            <h2 className="text-4xl font-black tracking-tighter">Partner & <span className="text-oro">Sponsor</span></h2>
-          </motion.div>
+        {sponsors.length > 0 && (
+          <section className="py-24 px-6 max-w-7xl mx-auto">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className="text-center mb-16"
+            >
+              <p className="text-oro text-[10px] font-black uppercase tracking-[0.4em] mb-4">In Collaborazione Con</p>
+              <h2 className="text-4xl font-black tracking-tighter">Partner & <span className="text-oro">Sponsor</span></h2>
+            </motion.div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {[
-              { name: "Morgana", role: "Organizzazione" },
-              { name: "O.R.U.M.", role: "Organizzazione" },
-              { name: "Messina", role: "Patrocinio" },
-              { name: "Piazza dell'Arte", role: "Partner" }
-            ].map((p, i) => (
-              <motion.div 
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                viewport={{ once: true }}
-                className="glass p-8 rounded-[2.5rem] border border-white/5 flex flex-col items-center justify-center grayscale hover:grayscale-0 transition-all cursor-pointer group"
-              >
-                <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 mb-4 flex items-center justify-center group-hover:border-oro/30 transition-all">
-                  <span className="text-2xl font-black text-gray-500 group-hover:text-oro">{p.name.charAt(0)}</span>
-                </div>
-                <p className="font-black text-xs uppercase tracking-widest mb-1">{p.name}</p>
-                <p className="text-[8px] font-black text-gray-600 uppercase tracking-widest">{p.role}</p>
-              </motion.div>
-            ))}
-          </div>
-        </section>
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
+              {sponsors.map((p, i) => (
+                <motion.div 
+                  key={p.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  viewport={{ once: true }}
+                  className="glass p-8 rounded-[2.5rem] border border-white/5 flex flex-col items-center justify-center grayscale hover:grayscale-0 transition-all cursor-pointer group"
+                >
+                  <div className="w-full aspect-square relative mb-4 flex items-center justify-center">
+                    {p.logoUrl ? (
+                      <img src={p.logoUrl} alt={p.name} className="max-w-full max-h-full object-contain group-hover:scale-110 transition-transform" />
+                    ) : (
+                      <span className="text-2xl font-black text-gray-500 group-hover:text-oro">{p.name.charAt(0)}</span>
+                    )}
+                  </div>
+                  <p className="font-black text-[10px] uppercase tracking-widest text-center">{p.name}</p>
+                </motion.div>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Marquee Revolution */}
         <section className="py-20 bg-oro/5 border-y border-oro/10 overflow-hidden">
