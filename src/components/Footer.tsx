@@ -48,6 +48,7 @@ export default function Footer() {
                             <h4 className="text-white text-[10px] font-black uppercase tracking-[0.4em] opacity-40">Esplora</h4>
                             <nav className="flex flex-col gap-6">
                                 <FooterLink href="/" label="Home" />
+                                <FooterLink href="/artisti" label="Artisti" />
                                 <FooterLink href="/leaderboards" label="Classifiche" />
                                 <FooterLink href="/team/create" label="Mia Squadra" />
                                 <FooterLink href="/supporto" label="Supporto" />

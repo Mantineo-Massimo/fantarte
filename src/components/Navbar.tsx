@@ -33,6 +33,7 @@ export default function Navbar() {
 
     const navLinks = [
         { href: "/", label: "Home", icon: FiHome },
+        { href: "/artisti", label: "Artisti", icon: FiUsers },
         { href: "/leaderboards", label: "Classifiche", icon: FiList },
     ];
 
