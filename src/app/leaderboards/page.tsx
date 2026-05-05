@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { FiUsers, FiStar, FiTrendingUp, FiAward, FiX, FiCheck, FiShare2, FiZap } from "react-icons/fi";
 import SocialShare from "@/components/SocialShare";
 import LeaderboardSkeleton from "./Skeleton";
 
@@ -23,9 +24,11 @@ type Artist = {
 type TeamResult = {
     score: number;
     team: {
+        id: string;
         name: string;
         image?: string | null;
         artists: Artist[];
+        captainId?: string | null;
     };
 };
 
@@ -33,6 +36,16 @@ type League = {
     id: string;
     name: string;
     teams: TeamResult[];
+};
+
+const fadeIn = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
+};
+
+const stagger = {
+    animate: { transition: { staggerChildren: 0.05 } }
 };
 
 export default function LeaderboardsPage() {
@@ -87,298 +100,315 @@ export default function LeaderboardsPage() {
         </main>
     );
 
-    if (!leagues.length && !artistsRanking.length) return <div className="min-h-screen bg-blunotte flex items-center justify-center text-white">Nessun dato disponibile al momento.</div>;
-
     const currentLeague = leagues.find(l => l.name === activeTab);
+    const top3 = viewMode === "teams" ? currentLeague?.teams.slice(0, 3) || [] : artistsRanking.slice(0, 3);
+    const rest = viewMode === "teams" ? currentLeague?.teams.slice(3) || [] : artistsRanking.slice(3);
 
     return (
         <main className="min-h-screen text-white p-6 md:p-12 pt-56 md:pt-44 pb-32">
-            <div className="max-w-5xl mx-auto">
-                <div className="text-center mb-12">
-                    <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">Classifiche <span className="text-oro">FantArte</span></h1>
-                    <p className="text-gray-400">Tieni d&apos;occhio i punteggi di squadre e artisti in tempo reale.</p>
-                </div>
+            
+            {/* Background Orbs */}
+            <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+                <div className="absolute top-[20%] left-[-10%] w-[500px] h-[500px] bg-viola opacity-[0.05] rounded-full blur-[100px]" />
+                <div className="absolute bottom-[20%] right-[-10%] w-[400px] h-[400px] bg-oro opacity-[0.03] rounded-full blur-[100px]" />
+            </div>
 
-                {/* Tab Switcher (Teams vs Artists) */}
-                <div className="flex justify-center mb-10">
-                    <div className="bg-[#131d36] p-1.5 rounded-2xl border border-gray-800 flex gap-1">
+            <div className="relative z-10 max-w-6xl mx-auto">
+                <motion.div initial="initial" animate="animate" variants={fadeIn} className="text-center mb-16">
+                    <h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-4">Classifiche <span className="text-oro drop-shadow-[0_0_20px_rgba(255,215,0,0.3)]">Globali</span></h1>
+                    <p className="text-gray-500 font-bold uppercase tracking-[0.2em] text-xs">Piazza dell&apos;Arte • FantArte 2026</p>
+                </motion.div>
+
+                {/* Switcher Revolution */}
+                <div className="flex justify-center mb-20">
+                    <div className="glass p-2 rounded-3xl border border-white/5 flex gap-2">
                         <button
                             onClick={() => setViewMode("teams")}
-                            className={`px-8 py-3 rounded-xl text-sm font-black uppercase tracking-widest transition-all ${viewMode === "teams" ? "bg-oro text-blunotte shadow-lg shadow-oro/20" : "text-gray-500 hover:text-white"}`}
+                            className={`px-10 py-4 rounded-2xl text-xs font-black uppercase tracking-widest transition-all ${viewMode === "teams" ? "bg-oro text-blunotte shadow-2xl" : "text-gray-500 hover:text-white"}`}
                         >
                             Podio Squadre
                         </button>
                         <button
                             onClick={() => setViewMode("artists")}
-                            className={`px-8 py-3 rounded-xl text-sm font-black uppercase tracking-widest transition-all ${viewMode === "artists" ? "bg-oro text-blunotte shadow-lg shadow-oro/20" : "text-gray-500 hover:text-white"}`}
+                            className={`px-10 py-4 rounded-2xl text-xs font-black uppercase tracking-widest transition-all ${viewMode === "artists" ? "bg-oro text-blunotte shadow-2xl" : "text-gray-500 hover:text-white"}`}
                         >
                             Top Armoni
                         </button>
                     </div>
                 </div>
 
-                <p className="text-oro/60 text-xs text-center mb-6 animate-pulse font-bold uppercase tracking-tighter">
-                    {viewMode === "teams" ? "💡 Clicca su una squadra per vedere i suoi Armoni" : "💡 Clicca su un artista per vedere i suoi Bonus/Malus"}
-                </p>
-
-                {/* Tabella Classifica */}
-                <div className="bg-[#131d36] rounded-3xl border border-gray-800 shadow-2xl overflow-hidden relative">
-                    <table className="w-full text-left">
-                        <thead className="bg-[#0a0f1c] text-gray-400 border-b border-gray-800">
-                            <tr>
-                                <th className="px-6 py-4 font-bold text-xs uppercase tracking-widest">Rank</th>
-                                <th className="px-6 py-4 font-bold text-xs uppercase tracking-widest">{viewMode === "teams" ? "Squadra" : "Artista"}</th>
-                                <th className="px-6 py-4 font-bold text-xs uppercase tracking-widest text-right">Punti</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <AnimatePresence mode="wait">
-                                {viewMode === "teams" ? (
-                                    currentLeague?.teams.map((t, index) => (
-                                        <motion.tr
-                                            key={`${currentLeague.id}-${t.team.name}`}
-                                            initial={{ opacity: 0, x: -20 }}
-                                            animate={{ opacity: 1, x: 0 }}
-                                            transition={{ delay: index * 0.05 }}
-                                            onClick={() => setSelectedTeam(t)}
-                                            className="border-b border-gray-800/50 hover:bg-[#1f2937] transition-colors cursor-pointer group"
-                                        >
-                                            <td className="px-6 py-4">
-                                                {index === 0 ? <span className="text-2xl">🥇</span> :
-                                                    index === 1 ? <span className="text-2xl">🥈</span> :
-                                                        index === 2 ? <span className="text-2xl">🥉</span> :
-                                                            <span className="font-mono text-gray-400 ml-2">{index + 1}</span>}
-                                            </td>
-                                            <td className="px-6 py-4 flex items-center gap-4">
-                                                <div className="w-10 h-10 rounded-xl bg-[#0a0f1c] border border-gray-800 overflow-hidden flex-shrink-0 flex items-center justify-center">
-                                                    {t.team.image ? (
-                                                        <img src={t.team.image} alt={t.team.name} className="w-full h-full object-cover" />
-                                                    ) : (
-                                                        <img src="/fanta-logo.png" alt="Default" className="w-full h-full object-contain p-1.5 opacity-40 shrink-0" />
-                                                    )}
-                                                </div>
-                                                <span className="font-bold text-lg">{t.team.name}</span>
-                                            </td>
-                                            <td className="px-6 py-4 text-right font-mono text-xl font-bold text-oro">{t.score} pt</td>
-                                        </motion.tr>
-                                    ))
-                                ) : (
-                                    artistsRanking.map((artist, index) => (
-                                        <motion.tr
-                                            key={artist.id}
-                                            initial={{ opacity: 0, x: -20 }}
-                                            animate={{ opacity: 1, x: 0 }}
-                                            transition={{ delay: index * 0.05 }}
-                                            onClick={() => handleArtistClick(artist)}
-                                            className="border-b border-gray-800/50 hover:bg-[#1f2937] transition-colors cursor-pointer group"
-                                        >
-                                            <td className="px-6 py-4">
-                                                {index === 0 ? <span className="text-2xl">🥇</span> :
-                                                    index === 1 ? <span className="text-2xl">🥈</span> :
-                                                        index === 2 ? <span className="text-2xl">🥉</span> :
-                                                            <span className="font-mono text-gray-400 ml-2">{index + 1}</span>}
-                                            </td>
-                                            <td className="px-6 py-4 flex items-center gap-4">
-                                                <div className="w-10 h-10 rounded-xl bg-[#0a0f1c] border border-gray-800 overflow-hidden flex-shrink-0 flex items-center justify-center">
-                                                    {artist.image ? (
-                                                        <img src={artist.image} alt={artist.name} className="w-full h-full object-cover" />
-                                                    ) : (
-                                                        <span className="text-oro font-black">{artist.name.charAt(0)}</span>
-                                                    )}
-                                                </div>
-                                                <span className="font-bold text-lg">{artist.name}</span>
-                                            </td>
-                                            <td className="px-6 py-4 text-right font-mono text-xl font-bold text-oro">{artist.totalScore} pt</td>
-                                        </motion.tr>
-                                    ))
-                                )}
-                            </AnimatePresence>
-
-                            {viewMode === "teams" && (!currentLeague?.teams || currentLeague.teams.length === 0) && (
-                                <tr>
-                                    <td colSpan={3} className="px-6 py-12 text-center text-gray-500 italic">
-                                        Nessuna squadra ancora iscritta in questa lega.
-                                    </td>
-                                </tr>
-                            )}
-                            {viewMode === "artists" && artistsRanking.length === 0 && (
-                                <tr>
-                                    <td colSpan={3} className="px-6 py-12 text-center text-gray-500 italic">
-                                        Nessun artista trovato.
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
+                {/* Podium Section */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20 items-end">
+                    {/* Rank 2 */}
+                    {top3[1] && (
+                        <PodiumCard 
+                            rank={2} 
+                            data={top3[1]} 
+                            type={viewMode} 
+                            onClick={() => viewMode === "teams" ? setSelectedTeam(top3[1] as TeamResult) : handleArtistClick(top3[1] as Artist)} 
+                        />
+                    )}
+                    {/* Rank 1 (Center) */}
+                    {top3[0] && (
+                        <PodiumCard 
+                            rank={1} 
+                            data={top3[0]} 
+                            type={viewMode} 
+                            featured
+                            onClick={() => viewMode === "teams" ? setSelectedTeam(top3[0] as TeamResult) : handleArtistClick(top3[0] as Artist)} 
+                        />
+                    )}
+                    {/* Rank 3 */}
+                    {top3[2] && (
+                        <PodiumCard 
+                            rank={3} 
+                            data={top3[2]} 
+                            type={viewMode} 
+                            onClick={() => viewMode === "teams" ? setSelectedTeam(top3[2] as TeamResult) : handleArtistClick(top3[2] as Artist)} 
+                        />
+                    )}
                 </div>
 
-                {/* Modal Dettaglio Squadra */}
+                {/* Neo-Table Section */}
+                <motion.div 
+                    initial="initial"
+                    whileInView="animate"
+                    viewport={{ once: true }}
+                    variants={stagger}
+                    className="glass rounded-[3rem] border border-white/5 overflow-hidden"
+                >
+                    <div className="px-10 py-8 bg-white/5 border-b border-white/5 flex justify-between items-center">
+                        <p className="text-[10px] font-black uppercase tracking-widest text-gray-500">Resto della Classifica</p>
+                        <div className="flex gap-4">
+                             <div className="w-3 h-3 rounded-full bg-oro/20" />
+                             <div className="w-3 h-3 rounded-full bg-viola/20" />
+                        </div>
+                    </div>
+                    <div className="divide-y divide-white/[0.03]">
+                        {rest.map((item, index) => (
+                            <RankRow 
+                                key={index}
+                                index={index + 4}
+                                data={item}
+                                type={viewMode}
+                                onClick={() => viewMode === "teams" ? setSelectedTeam(item as TeamResult) : handleArtistClick(item as Artist)}
+                            />
+                        ))}
+                    </div>
+                </motion.div>
+
+                {/* Modals are revolutionized too (via glassmorphism) */}
                 <AnimatePresence>
                     {selectedTeam && (
-                        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                onClick={() => setSelectedTeam(null)}
-                                className="absolute inset-0 bg-black/80 backdrop-blur-sm"
-                            />
-                            <motion.div
-                                initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                                animate={{ opacity: 1, scale: 1, y: 0 }}
-                                exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                                className="relative bg-[#131d36] w-full max-w-lg rounded-3xl border border-gray-700 shadow-2xl overflow-hidden p-8 z-10"
-                            >
-                                <div className="flex items-center gap-6 mb-8">
-                                    <div className="w-24 h-24 rounded-3xl bg-[#0a0f1c] border-2 border-oro/30 overflow-hidden flex items-center justify-center shrink-0">
-                                        {selectedTeam.team.image ? (
-                                            <img src={selectedTeam.team.image} alt={selectedTeam.team.name} className="w-full h-full object-cover" />
-                                        ) : (
-                                            <img src="/fanta-logo.png" alt="Default" className="w-full h-full object-contain p-3 opacity-40" />
-                                        )}
-                                    </div>
-                                    <div className="flex-1">
-                                        <h2 className="text-3xl font-black text-oro">{selectedTeam.team.name}</h2>
-                                        <p className="text-gray-400 text-sm font-bold uppercase tracking-widest mt-1">Squadra FantArte</p>
-                                    </div>
-                                    <button
-                                        onClick={() => setSelectedTeam(null)}
-                                        className="text-gray-400 hover:text-white transition-colors p-2 bg-white/5 rounded-full self-start"
-                                    >
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                    </button>
-                                </div>
-
-                                <div className="space-y-4">
-                                    <h3 className="text-gray-400 text-sm font-bold uppercase tracking-widest">Gli Armoni della squadra</h3>
-                                    <div className="divide-y divide-gray-800/50">
-                                        {selectedTeam.team.artists.map((artist) => (
-                                            <div
-                                                key={artist.id}
-                                                onClick={() => handleArtistClick(artist)}
-                                                className="flex justify-between items-center py-4 cursor-pointer hover:bg-white/5 px-2 -mx-2 rounded-xl transition-colors group/artist"
-                                            >
-                                                <div className="flex items-center gap-3">
-                                                    <div className="w-12 h-12 rounded-xl bg-[#1e293b] border border-gray-700 overflow-hidden flex-shrink-0 flex items-center justify-center text-oro font-bold text-sm group-hover/artist:border-oro transition-colors">
-                                                        {artist.image ? (
-                                                            <img src={artist.image} alt={artist.name} className="w-full h-full object-cover" />
-                                                        ) : (
-                                                            artist.name.charAt(0)
-                                                        )}
-                                                    </div>
-                                                    <div>
-                                                        <div className="flex items-center gap-2">
-                                                            <span className="font-bold text-lg">{artist.name}</span>
-                                                            {(selectedTeam.team as any).captainId === artist.id && (
-                                                                <span className="bg-oro text-blunotte text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-tighter">Capitano</span>
-                                                            )}
-                                                        </div>
-                                                        <span className="text-[10px] text-oro/60 uppercase font-black">Clicca per dettagli</span>
-                                                    </div>
-                                                </div>
-                                                <div className="text-right">
-                                                    <span className="block font-mono text-xl font-bold text-oro">{artist.totalScore}</span>
-                                                    <span className="text-[10px] text-gray-500 uppercase font-black">Punti</span>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                <div className="mt-8 pt-6 border-t border-gray-800 flex justify-between items-center">
-                                    <span className="text-gray-400 font-bold">Punteggio Totale</span>
-                                    <span className="text-3xl font-black text-oro">{selectedTeam.score} pt</span>
-                                </div>
-
-                                {/* Social Share */}
-                                <div className="mt-6">
-                                    <SocialShare
-                                        url={`${window.location.origin}/team/${(selectedTeam.team as any).id || ""}`}
-                                        title={`Guarda la squadra ${selectedTeam.team.name} su FantArte! 🏆`}
-                                    />
-                                </div>
-                            </motion.div>
-                        </div>
+                        <TeamModal 
+                            teamResult={selectedTeam} 
+                            onClose={() => setSelectedTeam(null)} 
+                            onArtistClick={handleArtistClick}
+                        />
                     )}
                 </AnimatePresence>
 
-                {/* Modal Dettaglio Artista (Eventi) */}
                 <AnimatePresence>
                     {selectedArtist && (
-                        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                onClick={() => setSelectedArtist(null)}
-                                className="absolute inset-0 bg-black/60 backdrop-blur-md"
-                            />
-                            <motion.div
-                                initial={{ opacity: 0, scale: 0.9, x: 20 }}
-                                animate={{ opacity: 1, scale: 1, x: 0 }}
-                                exit={{ opacity: 0, scale: 0.9, x: 20 }}
-                                className="relative bg-[#0f172a] w-full max-w-md rounded-3xl border border-oro/30 shadow-[0_0_40px_rgba(255,215,0,0.15)] overflow-hidden p-8 z-10"
-                            >
-                                <div className="flex justify-between items-center mb-6">
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-16 h-16 rounded-2xl bg-[#1e293b] border border-oro/30 overflow-hidden flex-shrink-0 flex items-center justify-center">
-                                            {selectedArtist.image ? (
-                                                <img src={selectedArtist.image} alt={selectedArtist.name} className="w-full h-full object-cover" />
-                                            ) : (
-                                                <span className="text-2xl font-black text-oro">{selectedArtist.name.charAt(0)}</span>
-                                            )}
-                                        </div>
-                                        <div>
-                                            <h2 className="text-2xl font-black text-oro">{selectedArtist.name}</h2>
-                                            <p className="text-gray-400 text-xs uppercase font-bold tracking-widest mt-1">Cronologia Bonus & Malus</p>
-                                        </div>
-                                    </div>
-                                    <button
-                                        onClick={() => setSelectedArtist(null)}
-                                        className="text-gray-400 hover:text-white transition-colors p-2 bg-white/5 rounded-full"
-                                    >
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                    </button>
-                                </div>
-
-                                <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
-                                    {detailLoading ? (
-                                        <div className="flex flex-col items-center justify-center py-12 space-y-4">
-                                            <div className="w-8 h-8 border-4 border-oro/30 border-t-oro rounded-full animate-spin"></div>
-                                            <p className="text-gray-500 text-sm font-bold uppercase tracking-widest">Caricamento...</p>
-                                        </div>
-                                    ) : selectedArtist.events && selectedArtist.events.length > 0 ? (
-                                        selectedArtist.events.map((event) => (
-                                            <div key={event.id} className="bg-[#1e293b]/50 border border-gray-800 p-4 rounded-2xl flex justify-between items-center gap-4">
-                                                <div className="flex-1">
-                                                    <p className="text-white text-sm leading-relaxed">{event.description}</p>
-                                                    <p className="text-[10px] text-gray-500 mt-1 uppercase font-bold">{new Date(event.createdAt).toLocaleDateString('it-IT')}</p>
-                                                </div>
-                                                <div className={`text-right font-mono font-black text-xl px-3 py-1 rounded-lg ${event.points >= 0 ? "text-green-500 bg-green-500/10" : "text-red-500 bg-red-500/10"}`}>
-                                                    {event.points > 0 ? `+${event.points}` : event.points}
-                                                </div>
-                                            </div>
-                                        ))
-                                    ) : (
-                                        <div className="text-center py-12 text-gray-500 italic">
-                                            Nessun bonus o malus ancora assegnato a questo artista.
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className="mt-8 pt-6 border-t border-gray-800/50 flex justify-between items-center">
-                                    <span className="text-gray-400 font-bold uppercase text-xs tracking-wider">Bilancio Finale</span>
-                                    <span className="text-2xl font-black text-oro">{selectedArtist.totalScore} pt</span>
-                                </div>
-                            </motion.div>
-                        </div>
+                        <ArtistModal 
+                            artist={selectedArtist} 
+                            onClose={() => setSelectedArtist(null)} 
+                            loading={detailLoading}
+                        />
                     )}
                 </AnimatePresence>
+
             </div>
         </main>
+    );
+}
+
+function PodiumCard({ rank, data, type, featured, onClick }: { rank: number, data: any, type: string, featured?: boolean, onClick: () => void }) {
+    const isTeam = type === "teams";
+    const name = isTeam ? data.team.name : data.name;
+    const score = isTeam ? data.score : data.totalScore;
+    const image = isTeam ? data.team.image : data.image;
+
+    return (
+        <motion.div 
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: rank * 0.1 }}
+            onClick={onClick}
+            className={`relative glass p-10 rounded-[3.5rem] border border-white/10 flex flex-col items-center text-center cursor-pointer group hover:bg-white/5 transition-all
+                ${featured ? "md:scale-110 md:-translate-y-12 z-20 shadow-[0_30px_100px_rgba(0,0,0,0.5)]" : "z-10"}
+            `}
+        >
+            <div className={`absolute -top-6 w-12 h-12 rounded-full flex items-center justify-center font-black shadow-2xl border-2
+                ${rank === 1 ? "bg-oro text-blunotte border-oro scale-125" : "bg-white/5 text-gray-400 border-white/10"}
+            `}>
+                {rank}
+            </div>
+            <div className={`w-32 h-32 rounded-[30px] bg-black mb-6 overflow-hidden border-2 transition-transform duration-500 group-hover:scale-105
+                ${rank === 1 ? "border-oro shadow-[0_0_30px_rgba(255,215,0,0.3)]" : "border-white/10"}
+            `}>
+                {image ? (
+                    <img src={image} className="w-full h-full object-cover" />
+                ) : (
+                    <div className="w-full h-full flex items-center justify-center text-4xl font-black text-gray-800">{name.charAt(0)}</div>
+                )}
+            </div>
+            <h3 className={`text-2xl font-black mb-2 ${rank === 1 ? "text-oro" : "text-white"}`}>{name}</h3>
+            <div className="flex items-center gap-2 px-6 py-2 rounded-2xl bg-white/5 border border-white/10">
+                <span className="text-2xl font-black tracking-tighter">{score}</span>
+                <span className="text-[10px] font-black uppercase tracking-widest text-gray-500">Punti</span>
+            </div>
+        </motion.div>
+    );
+}
+
+function RankRow({ index, data, type, onClick }: { index: number, data: any, type: string, onClick: () => void }) {
+    const isTeam = type === "teams";
+    const name = isTeam ? data.team.name : data.name;
+    const score = isTeam ? data.score : data.totalScore;
+    const image = isTeam ? data.team.image : data.image;
+
+    return (
+        <motion.div 
+            variants={fadeIn}
+            onClick={onClick}
+            className="flex items-center justify-between px-10 py-6 hover:bg-white/5 transition-all cursor-pointer group"
+        >
+            <div className="flex items-center gap-8">
+                <span className="font-black text-gray-700 w-6">{index}</span>
+                <div className="w-12 h-12 rounded-2xl bg-black overflow-hidden border border-white/10 group-hover:border-oro/40 transition-colors">
+                    {image ? (
+                        <img src={image} className="w-full h-full object-cover" />
+                    ) : (
+                        <div className="w-full h-full flex items-center justify-center font-black text-gray-800">{name.charAt(0)}</div>
+                    )}
+                </div>
+                <h4 className="font-black text-xl group-hover:text-oro transition-colors">{name}</h4>
+            </div>
+            <div className="text-right">
+                <p className="font-black text-2xl tracking-tighter">{score}</p>
+                <p className="text-[8px] font-black uppercase tracking-widest text-gray-500">Punteggio Totale</p>
+            </div>
+        </motion.div>
+    );
+}
+
+function TeamModal({ teamResult, onClose, onArtistClick }: { teamResult: TeamResult, onClose: () => void, onArtistClick: (a: Artist) => void }) {
+    return (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} onClick={onClose} className="absolute inset-0 bg-black/90 backdrop-blur-md" />
+            <motion.div 
+                initial={{ opacity: 0, scale: 0.9, y: 50 }} 
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                className="relative w-full max-w-xl glass p-12 rounded-[4rem] border border-white/10 shadow-3xl overflow-hidden"
+            >
+                <div className="absolute top-0 right-0 w-64 h-64 bg-oro opacity-[0.03] blur-3xl -translate-y-1/2 translate-x-1/2" />
+                
+                <div className="flex justify-between items-start mb-12">
+                    <div className="flex gap-6 items-center">
+                         <div className="w-24 h-24 rounded-[30px] bg-black border-2 border-oro/30 overflow-hidden">
+                            {teamResult.team.image ? <img src={teamResult.team.image} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center font-black text-gray-800">T</div>}
+                         </div>
+                         <div>
+                            <h2 className="text-4xl font-black text-oro mb-2">{teamResult.team.name}</h2>
+                            <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest">
+                               <FiTrendingUp className="text-oro" /> Rank #{teamResult.score > 0 ? "Competitor" : "New Entry"}
+                            </div>
+                         </div>
+                    </div>
+                    <button onClick={onClose} className="p-4 bg-white/5 rounded-2xl hover:bg-red-500/10 hover:text-red-500 transition-all"><FiX size={24} /></button>
+                </div>
+
+                <div className="space-y-4 mb-12">
+                    <p className="text-gray-500 text-[10px] font-black uppercase tracking-widest mb-4">Membri della Squadra</p>
+                    <div className="grid grid-cols-1 gap-3">
+                        {teamResult.team.artists.map(a => (
+                            <div 
+                                key={a.id} 
+                                onClick={() => onArtistClick(a)}
+                                className="flex items-center justify-between p-4 bg-white/5 rounded-3xl border border-white/5 hover:border-oro/30 cursor-pointer transition-all group/art"
+                            >
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 rounded-2xl bg-black border border-white/10 overflow-hidden">
+                                        {a.image && <img src={a.image} className="w-full h-full object-cover" />}
+                                    </div>
+                                    <div>
+                                        <p className="font-bold text-sm group-hover/art:text-oro transition-colors">{a.name}</p>
+                                        <div className="flex gap-2">
+                                            {teamResult.team.captainId === a.id && <span className="text-[8px] bg-oro text-blunotte font-black px-1.5 py-0.5 rounded-md uppercase">Capitano</span>}
+                                        </div>
+                                    </div>
+                                </div>
+                                <span className="font-black text-xl text-oro/60">{a.totalScore}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="flex justify-between items-center pt-8 border-t border-white/5">
+                    <div>
+                        <p className="text-[10px] font-black uppercase tracking-widest text-gray-500">Punteggio Totale</p>
+                        <p className="text-4xl font-black tracking-tighter text-oro">{teamResult.score}</p>
+                    </div>
+                    <div className="flex gap-4">
+                         <SocialShare url={`${window.location.origin}/leaderboards`} title={`La squadra ${teamResult.team.name} spacca su FantArte! 🎠`} />
+                    </div>
+                </div>
+            </motion.div>
+        </div>
+    );
+}
+
+function ArtistModal({ artist, onClose, loading }: { artist: Artist, onClose: () => void, loading: boolean }) {
+    return (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} onClick={onClose} className="absolute inset-0 bg-black/90 backdrop-blur-md" />
+            <motion.div 
+                initial={{ opacity: 0, scale: 0.9, x: 50 }} 
+                animate={{ opacity: 1, scale: 1, x: 0 }}
+                className="relative w-full max-w-md glass p-12 rounded-[4rem] border border-white/10 shadow-3xl overflow-hidden"
+            >
+                <div className="flex justify-between items-start mb-12">
+                    <div className="flex gap-6 items-center">
+                         <div className="w-20 h-20 rounded-[25px] bg-black border-2 border-oro/30 overflow-hidden">
+                            {artist.image ? <img src={artist.image} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center font-black text-gray-800">A</div>}
+                         </div>
+                         <div>
+                            <h2 className="text-3xl font-black text-oro mb-1">{artist.name}</h2>
+                            <p className="text-[10px] font-black uppercase tracking-widest text-gray-500">Cronologia Eventi</p>
+                         </div>
+                    </div>
+                    <button onClick={onClose} className="p-4 bg-white/5 rounded-2xl hover:bg-red-500/10 hover:text-red-500 transition-all"><FiX size={24} /></button>
+                </div>
+
+                <div className="space-y-4 max-h-[350px] overflow-y-auto pr-4 custom-scrollbar mb-10">
+                    {loading ? (
+                        <div className="flex flex-col items-center justify-center py-20 opacity-50">
+                            <FiZap className="animate-bounce text-oro mb-4" size={32} />
+                            <p className="text-xs font-black uppercase tracking-widest">Sincronizzando Punti...</p>
+                        </div>
+                    ) : artist.events && artist.events.length > 0 ? (
+                        artist.events.map(ev => (
+                            <div key={ev.id} className="p-6 bg-white/5 rounded-3xl border border-white/5 flex justify-between items-center gap-4">
+                                <div className="flex-1">
+                                    <p className="text-sm font-bold text-white/80 mb-1">{ev.description}</p>
+                                    <p className="text-[8px] font-black uppercase tracking-widest text-gray-600">{new Date(ev.createdAt).toLocaleDateString('it-IT')}</p>
+                                </div>
+                                <span className={`text-xl font-black ${ev.points >= 0 ? "text-green-500" : "text-red-500"}`}>
+                                    {ev.points > 0 ? `+${ev.points}` : ev.points}
+                                </span>
+                            </div>
+                        ))
+                    ) : (
+                        <p className="text-center py-20 text-gray-600 italic">Nessun evento registrato.</p>
+                    )}
+                </div>
+
+                <div className="flex justify-between items-center pt-8 border-t border-white/5">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-gray-500">Bilancio Finale</p>
+                    <p className="text-4xl font-black tracking-tighter text-oro">{artist.totalScore} pt</p>
+                </div>
+            </motion.div>
+        </div>
     );
 }
