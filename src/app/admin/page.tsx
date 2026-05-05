@@ -779,6 +779,18 @@ export default function AdminDashboard() {
                                             Annulla
                                         </button>
                                     )}
+                                <h2 className="text-2xl font-bold mb-8 flex items-center justify-between">
+                                    <div className="flex items-center gap-3">
+                                        <FiUsers className="text-oro" /> {editingArtistId ? "Modifica Artista" : "Aggiungi Nuovo Artista"}
+                                    </div>
+                                    {editingArtistId && (
+                                        <button
+                                            onClick={cancelEditingArtist}
+                                            className="text-xs bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg transition-all"
+                                        >
+                                            Annulla Modifica
+                                        </button>
+                                    )}
                                 </h2>
                                 <form onSubmit={handleAddArtist} className="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
                                     <div className="md:col-span-2 space-y-2">
@@ -788,7 +800,7 @@ export default function AdminDashboard() {
                                             value={newName}
                                             onChange={e => setNewName(e.target.value)}
                                             placeholder="Inserisci nome..."
-                                            className="w-full bg-[#0a0f1c] border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-colors"
+                                            className="w-full bg-[#0a0f1c] border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-oro transition-colors"
                                         />
                                     </div>
                                     <div className="space-y-2">
@@ -798,7 +810,7 @@ export default function AdminDashboard() {
                                             value={newCost}
                                             onChange={e => setNewCost(e.target.value ? Number(e.target.value) : "")}
                                             placeholder="es. 20"
-                                            className="w-full bg-[#0a0f1c] border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-colors"
+                                            className="w-full bg-[#0a0f1c] border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-oro transition-colors"
                                         />
                                     </div>
                                     <div className="space-y-2">
@@ -806,21 +818,13 @@ export default function AdminDashboard() {
                                         <select
                                             value={newType}
                                             onChange={e => setNewType(e.target.value as any)}
-                                            className="w-full bg-[#0a0f1c] border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-colors appearance-none"
+                                            className="w-full bg-[#0a0f1c] border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-oro transition-colors appearance-none"
                                         >
                                             <option value="ARTISTA">ARTISTA</option>
                                             <option value="PRESENTATORE">PRESENTATORE</option>
                                             <option value="OSPITE">OSPITE</option>
                                         </select>
                                     </div>
-                                    <button
-                                        type="submit"
-                                        disabled={artistLoading}
-                                        className="py-3.5 bg-red-600 hover:bg-red-500 text-white font-bold rounded-xl transition-all disabled:opacity-50 shadow-lg shadow-red-600/20"
-                                    >
-                                        {artistLoading ? "Salvataggio..." : "Salva Artista"}
-                                    </button>
-
                                     <div className="md:col-span-4 grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
                                         <div className="space-y-4">
                                             <label className="text-xs font-bold text-gray-500 uppercase block">Immagine Profilo</label>
@@ -837,14 +841,23 @@ export default function AdminDashboard() {
                                                         </div>
                                                     )}
                                                 </div>
-                                                <div className="flex-1">
-                                                    <label className="inline-flex items-center gap-2 px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white font-bold rounded-xl cursor-pointer transition-all border border-gray-600">
+                                                <div className="flex-1 flex flex-col gap-3">
+                                                    <label className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-oro text-blunotte font-black rounded-xl cursor-pointer transition-all hover:bg-yellow-300">
                                                         <FiUpload /> {isUploading ? "Caricamento..." : "Scegli File"}
                                                         <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={isUploading} />
                                                     </label>
-                                                    <p className="text-xs text-gray-500 mt-2 italic">Dimensioni consigliate: 400x400px (1:1)</p>
+                                                    <p className="text-xs text-gray-500 italic">Dimensioni consigliate: 1:1 (Quadrata)</p>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div className="flex items-end">
+                                            <button
+                                                type="submit"
+                                                disabled={artistLoading}
+                                                className="w-full bg-white text-blunotte font-black py-4 rounded-xl hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg uppercase tracking-widest text-sm"
+                                            >
+                                                {artistLoading ? "Salvataggio..." : editingArtistId ? "Aggiorna Artista" : "Salva Artista"}
+                                            </button>
                                         </div>
                                     </div>
                                 </form>
