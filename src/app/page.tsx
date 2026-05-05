@@ -59,8 +59,8 @@ export default function Home() {
             </motion.div>
 
             <motion.h1 variants={fadeIn} className="text-6xl md:text-9xl font-black tracking-tighter leading-[0.85] mb-12">
-              Scegli la tua <br />
-              <span className="text-oro drop-shadow-[0_0_30px_rgba(255,215,0,0.3)]">Visione.</span>
+              Domina la <br />
+              <span className="text-oro drop-shadow-[0_0_30px_rgba(255,215,0,0.3)]">Piazza.</span>
             </motion.h1>
 
             <motion.div variants={fadeIn} className="w-full max-w-3xl glass-oro p-12 rounded-[3rem] border border-oro/10 shadow-3xl mb-16 relative overflow-hidden group">
@@ -103,7 +103,7 @@ export default function Home() {
             <motion.div variants={fadeIn} className="glass p-12 rounded-[3.5rem] border border-white/5 flex flex-col justify-between group">
               <div>
                 <FiUsers className="text-viola text-5xl mb-8 group-hover:scale-110 transition-transform" />
-                <h2 className="text-4xl font-black tracking-tight mb-4">5 Membri. <br />1 Visione.</h2>
+                <h2 className="text-4xl font-black tracking-tight mb-4">Il tuo <br />Quintetto.</h2>
               </div>
               <Link href="/team/create" className="flex items-center gap-3 text-oro font-black uppercase tracking-widest group/link">
                 Fonda il Team <FiArrowRight className="group-hover/link:translate-x-2 transition-transform" />
