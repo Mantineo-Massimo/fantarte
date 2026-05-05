@@ -102,13 +102,13 @@ export default function Navbar() {
                             {isAdmin && (
                                 <Link
                                     href="/admin"
-                                    className={`flex items-center gap-2 px-6 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all border border-purple-500/10 ${pathname.startsWith("/admin")
+                                    className={`flex items-center justify-center p-2.5 rounded-2xl transition-all border border-purple-500/10 ${pathname.startsWith("/admin")
                                         ? "text-purple-400 bg-purple-500/10"
                                         : "text-gray-400 hover:text-purple-300 hover:bg-purple-500/5"
                                         }`}
+                                    title="Admin"
                                 >
-                                    <FiShield size={14} />
-                                    Admin
+                                    <FiShield size={18} />
                                 </Link>
                             )}
 
