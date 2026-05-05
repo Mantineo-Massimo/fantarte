@@ -45,6 +45,11 @@ export default function Navbar() {
 
     const isAdmin = status === "authenticated" && session?.user?.role === "ADMIN";
 
+    // Se admin, la home va sul logo (rimuoviamo il link Home dal menu per salvare spazio)
+    const filteredNavLinks = isAdmin 
+        ? navLinks.filter(link => link.href !== "/") 
+        : navLinks;
+
     return (
         <>
             <header className={`fixed top-0 w-full z-[100] transition-all duration-700 pointer-events-none
@@ -68,7 +73,7 @@ export default function Navbar() {
 
                         {/* Desktop Revolution Menu */}
                         <div className="hidden md:flex items-center gap-1">
-                            {navLinks.map((link) => {
+                            {filteredNavLinks.map((link) => {
                                 const Icon = link.icon;
                                 const isActive = pathname === link.href;
                                 return (
@@ -148,7 +153,7 @@ export default function Navbar() {
                         className="fixed inset-0 z-[95] bg-blunotte/98 backdrop-blur-3xl flex flex-col items-center justify-start overflow-y-auto pt-32 pb-20 px-6"
                     >
                         <div className="flex flex-col space-y-4 w-full max-w-sm">
-                            {navLinks.map((link, index) => {
+                            {filteredNavLinks.map((link, index) => {
                                 const Icon = link.icon;
                                 const isActive = pathname === link.href;
                                 return (
