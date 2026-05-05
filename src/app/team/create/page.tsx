@@ -206,7 +206,41 @@ export default function CreateTeamPage() {
                 <div className="absolute bottom-[10%] right-[-10%] w-[500px] h-[500px] bg-oro opacity-[0.04] rounded-full blur-[100px]" />
             </div>
 
-            <div className="relative z-10 w-full max-w-7xl px-6">
+            <div className="relative z-10 w-full max-w-7xl px-4 md:px-6">
+                
+                {/* Mobile Sticky Status Bar */}
+                <div className="lg:hidden fixed bottom-0 left-0 right-0 z-[100] p-4 pointer-events-none">
+                    <motion.div 
+                        initial={{ y: 100 }}
+                        animate={{ y: 0 }}
+                        className="glass-oro border border-oro/30 rounded-[2rem] p-4 shadow-2xl flex items-center justify-between pointer-events-auto backdrop-blur-2xl"
+                    >
+                        <div className="flex gap-4">
+                            <div className="flex flex-col">
+                                <span className="text-[8px] font-black uppercase text-gray-500">Armoni</span>
+                                <span className={`text-xl font-black ${remainingBudget < 0 ? 'text-red-500' : 'text-white'}`}>
+                                    {remainingBudget}<span className="text-[10px] opacity-30">/100</span>
+                                </span>
+                            </div>
+                            <div className="w-[1px] h-8 bg-white/10" />
+                            <div className="flex flex-col">
+                                <span className="text-[8px] font-black uppercase text-gray-500">Quintetto</span>
+                                <span className="text-xl font-black text-white">
+                                    {selectedArtists.length}<span className="text-[10px] opacity-30">/5</span>
+                                </span>
+                            </div>
+                        </div>
+                        <button 
+                            onClick={() => {
+                                const el = document.getElementById('summary-sidebar');
+                                if (el) el.scrollIntoView({ behavior: 'smooth' });
+                            }}
+                            className="bg-oro text-blunotte px-6 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-xl"
+                        >
+                            Riepilogo
+                        </button>
+                    </motion.div>
+                </div>
                 
                 {/* Hero Section Revolution */}
                 <motion.header 
@@ -220,7 +254,7 @@ export default function CreateTeamPage() {
                         Area Gestione Squadra
                     </div>
                     
-                    <h1 className="text-6xl md:text-9xl font-black tracking-tighter leading-[0.85]">
+                    <h1 className="text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter leading-[0.85] px-4">
                         {isEditing ? (
                             <>Il tuo <span className="text-oro drop-shadow-[0_0_20px_rgba(255,215,0,0.4)]">Impero.</span></>
                         ) : (
@@ -360,8 +394,8 @@ export default function CreateTeamPage() {
                     </div>
 
                     {/* Right: Summary Sidebar Revolution */}
-                    <div className="lg:col-span-4">
-                        <div className="sticky top-32 space-y-8">
+                    <div className="lg:col-span-4" id="summary-sidebar">
+                        <div className="sticky top-32 space-y-8 pb-20 lg:pb-0">
                             <div className="glass p-12 rounded-[4rem] border border-white/5 shadow-3xl overflow-hidden relative">
                                 <div className="absolute top-0 right-0 w-48 h-48 bg-oro opacity-[0.02] blur-3xl -translate-y-1/2 translate-x-1/2" />
                                 

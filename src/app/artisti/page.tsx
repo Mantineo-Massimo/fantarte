@@ -67,7 +67,7 @@ export default function ArtistsPage() {
                                 <FiArrowLeft /> Torna alla Home
                             </Link>
                         </motion.div>
-                        <motion.h1 variants={fadeIn} className="text-6xl md:text-8xl font-black tracking-tighter leading-none mb-6">
+                        <motion.h1 variants={fadeIn} className="text-5xl sm:text-7xl md:text-8xl font-black tracking-tighter leading-none mb-6">
                             Il Cast <br />
                             <span className="text-oro drop-shadow-[0_0_30px_rgba(255,215,0,0.3)]">Rivoluzionario</span>
                         </motion.h1>
@@ -208,7 +208,7 @@ function ArtistCard({ artist, index }: { artist: Artist; index: number }) {
                 </div>
 
                 {/* Info Section */}
-                <div className="p-8 flex flex-col justify-between flex-1">
+                <div className="p-6 md:p-8 flex flex-col justify-between flex-1">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex flex-col">
                             <span className="text-[9px] font-black text-gray-500 uppercase tracking-[0.2em] mb-1">Ruolo</span>
