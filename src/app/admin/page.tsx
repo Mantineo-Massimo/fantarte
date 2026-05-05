@@ -434,7 +434,10 @@ export default function AdminDashboard() {
                 })
             });
 
-            if (!res.ok) throw new Error(`Errore durante ${editingArtistId ? 'la modifica' : "l'aggiunta"} dell'artista`);
+            if (!res.ok) {
+                const errorText = await res.text();
+                throw new Error(errorText || `Errore durante ${editingArtistId ? 'la modifica' : "l'aggiunta"} dell'artista`);
+            }
 
             setSuccess(`Artista ${newName} ${editingArtistId ? 'modificato' : 'aggiunto'} con successo.`);
             setNewName("");
@@ -478,7 +481,10 @@ export default function AdminDashboard() {
 
         try {
             const res = await fetch(`/api/admin/artists?id=${id}`, { method: "DELETE" });
-            if (!res.ok) throw new Error("Errore durante l'eliminazione");
+            if (!res.ok) {
+                const errorText = await res.text();
+                throw new Error(errorText || "Errore durante l'eliminazione");
+            }
 
             setSuccess(`Artista "${name}" eliminato.`);
             loadArtists();
@@ -766,19 +772,6 @@ export default function AdminDashboard() {
                     {activeTab === "artists" && (
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8">
                             <div className="bg-[#131d36] p-8 rounded-3xl border border-gray-800 shadow-xl">
-                                <h2 className="text-2xl font-bold mb-6 flex items-center justify-between">
-                                    <div className="flex items-center gap-3">
-                                        {editingArtistId ? <FiEdit2 className="text-oro" /> : <FiPlus className="text-oro" />}
-                                        {editingArtistId ? "Modifica Artista" : "Aggiungi Nuovo Artista"}
-                                    </div>
-                                    {editingArtistId && (
-                                        <button
-                                            onClick={cancelEditingArtist}
-                                            className="text-xs font-black uppercase tracking-widest text-gray-500 hover:text-white transition-colors"
-                                        >
-                                            Annulla
-                                        </button>
-                                    )}
                                 <h2 className="text-2xl font-bold mb-8 flex items-center justify-between">
                                     <div className="flex items-center gap-3">
                                         <FiUsers className="text-oro" /> {editingArtistId ? "Modifica Artista" : "Aggiungi Nuovo Artista"}
@@ -786,7 +779,7 @@ export default function AdminDashboard() {
                                     {editingArtistId && (
                                         <button
                                             onClick={cancelEditingArtist}
-                                            className="text-xs bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg transition-all"
+                                            className="text-[10px] font-black uppercase tracking-widest bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg transition-all"
                                         >
                                             Annulla Modifica
                                         </button>
