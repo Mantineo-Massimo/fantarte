@@ -33,7 +33,7 @@ export async function POST(req: Request) {
         if (!user || user.role !== "ADMIN") return new NextResponse("Forbidden", { status: 403 });
 
         const body = await req.json();
-        const { name, logoUrl } = body;
+        const { name, logoUrl, role, linkUrl } = body;
 
         if (!name || !logoUrl) {
             return new NextResponse("Missing name or logoUrl", { status: 400 });
@@ -42,7 +42,9 @@ export async function POST(req: Request) {
         const sponsor = await prisma.sponsor.create({
             data: {
                 name,
-                logoUrl
+                logoUrl,
+                role: role || "Official Partner",
+                linkUrl
             }
         });
 

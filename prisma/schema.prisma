@@ -102,6 +102,8 @@ model Sponsor {
   id        String   @id @default(uuid())
   name      String
   logoUrl   String
+  role      String   @default("Official Partner")
+  linkUrl   String?
   createdAt DateTime @default(now())
 }
 

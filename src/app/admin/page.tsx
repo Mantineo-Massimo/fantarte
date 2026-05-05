@@ -60,6 +60,8 @@ export default function AdminDashboard() {
     const [artistLoading, setArtistLoading] = useState(false);
     const [editingArtistId, setEditingArtistId] = useState<string | null>(null);
     const [newType, setNewType] = useState<"ARTISTA" | "PRESENTATORE" | "OSPITE">("ARTISTA");
+    const [newRole, setNewRole] = useState("Official Partner");
+    const [newLink, setNewLink] = useState("");
 
     // Points State
     const [selectedArtistId, setSelectedArtistId] = useState("");
@@ -243,12 +245,14 @@ export default function AdminDashboard() {
             const res = await fetch("/api/admin/sponsors", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name: newName, logoUrl: newImage })
+                body: JSON.stringify({ name: newName, logoUrl: newImage, role: newRole, linkUrl: newLink })
             });
             if (!res.ok) throw new Error("Errore salvataggio sponsor");
             setSuccess("Sponsor aggiunto!");
             setNewName("");
             setNewImage(null);
+            setNewRole("Official Partner");
+            setNewLink("");
             loadSponsors();
         } catch (err: any) {
             setError(err.message);
@@ -1310,27 +1314,51 @@ export default function AdminDashboard() {
                                 <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
                                     <FiPlus className="text-oro" /> Aggiungi Nuovo Sponsor
                                 </h2>
-                                <form onSubmit={handleAddSponsor} className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
+                                <form onSubmit={handleAddSponsor} className="grid grid-cols-1 md:grid-cols-5 gap-6 items-end">
                                     <div className="space-y-2">
-                                        <label className="text-xs font-bold text-gray-500 uppercase">Nome Sponsor</label>
+                                        <label className="text-xs font-bold text-gray-500 uppercase">Nome</label>
                                         <input
                                             type="text"
                                             value={newName}
                                             onChange={e => setNewName(e.target.value)}
-                                            placeholder="Inserisci nome..."
+                                            placeholder="Nome..."
                                             className="w-full bg-[#0a0f1c] border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-oro transition-colors"
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-xs font-bold text-gray-500 uppercase">Logo (Verrà reso grayscale)</label>
+                                        <label className="text-xs font-bold text-gray-500 uppercase">Categoria</label>
+                                        <select
+                                            value={newRole}
+                                            onChange={e => setNewRole(e.target.value)}
+                                            className="w-full bg-[#0a0f1c] border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-oro transition-colors"
+                                        >
+                                            <option value="FantaPartner">FantaPartner</option>
+                                            <option value="Official Partner">Official Partner</option>
+                                            <option value="Premium Partner">Premium Partner</option>
+                                            <option value="Main Partner">Main Partner</option>
+                                            <option value="Patrocinio">Patrocinio</option>
+                                        </select>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold text-gray-500 uppercase">Link (Sito/Social)</label>
+                                        <input
+                                            type="url"
+                                            value={newLink}
+                                            onChange={e => setNewLink(e.target.value)}
+                                            placeholder="https://..."
+                                            className="w-full bg-[#0a0f1c] border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-oro transition-colors"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold text-gray-500 uppercase">Logo</label>
                                         <div className="flex gap-4">
                                             <label className="flex-1 flex items-center justify-center gap-2 bg-[#0a0f1c] border border-gray-800 rounded-xl px-4 py-3 text-sm font-bold text-gray-400 cursor-pointer hover:bg-white/5 transition-all">
                                                 <FiUpload className={isUploading ? "animate-bounce" : ""} />
-                                                {isUploading ? "Caricamento..." : "Carica Logo"}
+                                                {isUploading ? "..." : "Carica"}
                                                 <input type="file" className="hidden" onChange={handleImageUpload} accept="image/*" />
                                             </label>
                                             {newImage && (
-                                                <div className="w-12 h-12 rounded-lg border border-gray-800 overflow-hidden bg-white flex items-center justify-center p-1">
+                                                <div className="w-12 h-12 rounded-lg border border-gray-800 overflow-hidden bg-white flex items-center justify-center p-1 shrink-0">
                                                     <img src={newImage} alt="Preview" className="w-full h-full object-contain" />
                                                 </div>
                                             )}
@@ -1341,7 +1369,7 @@ export default function AdminDashboard() {
                                         disabled={sponsorsLoading || !newName || !newImage}
                                         className="bg-oro text-blunotte font-black py-4 rounded-xl hover:bg-yellow-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-oro/20 uppercase tracking-widest text-xs"
                                     >
-                                        Salva Sponsor
+                                        Salva
                                     </button>
                                 </form>
                             </div>
@@ -1365,7 +1393,8 @@ export default function AdminDashboard() {
                                                 <div className="aspect-[3/2] bg-white rounded-lg flex items-center justify-center p-3 mb-3">
                                                     <img src={s.logoUrl} alt={s.name} className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-500" />
                                                 </div>
-                                                <div className="text-[10px] font-black uppercase text-gray-500 tracking-wider truncate">{s.name}</div>
+                                                <div className="text-[10px] font-black uppercase text-white tracking-wider truncate mb-1">{s.name}</div>
+                                                <div className="text-[8px] font-black uppercase text-oro tracking-widest">{s.role || "Official Partner"}</div>
                                             </div>
                                         ))}
                                         {sponsors.length === 0 && (

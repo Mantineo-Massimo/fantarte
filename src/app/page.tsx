@@ -70,7 +70,7 @@ export default function Home() {
 
             <motion.h1 variants={fadeIn} className="text-6xl md:text-9xl font-black tracking-tighter leading-[0.85] mb-12">
               Domina la <br />
-              <span className="text-oro drop-shadow-[0_0_30px_rgba(255,215,0,0.3)]">Piazza.</span>
+              <span className="text-oro drop-shadow-[0_0_30px_rgba(255,215,0,0.3)]">Piazza</span>
             </motion.h1>
 
             <motion.div variants={fadeIn} className="w-full max-w-3xl glass-oro p-12 rounded-[3rem] border border-oro/10 shadow-3xl mb-16 relative overflow-hidden group">
@@ -160,26 +160,37 @@ export default function Home() {
                 {/* Ripetiamo la lista più volte per assicurarci che non ci siano mai buchi, anche con pochi sponsor */}
                 {[...Array(6)].map((_, setIndex) => (
                   <div key={`set-${setIndex}`} className="flex gap-12">
-                    {sponsors.map((p) => (
-                      <div
-                        key={`s-${setIndex}-${p.id}`}
-                        className="glass w-72 h-32 p-6 rounded-[2rem] border border-white/5 flex items-center gap-6 grayscale hover:grayscale-0 transition-all cursor-pointer hover:border-oro/20 shrink-0"
-                      >
-                        <div className="w-20 h-20 relative flex items-center justify-center shrink-0">
-                          {p.logoUrl ? (
-                            <img src={p.logoUrl} alt={p.name} className="max-w-full max-h-full object-contain" />
-                          ) : (
-                            <div className="w-full h-full rounded-xl bg-white/5 flex items-center justify-center border border-white/10">
-                              <span className="text-xl font-black text-gray-500">{p.name.charAt(0)}</span>
-                            </div>
-                          )}
+                    {sponsors.map((p) => {
+                      const SponsorContent = (
+                        <div 
+                          className="glass w-72 h-32 p-6 rounded-[2rem] border border-white/5 flex items-center gap-6 grayscale hover:grayscale-0 transition-all cursor-pointer hover:border-oro/20 shrink-0 group/sponsor"
+                        >
+                          <div className="w-20 h-20 relative flex items-center justify-center shrink-0 group-hover/sponsor:scale-110 transition-transform">
+                            {p.logoUrl ? (
+                              <img src={p.logoUrl} alt={p.name} className="max-w-full max-h-full object-contain" />
+                            ) : (
+                              <div className="w-full h-full rounded-xl bg-white/5 flex items-center justify-center border border-white/10">
+                                <span className="text-xl font-black text-gray-500">{p.name.charAt(0)}</span>
+                              </div>
+                            )}
+                          </div>
+                          <div className="overflow-hidden">
+                            <p className="font-black text-[11px] uppercase tracking-widest truncate text-white">{p.name}</p>
+                            <p className="text-[8px] font-black text-gray-600 uppercase tracking-widest">{p.role || "Official Partner"}</p>
+                          </div>
                         </div>
-                        <div className="overflow-hidden">
-                          <p className="font-black text-[11px] uppercase tracking-widest truncate text-white">{p.name}</p>
-                          <p className="text-[8px] font-black text-gray-600 uppercase tracking-widest">Official Partner</p>
+                      );
+
+                      return p.linkUrl ? (
+                        <a key={`s-${setIndex}-${p.id}`} href={p.linkUrl} target="_blank" rel="noopener noreferrer">
+                          {SponsorContent}
+                        </a>
+                      ) : (
+                        <div key={`s-${setIndex}-${p.id}`}>
+                          {SponsorContent}
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 ))}
               </div>
