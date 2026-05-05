@@ -8,7 +8,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
-type RuleCategory = "Tutte" | "Canto" | "Danza" | "Tematici" | "Piazza" | "Malus" | "Finale";
+type RuleCategory = "Tutte" | "BONUS" | "MALUS" | "SPECIALE";
 
 type Rule = {
     id: string;
@@ -18,7 +18,7 @@ type Rule = {
     points: number;
 };
 
-const categories: RuleCategory[] = ["Tutte", "Canto", "Danza", "Tematici", "Piazza", "Malus", "Finale"];
+const categories: RuleCategory[] = ["Tutte", "BONUS", "SPECIALE", "MALUS"];
 
 const fadeIn = {
     initial: { opacity: 0, y: 20 },
@@ -48,10 +48,11 @@ export default function RegolePage() {
         activeFilter === "Tutte" ? true : rule.category === activeFilter
     );
 
-    const getRuleColor = (points: number) => {
-        if (points >= 50) return "text-oro bg-oro/10 border-oro/30 shadow-[0_0_15px_rgba(255,215,0,0.1)]";
-        if (points > 0) return "text-green-400 bg-green-500/10 border-green-500/20";
-        return "text-red-500 bg-red-500/10 border-red-500/20";
+    const getRuleColor = (category: string) => {
+        if (category === "SPECIALE") return "text-oro bg-oro/10 border-oro/30 shadow-[0_0_15px_rgba(255,215,0,0.1)]";
+        if (category === "BONUS") return "text-green-400 bg-green-500/10 border-green-500/20";
+        if (category === "MALUS") return "text-red-500 bg-red-500/10 border-red-500/20";
+        return "text-gray-400 bg-white/5 border-white/10";
     };
 
     return (
@@ -130,7 +131,7 @@ export default function RegolePage() {
                                         : "bg-white/5 text-gray-500 hover:bg-white/10 hover:text-white"
                                     }`}
                                 >
-                                    {cat}
+                                    {cat === "SPECIALE" ? "Speciali" : cat === "BONUS" ? "Bonus" : cat === "MALUS" ? "Malus" : cat}
                                 </button>
                             ))}
                         </div>
@@ -152,7 +153,7 @@ export default function RegolePage() {
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, scale: 0.95 }}
                                         transition={{ delay: idx * 0.05 }}
-                                        className={`glass p-6 rounded-3xl border transition-all duration-300 hover:scale-[1.02] ${getRuleColor(rule.points)}`}
+                                        className={`glass p-6 rounded-3xl border transition-all duration-300 hover:scale-[1.02] ${getRuleColor(rule.category)}`}
                                     >
                                         <div className="flex items-center justify-between gap-6">
                                             <div className="flex-1">
