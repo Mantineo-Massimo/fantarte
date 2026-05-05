@@ -55,6 +55,7 @@ export default function PrivacyPage() {
                     </div>
 
                     {/* Card container */}
+
                     <motion.div
                         variants={sectionVariants}
                         transition={{ delay: 0.1 }}
