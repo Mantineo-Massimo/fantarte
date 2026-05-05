@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import {
     FiHome, FiList, FiPlus, FiLogOut, FiSettings,
-    FiBookOpen, FiUser, FiMenu, FiX, FiShield
+    FiBookOpen, FiUser, FiMenu, FiX, FiShield, FiCheck
 } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 
