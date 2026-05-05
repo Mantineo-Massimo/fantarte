@@ -51,9 +51,8 @@ next-env.d.ts
 *.out
 *.synctex.gz
 *.toc
-*.pdf
-*.tex
 documenti_legali/**/*.pdf
+
 documenti_legali/**/*.aux
 documenti_legali/**/*.log
 documenti_legali/**/*.out
