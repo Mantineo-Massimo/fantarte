@@ -271,12 +271,6 @@ export default function CreateTeamPage() {
                             disabled={isExpired}
                             className="w-full glass border border-white/5 rounded-[2.5rem] px-10 py-6 text-center text-2xl font-black focus:border-oro transition-all outline-none shadow-3xl placeholder:opacity-30"
                         />
-                        <div className="flex justify-center gap-4">
-                            <div className="glass px-8 py-4 rounded-3xl border border-white/5">
-                                <p className="text-[9px] text-gray-500 font-black uppercase tracking-widest mb-1">Punteggio Attuale</p>
-                                <p className="text-3xl font-black text-oro tracking-tighter">{teamScore}</p>
-                            </div>
-                        </div>
                     </div>
 
                     {deadline && (
@@ -320,7 +314,7 @@ export default function CreateTeamPage() {
                                             <h2 className="text-3xl font-black uppercase tracking-tighter">Scegli il <span className="text-oro">Presentatore</span></h2>
                                             <span className="text-gray-700 font-mono text-sm ml-auto">01 RICHIESTO</span>
                                         </div>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+                                        <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 gap-3 md:gap-8">
                                             {filteredArtists.filter(a => a.type === "PRESENTATORE").map(artist => (
                                                 <SelectionArtistCard 
                                                     key={artist.id} 
@@ -344,7 +338,7 @@ export default function CreateTeamPage() {
                                             <h2 className="text-3xl font-black uppercase tracking-tighter">Scegli l&apos;<span className="text-viola">Ospite</span></h2>
                                             <span className="text-gray-700 font-mono text-sm ml-auto">01 RICHIESTO</span>
                                         </div>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+                                        <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 gap-3 md:gap-8">
                                             {filteredArtists.filter(a => a.type === "OSPITE").map(artist => (
                                                 <SelectionArtistCard 
                                                     key={artist.id} 
@@ -368,7 +362,7 @@ export default function CreateTeamPage() {
                                             <h2 className="text-3xl font-black uppercase tracking-tighter">I tuoi 3 <span className="text-ocra">Artisti</span></h2>
                                             <span className="text-gray-700 font-mono text-sm ml-auto">03 RICHIESTI</span>
                                         </div>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+                                        <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 gap-3 md:gap-8">
                                             {filteredArtists.filter(a => a.type === "ARTISTA").map(artist => (
                                                 <SelectionArtistCard 
                                                     key={artist.id} 
@@ -502,54 +496,54 @@ function SelectionArtistCard({
             animate={{ opacity: 1, scale: 1 }}
             whileHover={{ scale: isDisabled ? 1 : 1.03 }}
             onClick={() => !isDisabled && toggleArtist(artist)}
-            className={`group relative rounded-[3rem] border-2 transition-all p-6 overflow-hidden cursor-pointer flex flex-col h-full
+            className={`group relative rounded-[2rem] md:rounded-[3rem] border-2 transition-all p-3 md:p-6 overflow-hidden cursor-pointer flex flex-col h-full
                 ${isSelected 
-                    ? "glass-oro border-oro shadow-[0_20px_50px_rgba(255,215,0,0.15)]" 
+                    ? "glass-oro border-oro shadow-[0_10px_30px_rgba(255,215,0,0.15)]" 
                     : isDisabled ? "bg-gray-900/50 border-white/5 opacity-20 grayscale cursor-not-allowed" : "glass border-white/10 hover:border-oro/30"
                 }
             `}
         >
-            <div className="flex flex-col h-full space-y-6">
+            <div className="flex flex-col h-full space-y-3 md:space-y-6">
                 <div className="flex justify-between items-start">
-                    <div>
-                        <h3 className="font-black text-2xl leading-[0.9] mb-1">{artist.name}</h3>
-                        <span className={`text-[9px] font-black uppercase tracking-[0.2em] 
+                    <div className="overflow-hidden">
+                        <h3 className="font-black text-sm md:text-2xl leading-[0.9] mb-1 truncate">{artist.name}</h3>
+                        <span className={`text-[7px] md:text-[9px] font-black uppercase tracking-[0.2em] 
                             ${artist.type === 'PRESENTATORE' ? 'text-oro' : artist.type === 'OSPITE' ? 'text-viola' : 'text-ocra'}
                         `}>
                             {artist.type}
                         </span>
                     </div>
-                    <div className="text-right">
-                        <p className="text-2xl font-black tracking-tighter leading-none">{artist.cost}</p>
-                        <p className="text-[8px] font-black text-gray-500 uppercase tracking-widest">Armoni</p>
+                    <div className="text-right shrink-0">
+                        <p className="text-sm md:text-2xl font-black tracking-tighter leading-none">{artist.cost}</p>
+                        <p className="text-[6px] md:text-[8px] font-black text-gray-500 uppercase tracking-widest">Armoni</p>
                     </div>
                 </div>
 
-                <div className="aspect-[4/5] w-full rounded-[2rem] bg-black overflow-hidden border border-white/10 shadow-2xl relative">
+                <div className="aspect-[4/5] w-full rounded-2xl md:rounded-[2rem] bg-black overflow-hidden border border-white/10 shadow-2xl relative">
                     {artist.image ? (
                         <img src={artist.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                     ) : (
-                        <div className="w-full h-full flex items-center justify-center text-5xl font-black opacity-[0.03]">{artist.name.charAt(0)}</div>
+                        <div className="w-full h-full flex items-center justify-center text-2xl md:text-5xl font-black opacity-[0.03]">{artist.name.charAt(0)}</div>
                     )}
                     {isSelected && (
-                        <div className="absolute inset-0 bg-oro/10 backdrop-blur-[2px] flex items-center justify-center">
-                            <motion.div initial={{ scale: 0 }} animate={{ scale: 1.2 }} className="bg-oro text-blunotte p-4 rounded-2xl shadow-2xl">
-                                <FiCheck size={24} />
+                        <div className="absolute inset-0 bg-oro/10 backdrop-blur-[1px] flex items-center justify-center">
+                            <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="bg-oro text-blunotte p-2 md:p-4 rounded-xl md:rounded-2xl shadow-2xl">
+                                <FiCheck size={16} />
                             </motion.div>
                         </div>
                     )}
                 </div>
 
                 {isSelected && (
-                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex justify-between items-center pt-2">
+                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex justify-between items-center pt-1 md:pt-2">
                         <button
                             onClick={(e) => {
                                 e.stopPropagation();
                                 setCaptainId(artist.id);
                             }}
-                            className={`flex-1 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${captainId === artist.id ? "bg-oro text-blunotte shadow-xl" : "bg-white/10 text-white hover:bg-white/20 border border-white/10"}`}
+                            className={`flex-1 py-2 md:py-4 rounded-xl md:rounded-2xl text-[8px] md:text-[10px] font-black uppercase tracking-widest transition-all ${captainId === artist.id ? "bg-oro text-blunotte shadow-xl" : "bg-white/10 text-white hover:bg-white/20 border border-white/10"}`}
                         >
-                            {captainId === artist.id ? "★ Capitano" : "Eleggi Capitano"}
+                            {captainId === artist.id ? "★ Capitano" : "Capitano"}
                         </button>
                     </motion.div>
                 )}

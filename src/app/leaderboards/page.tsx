@@ -139,33 +139,39 @@ export default function LeaderboardsPage() {
 
                 {/* Podium Section */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20 items-end">
-                    {/* Rank 2 */}
-                    {top3[1] && (
-                        <PodiumCard 
-                            rank={2} 
-                            data={top3[1]} 
-                            type={viewMode} 
-                            onClick={() => viewMode === "teams" ? setSelectedTeam(top3[1] as TeamResult) : handleArtistClick(top3[1] as Artist)} 
-                        />
-                    )}
-                    {/* Rank 1 (Center) */}
+                    {/* Rank 1 (Center on MD, First on Mobile) */}
                     {top3[0] && (
-                        <PodiumCard 
-                            rank={1} 
-                            data={top3[0]} 
-                            type={viewMode} 
-                            featured
-                            onClick={() => viewMode === "teams" ? setSelectedTeam(top3[0] as TeamResult) : handleArtistClick(top3[0] as Artist)} 
-                        />
+                        <div className="order-1 md:order-2">
+                            <PodiumCard 
+                                rank={1} 
+                                data={top3[0]} 
+                                type={viewMode} 
+                                featured
+                                onClick={() => viewMode === "teams" ? setSelectedTeam(top3[0] as TeamResult) : handleArtistClick(top3[0] as Artist)} 
+                            />
+                        </div>
                     )}
-                    {/* Rank 3 */}
+                    {/* Rank 2 (Left on MD, Second on Mobile) */}
+                    {top3[1] && (
+                        <div className="order-2 md:order-1">
+                            <PodiumCard 
+                                rank={2} 
+                                data={top3[1]} 
+                                type={viewMode} 
+                                onClick={() => viewMode === "teams" ? setSelectedTeam(top3[1] as TeamResult) : handleArtistClick(top3[1] as Artist)} 
+                            />
+                        </div>
+                    )}
+                    {/* Rank 3 (Right on MD, Third on Mobile) */}
                     {top3[2] && (
-                        <PodiumCard 
-                            rank={3} 
-                            data={top3[2]} 
-                            type={viewMode} 
-                            onClick={() => viewMode === "teams" ? setSelectedTeam(top3[2] as TeamResult) : handleArtistClick(top3[2] as Artist)} 
-                        />
+                        <div className="order-3 md:order-3">
+                            <PodiumCard 
+                                rank={3} 
+                                data={top3[2]} 
+                                type={viewMode} 
+                                onClick={() => viewMode === "teams" ? setSelectedTeam(top3[2] as TeamResult) : handleArtistClick(top3[2] as Artist)} 
+                            />
+                        </div>
                     )}
                 </div>
 
