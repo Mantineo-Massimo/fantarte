@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { 
     FiInfo, FiCheckCircle, FiAlertTriangle, FiFilter, 
-    FiArrowLeft, FiStar, FiZap, FiTarget, FiHelpCircle 
+    FiArrowLeft, FiStar, FiZap, FiTarget, FiHelpCircle, FiUsers
 } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
