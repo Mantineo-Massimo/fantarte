@@ -237,33 +237,8 @@ export default function AccordoPage() {
                             </p>
                         </section>
 
-                        {/* Firme */}
-                        <div className="border-t border-gray-800/60 pt-8">
-                            <p className="text-gray-500 text-xs text-center mb-6 italic">
-                                Letto, approvato e sottoscritto in <strong className="text-gray-400">Messina</strong>, lì <strong className="text-gray-400">5 Maggio 2026</strong>
-                            </p>
-                            <div className="grid md:grid-cols-2 gap-4 mb-4">
-                                <div className="bg-white/[0.03] rounded-2xl p-6 border border-gray-800 text-center">
-                                    <p className="text-white font-bold text-sm mb-1">Per Associazione O.R.U.M.</p>
-                                    <p className="text-gray-400 text-xs italic mb-4">Luigi Grillo (Presidente)</p>
-                                    <div className="border-b border-gray-700 w-32 mx-auto" />
-                                </div>
-                                <div className="bg-white/[0.03] rounded-2xl p-6 border border-gray-800 text-center">
-                                    <p className="text-white font-bold text-sm mb-1">Per Associazione Morgana</p>
-                                    <p className="text-gray-400 text-xs italic mb-4">Giuseppe Di Giorgio (Presidente)</p>
-                                    <div className="border-b border-gray-700 w-32 mx-auto" />
-                                </div>
-                            </div>
-                            <div className="bg-white/[0.03] rounded-2xl p-6 border border-gray-800 text-center">
-                                <p className="text-white font-bold text-sm mb-1">Il Responsabile Tecnico</p>
-                                <p className="text-gray-400 text-xs italic mb-1">Massimo Mantineo</p>
-                                <p className="text-gray-600 text-[10px] mb-4">Firma per presa visione e accettazione dell&apos;incarico</p>
-                                <div className="border-b border-gray-700 w-32 mx-auto" />
-                            </div>
-                        </div>
-
                         {/* Link a privacy */}
-                        <div className="text-center">
+                        <div className="pt-8 text-center">
                             <Link href="/privacy" className="inline-block text-oro text-xs hover:underline">
                                 ← Torna all&apos;Informativa sulla Privacy
                             </Link>
