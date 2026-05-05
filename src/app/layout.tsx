@@ -4,6 +4,7 @@ import "./globals.css";
 import { NextAuthProvider } from "@/components/NextAuthProvider";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { Analytics } from "@vercel/analytics/next"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -78,6 +79,7 @@ export default function RootLayout({
             </div>
             <Footer />
           </div>
+          <Analytics />
         </NextAuthProvider>
       </body>
     </html>
