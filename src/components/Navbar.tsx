@@ -142,10 +142,10 @@ export default function Navbar() {
             <AnimatePresence>
                 {isMenuOpen && (
                     <motion.div
-                        initial={{ opacity: 0, scale: 1.1 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 1.1 }}
-                        className="fixed inset-0 z-[95] bg-blunotte/95 backdrop-blur-2xl flex flex-col items-center justify-center p-8"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[95] bg-blunotte/98 backdrop-blur-3xl flex flex-col items-center justify-start overflow-y-auto pt-32 pb-20 px-6"
                     >
                         <div className="flex flex-col space-y-4 w-full max-w-sm">
                             {navLinks.map((link, index) => {
@@ -160,7 +160,7 @@ export default function Navbar() {
                                     >
                                         <Link
                                             href={link.href}
-                                            className={`flex items-center justify-between py-6 px-10 rounded-[2rem] text-2xl font-black transition-all ${isActive ? "bg-oro text-blunotte shadow-2xl" : "glass text-gray-400"
+                                            className={`flex items-center justify-between py-4 px-8 rounded-2xl text-xl font-black transition-all ${isActive ? "bg-oro text-blunotte shadow-[0_0_30px_rgba(255,215,0,0.3)]" : "glass text-gray-400"
                                                 }`}
                                         >
                                             <div className="flex items-center gap-6">
@@ -176,9 +176,9 @@ export default function Navbar() {
                             {isAdmin && (
                                 <Link
                                     href="/admin"
-                                    className="flex items-center gap-6 py-6 px-10 rounded-[2rem] text-2xl font-black text-purple-400 border border-purple-500/20 bg-purple-500/5 mt-4"
+                                    className="flex items-center gap-6 py-4 px-8 rounded-2xl text-xl font-black text-purple-400 border border-purple-500/20 bg-purple-500/5 mt-2"
                                 >
-                                    <FiShield size={24} />
+                                    <FiShield size={20} />
                                     Admin
                                 </Link>
                             )}
@@ -194,7 +194,7 @@ export default function Navbar() {
                                 ) : (
                                     <Link
                                         href="/auth/login"
-                                        className="w-full py-8 rounded-[2rem] bg-oro text-blunotte font-black text-center text-2xl shadow-[0_20px_50px_rgba(255,215,0,0.3)]"
+                                        className="w-full py-5 rounded-2xl bg-oro text-blunotte font-black text-center text-xl shadow-[0_15px_30px_rgba(255,215,0,0.3)]"
                                     >
                                         Accedi Ora
                                     </Link>
