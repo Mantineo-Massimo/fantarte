@@ -59,7 +59,7 @@ export default function Footer() {
                             <nav className="flex flex-col gap-6">
                                 <FooterLink href="/privacy" label="Privacy Policy" />
                                 <FooterLink href="/accordo" label="Collaborazione" />
-                                <FooterLink href="/regolamento" label="Termini" />
+                                <FooterLink href="/regole" label="Regolamento" />
                             </nav>
                         </div>
                     </div>

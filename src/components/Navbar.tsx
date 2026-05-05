@@ -35,6 +35,7 @@ export default function Navbar() {
         { href: "/", label: "Home", icon: FiHome },
         { href: "/artisti", label: "Artisti", icon: FiUsers },
         { href: "/leaderboards", label: "Classifiche", icon: FiList },
+        { href: "/regole", label: "Regole", icon: FiBookOpen },
     ];
 
     if (status === "authenticated" && session) {

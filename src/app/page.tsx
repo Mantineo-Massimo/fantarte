@@ -68,22 +68,22 @@ export default function Home() {
               L&apos;Arte ha un nuovo Campo da Gioco
             </motion.div>
 
-            <motion.h1 variants={fadeIn} className="text-6xl md:text-9xl font-black tracking-tighter leading-[0.85] mb-12">
+            <motion.h1 variants={fadeIn} className="text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter leading-[0.85] mb-12">
               Domina la <br />
               <span className="text-oro drop-shadow-[0_0_30px_rgba(255,215,0,0.3)]">Piazza</span>
             </motion.h1>
 
-            <motion.div variants={fadeIn} className="w-full max-w-3xl glass-oro p-12 rounded-[3rem] border border-oro/10 shadow-3xl mb-16 relative overflow-hidden group">
+            <motion.div variants={fadeIn} className="w-full max-w-3xl glass-oro p-8 md:p-12 rounded-[2rem] md:rounded-[3rem] border border-oro/10 shadow-3xl mb-16 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-64 h-64 bg-oro opacity-[0.03] blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:opacity-10 transition-opacity" />
-              <p className="text-gray-400 font-bold uppercase tracking-[0.3em] text-xs mb-8">Inizio della Gara</p>
+              <p className="text-gray-400 font-bold uppercase tracking-[0.3em] text-[10px] mb-8">Inizio della Gara</p>
               <CountdownTimer targetDate="2026-05-18T18:00:00" />
             </motion.div>
 
-            <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-6">
-              <Link href="/team/create" className="px-12 py-6 bg-gradient-to-r from-oro to-ocra text-blunotte font-black rounded-2xl text-xl uppercase tracking-widest shadow-[0_0_40px_rgba(255,215,0,0.3)] hover:scale-105 active:scale-95 transition-all">
+            <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto px-4 sm:px-0">
+              <Link href="/team/create" className="px-8 md:px-12 py-5 md:py-6 bg-gradient-to-r from-oro to-ocra text-blunotte font-black rounded-2xl text-lg md:text-xl uppercase tracking-widest shadow-[0_0_40px_rgba(255,215,0,0.3)] hover:scale-105 active:scale-95 transition-all text-center">
                 Crea la tua Squadra
               </Link>
-              <Link href="/supporto" className="px-12 py-6 glass hover:bg-white/5 rounded-2xl text-xl font-bold uppercase tracking-widest transition-all">
+              <Link href="/regole" className="px-8 md:px-12 py-5 md:py-6 glass hover:bg-white/5 rounded-2xl text-lg md:text-xl font-bold uppercase tracking-widest transition-all text-center">
                 Come si Gioca
               </Link>
             </motion.div>
@@ -132,15 +132,15 @@ export default function Home() {
             </motion.div>
 
             {/* Box 4: FAQ */}
-            <motion.div variants={fadeIn} className="md:col-span-2 glass p-12 rounded-[3.5rem] border border-white/5 flex items-center justify-between group cursor-pointer hover:bg-white/5 transition-all">
-              <div className="flex items-center gap-8">
-                <FiInfo className="text-oro text-5xl" />
+            <motion.div variants={fadeIn} className="md:col-span-2 glass p-8 md:p-12 rounded-[2.5rem] md:rounded-[3.5rem] border border-white/5 flex flex-col md:flex-row items-center justify-between gap-8 md:gap-0 group cursor-pointer hover:bg-white/5 transition-all">
+              <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8 text-center md:text-left">
+                <FiInfo className="text-oro text-4xl md:text-5xl" />
                 <div>
-                  <h2 className="text-3xl font-black tracking-tight">Hai domande?</h2>
-                  <p className="text-gray-400">Abbiamo preparato una guida completa per te.</p>
+                  <h2 className="text-2xl md:text-3xl font-black tracking-tight">Hai domande?</h2>
+                  <p className="text-gray-400 text-sm md:text-base">Abbiamo preparato una guida completa per te.</p>
                 </div>
               </div>
-              <Link href="/supporto" className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-oro group-hover:text-blunotte transition-all">
+              <Link href="/supporto" className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-oro group-hover:text-blunotte transition-all shrink-0">
                 <FiArrowRight size={24} />
               </Link>
             </motion.div>
