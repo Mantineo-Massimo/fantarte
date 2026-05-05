@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "FantArte | Morgana e Orum",
-    description: "Il Fantagioco dove l'Arte incontra la Piazza.",
+    description: "Il Fantagioco dove l'Arte incontra la Piazza",
     images: ["/fanta-logo.png"],
   },
   icons: {
