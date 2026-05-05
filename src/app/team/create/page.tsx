@@ -200,11 +200,6 @@ export default function CreateTeamPage() {
     return (
         <main className="min-h-screen text-white flex flex-col items-center pt-56 md:pt-44 pb-32 overflow-x-hidden">
             
-            {/* Background Orbs */}
-            <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-                <div className="absolute top-[10%] left-[-10%] w-[600px] h-[600px] bg-viola opacity-[0.06] rounded-full blur-[120px]" />
-                <div className="absolute bottom-[10%] right-[-10%] w-[500px] h-[500px] bg-oro opacity-[0.04] rounded-full blur-[100px]" />
-            </div>
 
             <div className="relative z-10 w-full max-w-7xl px-4 md:px-6">
                 

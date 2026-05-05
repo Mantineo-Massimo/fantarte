@@ -107,11 +107,6 @@ export default function LeaderboardsPage() {
     return (
         <main className="min-h-screen text-white p-6 md:p-12 pt-56 md:pt-44 pb-32">
             
-            {/* Background Orbs */}
-            <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-                <div className="absolute top-[20%] left-[-10%] w-[500px] h-[500px] bg-viola opacity-[0.05] rounded-full blur-[100px]" />
-                <div className="absolute bottom-[20%] right-[-10%] w-[400px] h-[400px] bg-oro opacity-[0.03] rounded-full blur-[100px]" />
-            </div>
 
             <div className="relative z-10 max-w-6xl mx-auto">
                 <motion.div initial="initial" animate="animate" variants={fadeIn} className="text-center mb-16">
