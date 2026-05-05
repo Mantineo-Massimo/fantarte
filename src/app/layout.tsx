@@ -64,11 +64,16 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased text-white min-h-screen relative overflow-x-hidden`}
       >
-        {/* Animated Background Orbs */}
-        <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-          <div className="absolute -top-40 -left-64 w-[500px] h-[500px] bg-oro opacity-5 rounded-full blur-[100px] mix-blend-screen" />
-          <div className="absolute top-[20%] right-[-10%] w-[600px] h-[600px] bg-viola opacity-[0.03] rounded-full blur-[120px] mix-blend-screen" />
-          <div className="absolute -bottom-[10%] left-[20%] w-[400px] h-[400px] bg-ocra opacity-[0.04] rounded-full blur-[90px] mix-blend-screen" />
+        {/* Cinematic Fixed Background (Static & Cross-page) */}
+        <div className="fixed inset-0 z-0 pointer-events-none">
+          {/* Top Left Viola Glow */}
+          <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-viola opacity-[0.07] blur-[150px] rounded-full" />
+          {/* Bottom Right Oro Glow */}
+          <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-oro opacity-[0.04] blur-[150px] rounded-full" />
+          {/* Center-ish Ocra Glow */}
+          <div className="absolute top-[30%] left-[40%] w-[40%] h-[40%] bg-ocra opacity-[0.02] blur-[120px] rounded-full" />
+          {/* Texture Overlay */}
+          <div className="absolute inset-0 bg-[url('/background.png')] bg-cover bg-center opacity-[0.04] mix-blend-overlay" />
         </div>
 
         <NextAuthProvider>

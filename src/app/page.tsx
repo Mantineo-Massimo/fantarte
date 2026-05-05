@@ -34,12 +34,6 @@ export default function Home() {
   return (
     <main className="min-h-screen text-white overflow-hidden">
 
-      {/* Background Cinematic Elements */}
-      <div className="fixed inset-0 z-0">
-        <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-viola opacity-[0.08] blur-[150px] rounded-full animate-pulse" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-oro opacity-[0.05] blur-[150px] rounded-full animate-pulse" style={{ animationDelay: '2s' }} />
-        <div className="absolute inset-0 bg-[url('/background.png')] bg-cover bg-center opacity-[0.05] mix-blend-overlay" />
-      </div>
 
       <div className="relative z-10">
 
