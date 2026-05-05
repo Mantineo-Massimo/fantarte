@@ -55,7 +55,7 @@ export default function Navbar() {
                             <Link href="/" className="flex-shrink-0 flex items-center group">
                                 <Image
                                     src="/fanta-logo.png"
-                                    alt="FantaPiazza Logo"
+                                    alt="FantArte Logo"
                                     width={400}
                                     height={150}
                                     className={`w-auto object-contain drop-shadow-[0_0_15px_rgba(255,215,0,0.3)] group-hover:drop-shadow-[0_0_20px_rgba(255,215,0,0.5)] transition-all duration-500 ${scrolled ? "h-10 md:h-12" : "h-16 md:h-20"

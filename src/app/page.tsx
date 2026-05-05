@@ -36,7 +36,7 @@ export default function Home() {
         <div className="relative inline-block mt-8 mb-4">
           <Image
             src="/fanta-logo.png"
-            alt="FantaPiazza Logo"
+            alt="FantArte Logo"
             width={800}
             height={300}
             className="w-full max-w-4xl mx-auto drop-shadow-[0_0_30px_rgba(255,215,0,0.4)]"
