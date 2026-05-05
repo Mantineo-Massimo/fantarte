@@ -48,7 +48,6 @@ export default function CreateTeamPage() {
 
     // Filter/Search
     const [searchTerm, setSearchTerm] = useState("");
-    const [activeFilter, setActiveFilter] = useState<ArtistType | "ALL">("ALL");
 
     useEffect(() => {
         if (status === "unauthenticated") {
@@ -192,10 +191,9 @@ export default function CreateTeamPage() {
     const filteredArtists = useMemo(() => {
         return artists.filter(a => {
             const matchesSearch = a.name.toLowerCase().includes(searchTerm.toLowerCase());
-            const matchesFilter = activeFilter === "ALL" || a.type === activeFilter;
-            return matchesSearch && matchesFilter;
+            return matchesSearch;
         });
-    }, [artists, searchTerm, activeFilter]);
+    }, [artists, searchTerm]);
 
     if (status === "loading" || !initialFetchDone) return <div className="min-h-screen bg-blunotte flex items-center justify-center text-white">Caricamento...</div>;
 
@@ -260,99 +258,105 @@ export default function CreateTeamPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
 
                     {/* Left: Artist Market (Neo-Grid) */}
-                    <div className="lg:col-span-8 space-y-12">
-                        <div className="flex flex-col md:flex-row justify-between items-center gap-8 bg-white/5 p-6 rounded-[2.5rem] border border-white/5 backdrop-blur-md">
-                            <div className="relative w-full md:w-96">
-                                <FiSearch className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-500" />
+                    <div className="lg:col-span-8 space-y-16">
+                        <div className="bg-white/5 p-8 rounded-[3rem] border border-white/5 backdrop-blur-md">
+                            <div className="relative w-full">
+                                <FiSearch className="absolute left-8 top-1/2 -translate-y-1/2 text-oro" />
                                 <input 
                                     type="text" 
-                                    placeholder="Cerca un talento..."
+                                    placeholder="Cerca il talento perfetto per la tua squadra..."
                                     value={searchTerm}
                                     onChange={e => setSearchTerm(e.target.value)}
-                                    className="w-full bg-white/5 border border-white/10 rounded-2xl pl-16 pr-6 py-4 text-sm font-bold focus:border-oro outline-none transition-all"
+                                    className="w-full bg-white/5 border border-white/10 rounded-[2rem] pl-20 pr-8 py-6 text-xl font-black focus:border-oro outline-none transition-all placeholder:text-gray-600"
                                 />
                             </div>
-                            <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar w-full md:w-auto">
-                                {["ALL", "PRESENTATORE", "OSPITE", "ARTISTA"].map(f => (
-                                    <button
-                                        key={f}
-                                        onClick={() => setActiveFilter(f as any)}
-                                        className={`px-6 py-3 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] transition-all border ${activeFilter === f ? "bg-oro text-blunotte border-oro shadow-xl" : "bg-white/5 text-gray-500 border-white/10 hover:border-gray-600"}`}
-                                    >
-                                        {f === "ALL" ? "TUTTI" : f}
-                                    </button>
-                                ))}
+                        </div>
+
+                        {loading ? (
+                            <div className="flex items-center justify-center py-20">
+                                <div className="w-10 h-10 border-4 border-oro/20 border-t-oro rounded-full animate-spin" />
                             </div>
-                        </div>
+                        ) : (
+                            <div className="space-y-24">
+                                {/* SEZIONE PRESENTATORI */}
+                                {filteredArtists.some(a => a.type === "PRESENTATORE") && (
+                                    <section className="space-y-8">
+                                        <div className="flex items-center gap-4 px-2">
+                                            <div className="w-2 h-8 bg-oro rounded-full" />
+                                            <h2 className="text-3xl font-black uppercase tracking-tighter">Scegli il <span className="text-oro">Presentatore</span></h2>
+                                            <span className="text-gray-700 font-mono text-sm ml-auto">01 RICHIESTO</span>
+                                        </div>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+                                            {filteredArtists.filter(a => a.type === "PRESENTATORE").map(artist => (
+                                                <SelectionArtistCard 
+                                                    key={artist.id} 
+                                                    artist={artist} 
+                                                    isSelected={selectedArtists.some(a => a.id === artist.id)}
+                                                    captainId={captainId}
+                                                    setCaptainId={setCaptainId}
+                                                    isDisabled={isExpired || (remainingBudget < artist.cost && !selectedArtists.some(a => a.id === artist.id))}
+                                                    toggleArtist={toggleArtist}
+                                                />
+                                            ))}
+                                        </div>
+                                    </section>
+                                )}
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                            <AnimatePresence>
-                                {filteredArtists.map((artist) => {
-                                    const isSelected = selectedArtists.some(a => a.id === artist.id);
-                                    const canAfford = remainingBudget >= artist.cost || isSelected;
-                                    const isDisabled = isExpired || (!canAfford && !isSelected);
+                                {/* SEZIONE OSPITI */}
+                                {filteredArtists.some(a => a.type === "OSPITE") && (
+                                    <section className="space-y-8">
+                                        <div className="flex items-center gap-4 px-2">
+                                            <div className="w-2 h-8 bg-viola rounded-full" />
+                                            <h2 className="text-3xl font-black uppercase tracking-tighter">Scegli l&apos;<span className="text-viola">Ospite</span></h2>
+                                            <span className="text-gray-700 font-mono text-sm ml-auto">01 RICHIESTO</span>
+                                        </div>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+                                            {filteredArtists.filter(a => a.type === "OSPITE").map(artist => (
+                                                <SelectionArtistCard 
+                                                    key={artist.id} 
+                                                    artist={artist} 
+                                                    isSelected={selectedArtists.some(a => a.id === artist.id)}
+                                                    captainId={captainId}
+                                                    setCaptainId={setCaptainId}
+                                                    isDisabled={isExpired || (remainingBudget < artist.cost && !selectedArtists.some(a => a.id === artist.id))}
+                                                    toggleArtist={toggleArtist}
+                                                />
+                                            ))}
+                                        </div>
+                                    </section>
+                                )}
 
-                                    return (
-                                        <motion.div
-                                            key={artist.id}
-                                            layout
-                                            initial={{ opacity: 0, scale: 0.9 }}
-                                            animate={{ opacity: 1, scale: 1 }}
-                                            whileHover={{ scale: isDisabled ? 1 : 1.03 }}
-                                            onClick={() => !isDisabled && toggleArtist(artist)}
-                                            className={`group relative rounded-[3rem] border-2 transition-all p-6 overflow-hidden cursor-pointer
-                                                ${isSelected 
-                                                    ? "glass-oro border-oro shadow-[0_20px_50px_rgba(255,215,0,0.15)]" 
-                                                    : isDisabled ? "bg-gray-900/50 border-white/5 opacity-20 grayscale" : "glass border-white/10 hover:border-oro/30"
-                                                }
-                                            `}
-                                        >
-                                            <div className="flex flex-col h-full space-y-6">
-                                                <div className="flex justify-between items-start">
-                                                    <div>
-                                                        <h3 className="font-black text-xl leading-[0.9] mb-1">{artist.name}</h3>
-                                                        <span className="text-[9px] font-black text-oro uppercase tracking-[0.2em] opacity-60">{artist.type}</span>
-                                                    </div>
-                                                    <div className="text-right">
-                                                        <p className="text-2xl font-black tracking-tighter leading-none">{artist.cost}</p>
-                                                        <p className="text-[8px] font-black text-gray-500 uppercase tracking-widest">Armoni</p>
-                                                    </div>
-                                                </div>
+                                {/* SEZIONE ARTISTI */}
+                                {filteredArtists.some(a => a.type === "ARTISTA") && (
+                                    <section className="space-y-8">
+                                        <div className="flex items-center gap-4 px-2">
+                                            <div className="w-2 h-8 bg-ocra rounded-full" />
+                                            <h2 className="text-3xl font-black uppercase tracking-tighter">I tuoi 3 <span className="text-ocra">Artisti</span></h2>
+                                            <span className="text-gray-700 font-mono text-sm ml-auto">03 RICHIESTI</span>
+                                        </div>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+                                            {filteredArtists.filter(a => a.type === "ARTISTA").map(artist => (
+                                                <SelectionArtistCard 
+                                                    key={artist.id} 
+                                                    artist={artist} 
+                                                    isSelected={selectedArtists.some(a => a.id === artist.id)}
+                                                    captainId={captainId}
+                                                    setCaptainId={setCaptainId}
+                                                    isDisabled={isExpired || (remainingBudget < artist.cost && !selectedArtists.some(a => a.id === artist.id))}
+                                                    toggleArtist={toggleArtist}
+                                                />
+                                            ))}
+                                        </div>
+                                    </section>
+                                )}
 
-                                                <div className="aspect-[4/5] w-full rounded-[2rem] bg-black overflow-hidden border border-white/10 shadow-2xl relative">
-                                                    {artist.image ? (
-                                                        <img src={artist.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                                                    ) : (
-                                                        <div className="w-full h-full flex items-center justify-center text-5xl font-black opacity-[0.03]">{artist.name.charAt(0)}</div>
-                                                    )}
-                                                    {isSelected && (
-                                                        <div className="absolute inset-0 bg-oro/10 backdrop-blur-[2px] flex items-center justify-center">
-                                                            <div className="bg-oro text-blunotte p-3 rounded-2xl shadow-2xl scale-125">
-                                                                <FiCheck size={20} />
-                                                            </div>
-                                                        </div>
-                                                    )}
-                                                </div>
-
-                                                {isSelected && (
-                                                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex justify-between items-center pt-2">
-                                                        <button
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                setCaptainId(artist.id);
-                                                            }}
-                                                            className={`flex-1 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${captainId === artist.id ? "bg-oro text-blunotte shadow-xl" : "bg-white/10 text-white hover:bg-white/20 border border-white/10"}`}
-                                                        >
-                                                            {captainId === artist.id ? "★ Capitano" : "Eleggi Capitano"}
-                                                        </button>
-                                                    </motion.div>
-                                                )}
-                                            </div>
-                                        </motion.div>
-                                    );
-                                })}
-                            </AnimatePresence>
-                        </div>
+                                {filteredArtists.length === 0 && (
+                                    <div className="text-center py-20 bg-white/5 rounded-[3rem] border border-dashed border-white/10">
+                                        <p className="text-gray-500 font-black uppercase tracking-widest italic">Nessun talento trovato con questo nome.</p>
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
 
                     {/* Right: Summary Sidebar Revolution */}
@@ -439,5 +443,83 @@ export default function CreateTeamPage() {
 
             </div>
         </main>
+    );
+}
+
+function SelectionArtistCard({ 
+    artist, 
+    isSelected, 
+    isDisabled, 
+    toggleArtist, 
+    captainId, 
+    setCaptainId 
+}: { 
+    artist: Artist; 
+    isSelected: boolean; 
+    isDisabled: boolean; 
+    toggleArtist: (a: Artist) => void; 
+    captainId: string | null;
+    setCaptainId: (id: string | null) => void;
+}) {
+    return (
+        <motion.div
+            layout
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            whileHover={{ scale: isDisabled ? 1 : 1.03 }}
+            onClick={() => !isDisabled && toggleArtist(artist)}
+            className={`group relative rounded-[3rem] border-2 transition-all p-6 overflow-hidden cursor-pointer flex flex-col h-full
+                ${isSelected 
+                    ? "glass-oro border-oro shadow-[0_20px_50px_rgba(255,215,0,0.15)]" 
+                    : isDisabled ? "bg-gray-900/50 border-white/5 opacity-20 grayscale cursor-not-allowed" : "glass border-white/10 hover:border-oro/30"
+                }
+            `}
+        >
+            <div className="flex flex-col h-full space-y-6">
+                <div className="flex justify-between items-start">
+                    <div>
+                        <h3 className="font-black text-2xl leading-[0.9] mb-1">{artist.name}</h3>
+                        <span className={`text-[9px] font-black uppercase tracking-[0.2em] 
+                            ${artist.type === 'PRESENTATORE' ? 'text-oro' : artist.type === 'OSPITE' ? 'text-viola' : 'text-ocra'}
+                        `}>
+                            {artist.type}
+                        </span>
+                    </div>
+                    <div className="text-right">
+                        <p className="text-2xl font-black tracking-tighter leading-none">{artist.cost}</p>
+                        <p className="text-[8px] font-black text-gray-500 uppercase tracking-widest">Armoni</p>
+                    </div>
+                </div>
+
+                <div className="aspect-[4/5] w-full rounded-[2rem] bg-black overflow-hidden border border-white/10 shadow-2xl relative">
+                    {artist.image ? (
+                        <img src={artist.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                    ) : (
+                        <div className="w-full h-full flex items-center justify-center text-5xl font-black opacity-[0.03]">{artist.name.charAt(0)}</div>
+                    )}
+                    {isSelected && (
+                        <div className="absolute inset-0 bg-oro/10 backdrop-blur-[2px] flex items-center justify-center">
+                            <motion.div initial={{ scale: 0 }} animate={{ scale: 1.2 }} className="bg-oro text-blunotte p-4 rounded-2xl shadow-2xl">
+                                <FiCheck size={24} />
+                            </motion.div>
+                        </div>
+                    )}
+                </div>
+
+                {isSelected && (
+                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex justify-between items-center pt-2">
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setCaptainId(artist.id);
+                            }}
+                            className={`flex-1 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${captainId === artist.id ? "bg-oro text-blunotte shadow-xl" : "bg-white/10 text-white hover:bg-white/20 border border-white/10"}`}
+                        >
+                            {captainId === artist.id ? "★ Capitano" : "Eleggi Capitano"}
+                        </button>
+                    </motion.div>
+                )}
+            </div>
+        </motion.div>
     );
 }
