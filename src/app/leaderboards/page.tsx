@@ -120,7 +120,7 @@ export default function LeaderboardsPage() {
                 </motion.div>
 
                 {/* Switcher Revolution */}
-                <div className="flex justify-center mb-20">
+                <div className="flex justify-center mb-32">
                     <div className="glass p-2 rounded-3xl border border-white/5 flex gap-2">
                         <button
                             onClick={() => setViewMode("teams")}
