@@ -37,7 +37,7 @@ export async function POST(req: Request) {
         try {
             await sendEmail({
                 to: email,
-                subject: "Verifica il tuo account FantaPiazza 🎠",
+                subject: "Verifica il tuo account FantArte 🎠",
                 body: verificationEmail(verificationToken)
             });
         } catch (err) {

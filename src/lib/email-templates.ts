@@ -1,15 +1,15 @@
 /**
- * FantaPiazza Email Templates
+ * FantArte Email Templates
  * Branded HTML templates for automated communications.
  */
 
 const APP_COLOR_GOLD = "#bc9c5d";
 const APP_COLOR_DARK_BLUE = "#0a0f1c";
 
-const BASE_URL = process.env.NEXTAUTH_URL || "https://fantapiazza.it";
+const BASE_URL = process.env.NEXTAUTH_URL || "https://fantarte.it";
 
 /**
- * Modern HTML wrapper for all FantaPiazza emails.
+ * Modern HTML wrapper for all FantArte emails.
  */
 const emailWrapper = (content: string) => `
 <!DOCTYPE html>
@@ -93,13 +93,13 @@ const emailWrapper = (content: string) => `
     <div class="container">
         <div class="header">
             <!-- Logo uses dynamic BASE_URL to ensure visibility in all environments -->
-            <img src="${BASE_URL}/fanta-logo.png" alt="FantaPiazza" class="logo">
+            <img src="${BASE_URL}/fanta-logo.png" alt="FantArte" class="logo">
         </div>
         <div class="content">
             ${content}
         </div>
         <div class="footer">
-            <p>&copy; 2024 FantaPiazza • Piazza dell'Arte</p>
+            <p>&copy; ${new Date().getFullYear()} FantArte • Piazza dell'Arte</p>
             <p>
                 Associazione Culturale Morgana & Orum
             </p>
@@ -113,11 +113,11 @@ const emailWrapper = (content: string) => `
 export const welcomeEmail = (email: string) => emailWrapper(`
     <h1 class="h1">Benvenuto in Piazza! 🎠</h1>
     <p class="text">Ciao <strong>${email}</strong>,</p>
-    <p class="text">La tua iscrizione a <strong>FantaPiazza</strong> è stata confermata con successo! Sei pronto a sfidare i tuoi amici nel gioco più appassionante della Piazza dell'Arte?</p>
+    <p class="text">La tua iscrizione a <strong>FantArte</strong> è stata confermata con successo! Sei pronto a sfidare i tuoi amici nel gioco più appassionante della Piazza dell'Arte?</p>
     <p class="text">Ecco cosa puoi fare ora:</p>
     <ul class="text" style="padding-left: 20px;">
-        <li>Crea la tua squadra con 5 artisti</li>
-        <li>Scegli un <strong>Capitano</strong> per raddoppiare i punti!</li>
+        <li>Crea la tua squadra con 5 membri</li>
+        <li>Scegli un <strong>Capitano</strong> per raddoppiare i punti speciali!</li>
         <li>Scala la classifica generale</li>
     </ul>
     <div style="text-align: center; margin-top: 40px;">
@@ -127,12 +127,12 @@ export const welcomeEmail = (email: string) => emailWrapper(`
 
 export const newArtistEmail = (name: string, cost: number) => emailWrapper(`
     <h1 class="h1">Nuovo Artista sul Palco! 🎭</h1>
-    <p class="text">Grandi novità! Un nuovo artista si è appena unito alla competizione di FantaPiazza.</p>
+    <p class="text">Grandi novità! Un nuovo membro si è appena unito alla competizione di FantArte.</p>
     <div style="background-color: #f1f5f9; padding: 24px; border-radius: 16px; margin-bottom: 24px; text-align: center;">
         <h2 style="margin: 0; color: #0a0f1c; font-size: 24px;">${name}</h2>
         <p style="margin: 8px 0 0 0; color: ${APP_COLOR_GOLD}; font-weight: 900; text-transform: uppercase; font-size: 14px;">Costo: ${cost} Armoni</p>
     </div>
-    <p class="text">Controlla subito se questo artista può fare al caso tuo e aggiorna la tua formazione prima della prossima scadenza!</p>
+    <p class="text">Controlla subito se può fare al caso tuo e aggiorna la tua formazione!</p>
     <div style="text-align: center; margin-top: 40px;">
         <a href="${BASE_URL}/team/create" class="button">Gestisci Squadra</a>
     </div>
@@ -140,7 +140,7 @@ export const newArtistEmail = (name: string, cost: number) => emailWrapper(`
 
 export const verificationEmail = (token: string) => emailWrapper(`
     <h1 class="h1">Verifica la tua Email 📧</h1>
-    <p class="text">Grazie per esserti iscritto a <strong>FantaPiazza</strong>! Per completare la registrazione e iniziare a creare la tua squadra, clicca sul pulsante qui sotto:</p>
+    <p class="text">Grazie per esserti iscritto a <strong>FantArte</strong>! Per completare la registrazione e iniziare a creare la tua squadra, clicca sul pulsante qui sotto:</p>
     <div style="text-align: center; margin-top: 40px;">
         <a href="${BASE_URL}/api/auth/verify?token=${token}" class="button">Verifica Account</a>
     </div>
