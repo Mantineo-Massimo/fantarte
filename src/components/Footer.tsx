@@ -97,10 +97,6 @@ export default function Footer() {
                              <FiCode size={16} />
                              <span className="text-[10px] font-black uppercase tracking-widest">Dev: Massimo Mantineo</span>
                         </div>
-                        <div className="px-5 py-2.5 rounded-full glass border border-white/5 flex items-center gap-3">
-                             <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)] animate-pulse" />
-                             <span className="text-[9px] font-black uppercase tracking-widest text-gray-400">Live Production</span>
-                        </div>
                     </div>
                 </div>
             </div>
