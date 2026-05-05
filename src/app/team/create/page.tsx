@@ -5,14 +5,16 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import SocialShare from "@/components/SocialShare";
-
 import CountdownTimer from "@/components/CountdownTimer";
+
+type ArtistType = "ARTISTA" | "PRESENTATORE" | "OSPITE";
 
 type Artist = {
     id: string;
     name: string;
     cost: number;
     image?: string | null;
+    type: ArtistType;
     totalScore: number;
 };
 
@@ -63,7 +65,7 @@ export default function CreateTeamPage() {
                 setInitialFetchDone(true);
             })
             .catch(err => {
-                console.error("Failed to load generic team", err);
+                console.error("Failed to load team", err);
                 setInitialFetchDone(true);
             });
 
@@ -81,7 +83,6 @@ export default function CreateTeamPage() {
             .catch(err => console.error("Failed to load settings", err));
     }, []);
 
-    // Also check every second if expired
     useEffect(() => {
         if (!deadline) return;
         const interval = setInterval(() => {
@@ -95,6 +96,13 @@ export default function CreateTeamPage() {
     const spentBudget = selectedArtists.reduce((acc, curr) => acc + curr.cost, 0);
     const remainingBudget = 100 - spentBudget;
 
+    // Count by type
+    const counts = {
+        ARTISTA: selectedArtists.filter(a => a.type === "ARTISTA").length,
+        PRESENTATORE: selectedArtists.filter(a => a.type === "PRESENTATORE").length,
+        OSPITE: selectedArtists.filter(a => a.type === "OSPITE").length,
+    };
+
     const toggleArtist = (artist: Artist) => {
         if (isExpired) return;
 
@@ -102,8 +110,22 @@ export default function CreateTeamPage() {
             setSelectedArtists(selectedArtists.filter(a => a.id !== artist.id));
             if (captainId === artist.id) setCaptainId(null);
         } else {
+            // Check limits
+            if (artist.type === "PRESENTATORE" && counts.PRESENTATORE >= 1) {
+                setError("Puoi selezionare solo 1 presentatore.");
+                return;
+            }
+            if (artist.type === "OSPITE" && counts.OSPITE >= 1) {
+                setError("Puoi selezionare solo 1 ospite.");
+                return;
+            }
+            if (artist.type === "ARTISTA" && counts.ARTISTA >= 3) {
+                setError("Puoi selezionare massimo 3 artisti.");
+                return;
+            }
+            
             if (selectedArtists.length >= 5) {
-                setError("Puoi selezionare massimo 5 artisti.");
+                setError("La squadra è già completa (5 membri).");
                 return;
             }
             if (remainingBudget - artist.cost < 0) {
@@ -149,12 +171,16 @@ export default function CreateTeamPage() {
             setError("Le iscrizioni sono chiuse!");
             return;
         }
-        if (selectedArtists.length !== 5) {
-            setError("Devi selezionare esattamente 5 artisti.");
+        if (counts.ARTISTA !== 3 || counts.PRESENTATORE !== 1 || counts.OSPITE !== 1) {
+            setError("Composizione squadra non valida: servono 1 presentatore, 1 ospite e 3 artisti.");
             return;
         }
         if (!teamName.trim()) {
             setError("Inserire un nome per la squadra.");
+            return;
+        }
+        if (!captainId) {
+            setError("Seleziona un capitano per raddoppiare i punti speciali!");
             return;
         }
 
@@ -189,6 +215,15 @@ export default function CreateTeamPage() {
 
     if (status === "loading" || !initialFetchDone) return <div className="min-h-screen bg-blunotte flex items-center justify-center text-white">Caricamento...</div>;
 
+    const getRoleColor = (type: ArtistType) => {
+        switch (type) {
+            case "PRESENTATORE": return "bg-viola/20 text-purple-400 border-purple-500/30";
+            case "OSPITE": return "bg-green-500/10 text-green-400 border-green-500/30";
+            case "ARTISTA": return "bg-oro/10 text-oro border-oro/30";
+            default: return "bg-gray-800 text-gray-400 border-gray-700";
+        }
+    };
+
     return (
         <main className="min-h-screen text-white p-6 md:p-12 pt-56 md:pt-44 pb-32 relative">
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -199,11 +234,17 @@ export default function CreateTeamPage() {
                         <h1 className="text-4xl font-extrabold tracking-tight mb-2">
                             {isEditing ? "Gestisci la tua Squadra" : "Crea la tua Squadra"}
                         </h1>
-                        <p className="text-gray-400">
-                            {isEditing
-                                ? "Modifica i tuoi artisti finché le iscrizioni sono aperte. Solo 5 artisti e max 100 Armoni."
-                                : "Scegli 5 artisti e non superare i 100 Armoni."}
-                        </p>
+                        <div className="flex flex-wrap gap-3 mt-4">
+                            <span className={`px-3 py-1 rounded-full text-xs font-bold border transition-colors ${counts.PRESENTATORE === 1 ? "bg-purple-500 text-white border-purple-400" : "bg-purple-500/10 text-purple-400 border-purple-500/20"}`}>
+                                1 Presentatore ({counts.PRESENTATORE}/1)
+                            </span>
+                            <span className={`px-3 py-1 rounded-full text-xs font-bold border transition-colors ${counts.OSPITE === 1 ? "bg-green-600 text-white border-green-500" : "bg-green-500/10 text-green-400 border-green-500/20"}`}>
+                                1 Ospite ({counts.OSPITE}/1)
+                            </span>
+                            <span className={`px-3 py-1 rounded-full text-xs font-bold border transition-colors ${counts.ARTISTA === 3 ? "bg-oro text-blunotte border-yellow-400" : "bg-oro/10 text-oro border-oro/20"}`}>
+                                3 Artisti ({counts.ARTISTA}/3)
+                            </span>
+                        </div>
                     </div>
 
                     {deadline && (
@@ -238,7 +279,12 @@ export default function CreateTeamPage() {
                                     >
                                         <div className="flex flex-col gap-4">
                                             <div className="flex justify-between items-start">
-                                                <h3 className="text-xl font-bold truncate pr-2 z-10">{artist.name}</h3>
+                                                <div className="z-10">
+                                                    <h3 className="text-xl font-bold truncate pr-2">{artist.name}</h3>
+                                                    <span className={`inline-block mt-1 px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest border ${getRoleColor(artist.type)}`}>
+                                                        {artist.type}
+                                                    </span>
+                                                </div>
                                                 <div className="flex flex-col items-end gap-1 z-10">
                                                     <span className={`px-2 py-1 rounded-lg text-[10px] font-black uppercase tracking-tighter ${isSelected ? "bg-white/20 text-white" : "bg-gray-800 text-gray-400"}`}>
                                                         {artist.cost} ARMONI
@@ -260,7 +306,6 @@ export default function CreateTeamPage() {
                                                 </div>
                                             </div>
 
-                                            {/* Artist Image Preview */}
                                             <div className="h-40 w-full rounded-xl bg-[#0a0f1c] overflow-hidden">
                                                 {artist.image ? (
                                                     <img src={artist.image} alt={artist.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
@@ -280,32 +325,12 @@ export default function CreateTeamPage() {
                     </div>
                 </div>
 
-                {/* Destra: Riepilogo (Sticky su Desktop) */}
+                {/* Destra: Riepilogo */}
                 <div className="lg:col-span-1 border-l-0 lg:border-l border-gray-800 pl-0 lg:pl-8">
                     <div className="sticky top-24 bg-[#131d36] rounded-3xl p-6 shadow-2xl border border-gray-800">
-                        <h2 className="text-2xl font-bold mb-6 border-b border-gray-800 pb-4">Riepilogo</h2>
+                        <h2 className="text-2xl font-bold mb-6 border-b border-gray-800 pb-4">Riepilogo Squadra</h2>
 
                         <div className="mb-6">
-                            <label className="block text-sm font-medium text-gray-400 mb-2 uppercase tracking-widest font-bold">Immagine della Squadra</label>
-                            <div className="flex items-center gap-4 mb-4">
-                                <div className="w-20 h-20 rounded-2xl bg-[#0a0f1c] border border-gray-700 overflow-hidden flex items-center justify-center relative shrink-0">
-                                    {teamImage ? (
-                                        <img src={teamImage} alt="Team" className="w-full h-full object-cover" />
-                                    ) : (
-                                        <img src="/fanta-logo.png" alt="Default Logo" className="w-full h-full object-contain p-2 opacity-50" />
-                                    )}
-                                    {isUploading && (
-                                        <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                                            <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
-                                        </div>
-                                    )}
-                                </div>
-                                <label className="flex-1 flex flex-col items-center justify-center py-2 px-4 bg-gray-800 hover:bg-gray-700 rounded-xl cursor-pointer transition-colors border border-gray-600 text-xs font-bold text-gray-300 gap-1">
-                                    <span>{teamImage ? "Cambia Foto" : "Carica Foto"}</span>
-                                    <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={isUploading || isExpired} />
-                                </label>
-                            </div>
-
                             <label className="block text-sm font-medium text-gray-400 mb-2 uppercase tracking-widest font-bold">Nome Squadra</label>
                             <input
                                 type="text"
@@ -320,39 +345,36 @@ export default function CreateTeamPage() {
 
                         <div className="space-y-4 mb-8">
                             <div className="flex justify-between items-center text-lg">
-                                <span className="text-gray-400">Armoni Totali</span>
-                                <span className={`font-mono font-bold text-2xl ${remainingBudget < 0 ? "text-red-500" : remainingBudget <= 10 ? "text-ocra" : "text-green-500"}`}>
+                                <span className="text-gray-400">Budget</span>
+                                <span className={`font-mono font-bold text-2xl ${remainingBudget < 0 ? "text-red-500" : "text-green-500"}`}>
                                     {remainingBudget} / 100
                                 </span>
                             </div>
-                            <div className="flex justify-between items-center text-lg">
-                                <span className="text-gray-400">Slot</span>
-                                <span className={`font-bold ${selectedArtists.length === 5 ? "text-oro" : "text-white"}`}>
-                                    {selectedArtists.length} / 5
-                                </span>
+                            <div className="flex justify-between items-center text-sm">
+                                <span className="text-gray-500">Capitano raddoppia i <strong className="text-oro">Punti Speciali</strong></span>
                             </div>
                         </div>
 
-                        <div className="space-y-3 min-h-[200px]">
+                        <div className="space-y-3 min-h-[250px]">
                             {selectedArtists.length === 0 ? (
-                                <p className="text-gray-500 text-center italic mt-10">Nessun artista selezionato</p>
+                                <p className="text-gray-500 text-center italic mt-10">Inizia a comporre la tua squadra</p>
                             ) : (
                                 selectedArtists.map(a => (
-                                    <div key={a.id} className="flex justify-between bg-[#0a0f1c] px-4 py-3 rounded-xl text-sm items-center border border-gray-800">
-                                        <span className="font-medium text-gray-200">{a.name}</span>
-                                        <span className="text-oro font-bold text-lg">{a.cost}</span>
+                                    <div key={a.id} className="flex justify-between bg-[#0a0f1c] px-4 py-3 rounded-xl text-sm items-center border border-gray-800 relative">
+                                        <div className="flex flex-col">
+                                            <span className="font-medium text-gray-200">{a.name}</span>
+                                            <span className="text-[10px] text-gray-500 font-bold uppercase">{a.type}</span>
+                                        </div>
+                                        <div className="flex items-center gap-3">
+                                            {captainId === a.id && <span className="text-oro text-xs font-black">★ CAPITANO</span>}
+                                            <span className="text-oro font-bold text-lg">{a.cost}</span>
+                                        </div>
                                     </div>
                                 ))
                             )}
                         </div>
 
                         {error && <div className="mt-4 p-3 bg-red-900/50 border border-red-500 rounded-xl text-red-200 text-sm">{error}</div>}
-
-                        {!captainId && selectedArtists.length === 5 && (
-                            <p className="mt-4 text-center text-oro text-xs font-bold uppercase tracking-widest animate-pulse">
-                                ⚠️ Scegli un Capitano per continuare
-                            </p>
-                        )}
 
                         <button
                             onClick={saveTeam}
@@ -366,18 +388,6 @@ export default function CreateTeamPage() {
                         >
                             {loading ? "Salvataggio..." : isExpired ? "Iscrizioni Chiuse" : (isEditing ? "Salva Modifiche" : "Fonda Squadra")}
                         </button>
-
-                        {isEditing && teamId && (
-                            <div className="mt-8 pt-6 border-t border-gray-800">
-                                <p className="text-[10px] font-black uppercase text-gray-500 mb-4 tracking-[0.2em] text-center">Orgoglioso della tua squadra? Condividila!</p>
-                                <div className="flex justify-center">
-                                    <SocialShare
-                                        url={`${typeof window !== 'undefined' ? window.location.origin : ''}/team/${teamId}`}
-                                        title={`Ho appena creato la mia squadra ${teamName} su FantaPiazza! Vieni a vederla! 🚀`}
-                                    />
-                                </div>
-                            </div>
-                        )}
                     </div>
                 </div>
 

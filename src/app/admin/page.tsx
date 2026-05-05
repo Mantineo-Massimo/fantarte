@@ -26,8 +26,11 @@ type Artist = {
     name: string;
     cost: number;
     image?: string | null;
+    type: "ARTISTA" | "PRESENTATORE" | "OSPITE";
     totalScore: number;
 };
+
+type PointCategory = "BONUS" | "MALUS" | "SPECIALE";
 
 type Tab = "dashboard" | "artists" | "points" | "history" | "settings" | "regole" | "participants" | "sponsors" | "news";
 
@@ -56,11 +59,13 @@ export default function AdminDashboard() {
     const [isUploading, setIsUploading] = useState(false);
     const [artistLoading, setArtistLoading] = useState(false);
     const [editingArtistId, setEditingArtistId] = useState<string | null>(null);
+    const [newType, setNewType] = useState<"ARTISTA" | "PRESENTATORE" | "OSPITE">("ARTISTA");
 
     // Points State
     const [selectedArtistId, setSelectedArtistId] = useState("");
     const [points, setPoints] = useState<number | "">("");
     const [description, setDescription] = useState("");
+    const [pointCategory, setPointCategory] = useState<PointCategory>("BONUS");
     const [selectedPredefined, setSelectedPredefined] = useState("");
 
     // Settings State
@@ -401,6 +406,7 @@ export default function AdminDashboard() {
                     id: editingArtistId,
                     name: newName,
                     cost: newCost,
+                    type: newType,
                     image: newImage
                 })
             });
@@ -410,6 +416,7 @@ export default function AdminDashboard() {
             setSuccess(`Artista ${newName} ${editingArtistId ? 'modificato' : 'aggiunto'} con successo.`);
             setNewName("");
             setNewCost("");
+            setNewType("ARTISTA");
             setNewImage(null);
             setEditingArtistId(null);
             loadArtists();
@@ -425,6 +432,7 @@ export default function AdminDashboard() {
         setEditingArtistId(artist.id);
         setNewName(artist.name);
         setNewCost(artist.cost);
+        setNewType(artist.type || "ARTISTA");
         setNewImage(artist.image || null);
         // Scroll to form
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -434,6 +442,7 @@ export default function AdminDashboard() {
         setEditingArtistId(null);
         setNewName("");
         setNewCost("");
+        setNewType("ARTISTA");
         setNewImage(null);
     };
 
@@ -465,6 +474,7 @@ export default function AdminDashboard() {
         if (rule) {
             setPoints(rule.points);
             setDescription(rule.title);
+            setPointCategory(rule.category as PointCategory || "BONUS");
         }
     };
 
@@ -486,6 +496,7 @@ export default function AdminDashboard() {
                 body: JSON.stringify({
                     artistId: selectedArtistId,
                     points: Number(points),
+                    category: pointCategory,
                     description: description.trim(),
                     ruleId: rules.find(r => r.title === selectedPredefined)?.id || null
                 })
@@ -767,6 +778,18 @@ export default function AdminDashboard() {
                                             className="w-full bg-[#0a0f1c] border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-colors"
                                         />
                                     </div>
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold text-gray-500 uppercase">Ruolo</label>
+                                        <select
+                                            value={newType}
+                                            onChange={e => setNewType(e.target.value as any)}
+                                            className="w-full bg-[#0a0f1c] border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-colors appearance-none"
+                                        >
+                                            <option value="ARTISTA">ARTISTA</option>
+                                            <option value="PRESENTATORE">PRESENTATORE</option>
+                                            <option value="OSPITE">OSPITE</option>
+                                        </select>
+                                    </div>
                                     <button
                                         type="submit"
                                         disabled={artistLoading}
@@ -827,7 +850,10 @@ export default function AdminDashboard() {
                                                                 <div className="w-full h-full flex items-center justify-center text-gray-600"><FiUsers /></div>
                                                             )}
                                                         </div>
-                                                        <span className="font-bold text-lg">{a.name}</span>
+                                                        <div className="flex flex-col">
+                                                            <span className="font-bold text-lg">{a.name}</span>
+                                                            <span className="text-[10px] text-oro font-black uppercase tracking-widest">{a.type}</span>
+                                                        </div>
                                                     </td>
                                                     <td className="py-4 px-4 text-center font-mono text-oro font-bold">{a.cost}</td>
                                                     <td className="py-4 px-4 text-center font-mono font-bold">{a.totalScore}</td>
@@ -909,7 +935,19 @@ export default function AdminDashboard() {
                                                 className="w-full bg-[#0a0f1c] border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-colors"
                                             />
                                         </div>
-                                        <div className="md:col-span-3 space-y-3">
+                                        <div className="space-y-3">
+                                            <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Categoria</label>
+                                            <select
+                                                value={pointCategory}
+                                                onChange={e => setPointCategory(e.target.value as any)}
+                                                className="w-full bg-[#0a0f1c] border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-colors appearance-none"
+                                            >
+                                                <option value="BONUS">BONUS</option>
+                                                <option value="MALUS">MALUS</option>
+                                                <option value="SPECIALE">SPECIALE (x2 Cap)</option>
+                                            </select>
+                                        </div>
+                                        <div className="md:col-span-2 space-y-3">
                                             <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Motivazione</label>
                                             <input
                                                 type="text"
@@ -944,14 +982,17 @@ export default function AdminDashboard() {
                                 <form onSubmit={handleRuleSubmit} className="space-y-6">
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                         <div className="space-y-2">
-                                            <label className="text-xs font-bold text-gray-500 uppercase">Categoria</label>
-                                            <input
-                                                type="text"
+                                            <label className="text-xs font-bold text-gray-500 uppercase">Tipo Punteggio</label>
+                                            <select
                                                 value={ruleCategory}
                                                 onChange={e => setRuleCategory(e.target.value)}
-                                                placeholder="Canto, Danza, Malus..."
-                                                className="w-full bg-[#0a0f1c] border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-colors"
-                                            />
+                                                className="w-full bg-[#0a0f1c] border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-colors appearance-none"
+                                            >
+                                                <option value="">-- Seleziona --</option>
+                                                <option value="BONUS">BONUS</option>
+                                                <option value="MALUS">MALUS</option>
+                                                <option value="SPECIALE">SPECIALE</option>
+                                            </select>
                                         </div>
                                         <div className="md:col-span-1 space-y-2">
                                             <label className="text-xs font-bold text-gray-500 uppercase">Titolo</label>
@@ -1106,9 +1147,10 @@ export default function AdminDashboard() {
                                                     </td>
                                                     <td className="py-4 px-4 font-bold">{event.artist?.name || "Eliminato"}</td>
                                                     <td className="py-4 px-4">
-                                                        <span className={`font-mono font-black ${event.points >= 0 ? "text-green-400" : "text-red-500"}`}>
+                                                        <div className={`font-mono font-black ${event.points >= 0 ? "text-green-400" : "text-red-500"}`}>
                                                             {event.points > 0 ? `+${event.points}` : event.points}
-                                                        </span>
+                                                        </div>
+                                                        <div className="text-[9px] text-gray-500 font-bold uppercase tracking-tighter">{event.category}</div>
                                                     </td>
                                                     <td className="py-4 px-4 text-gray-300 text-sm">{event.description}</td>
                                                     <td className="py-4 px-4 text-gray-400 font-medium text-xs">

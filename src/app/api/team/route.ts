@@ -3,6 +3,21 @@ import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
+// Helper to calculate score based on captain bonus (double SPECIALE only)
+async function calculateTeamScore(artistIds: string[], captainId: string | null) {
+    const events = await prisma.bonusMalusEvent.findMany({
+        where: { artistId: { in: artistIds } }
+    });
+    
+    let total = 0;
+    for (const event of events) {
+        const isCaptain = event.artistId === captainId;
+        const multiplier = (isCaptain && event.category === "SPECIALE") ? 2 : 1;
+        total += event.points * multiplier;
+    }
+    return total;
+}
+
 export async function POST(req: Request) {
     try {
         const session = await getServerSession(authOptions);
@@ -21,33 +36,43 @@ export async function POST(req: Request) {
         const body = await req.json();
         const { teamName, artistIds, image, captainId } = body;
 
-        // Validation
+        // Base Validation
         if (!teamName || !artistIds || artistIds.length !== 5 || !captainId) {
-            return new NextResponse("Dati non validi. Nome squadra, 5 artisti e un Capitano sono obbligatori.", { status: 400 });
+            return new NextResponse("Dati non validi. Nome squadra, 5 membri e un Capitano sono obbligatori.", { status: 400 });
         }
 
         // --- Deadline Check ---
         const settings = await prisma.systemSettings.findFirst();
         if (settings?.draftDeadline && new Date() > settings.draftDeadline) {
-            return new NextResponse("Draft deadline has passed. You can no longer create a team.", { status: 403 });
+            return new NextResponse("Le iscrizioni sono chiuse.", { status: 403 });
         }
-        // ----------------------
 
         const artists = await prisma.artist.findMany({
             where: { id: { in: artistIds } }
         });
 
         if (artists.length !== 5) {
-            return new NextResponse("Some artists were not found", { status: 400 });
+            return new NextResponse("Alcuni artisti non sono stati trovati.", { status: 400 });
         }
 
-        const totalCost = artists.reduce((sum: number, artist: { cost: number }) => sum + artist.cost, 0);
+        // ROLE VALIDATION: 1 Presentatore, 1 Ospite, 3 Artisti
+        const counts = {
+            PRESENTATORE: artists.filter(a => a.type === "PRESENTATORE").length,
+            OSPITE: artists.filter(a => a.type === "OSPITE").length,
+            ARTISTA: artists.filter(a => a.type === "ARTISTA").length,
+        };
+
+        if (counts.PRESENTATORE !== 1 || counts.OSPITE !== 1 || counts.ARTISTA !== 3) {
+            return new NextResponse("Composizione squadra non valida: servono 1 presentatore, 1 ospite e 3 artisti.", { status: 400 });
+        }
+
+        const totalCost = artists.reduce((sum, artist) => sum + artist.cost, 0);
         if (totalCost > 100) {
-            return new NextResponse("Armoni insufficienti", { status: 400 });
+            return new NextResponse("Budget superato (max 100 Armoni).", { status: 400 });
         }
 
         if (captainId && !artistIds.includes(captainId)) {
-            return new NextResponse("Il capitano deve essere uno dei membri della squadra", { status: 400 });
+            return new NextResponse("Il capitano deve essere uno dei membri della squadra.", { status: 400 });
         }
 
         const existingTeam = await prisma.team.findUnique({
@@ -55,7 +80,7 @@ export async function POST(req: Request) {
         });
 
         if (existingTeam) {
-            return new NextResponse("User already has a team", { status: 409 });
+            return new NextResponse("Hai già una squadra.", { status: 409 });
         }
 
         const nameInUse = await prisma.team.findUnique({
@@ -63,16 +88,15 @@ export async function POST(req: Request) {
         });
 
         if (nameInUse) {
-            return new NextResponse("Team name already taken", { status: 409 });
+            return new NextResponse("Nome squadra già in uso.", { status: 409 });
         }
 
-        // Identify the 5 Leagues to auto-enroll (now 1 Generale)
         const leagues = await prisma.league.findMany();
 
-        // Transaction to ensure atomicity
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // Calculate initial score correctly
+        const initialScore = await calculateTeamScore(artistIds, captainId);
+
         const team = await prisma.$transaction(async (tx: any) => {
-            // 1. Create the team
             const newTeam = await tx.team.create({
                 data: {
                     name: teamName,
@@ -80,18 +104,12 @@ export async function POST(req: Request) {
                     userId: user.id,
                     captainId: captainId || null,
                     artists: {
-                        connect: artists.map((a: { id: string }) => ({ id: a.id }))
+                        connect: artists.map(a => ({ id: a.id }))
                     }
                 }
             });
 
-            // 2. Enroll the team in all leagues with current points
-            const initialScore = artists.reduce((sum: number, a: any) => {
-                const isCaptain = a.id === captainId;
-                return sum + (isCaptain ? a.totalScore * 2 : a.totalScore);
-            }, 0);
-
-            const teamLeaguesData = leagues.map((league: { id: string }) => ({
+            const teamLeaguesData = leagues.map(league => ({
                 teamId: newTeam.id,
                 leagueId: league.id,
                 score: initialScore
@@ -158,13 +176,12 @@ export async function PUT(req: Request) {
         const { teamName, artistIds, image, captainId } = body;
 
         if (!teamName || !artistIds || artistIds.length !== 5 || !captainId) {
-            return new NextResponse("Dati non validi. Nome squadra, 5 artisti e un Capitano sono obbligatori.", { status: 400 });
+            return new NextResponse("Dati non validi.", { status: 400 });
         }
 
-        // Deadline check
         const settings = await prisma.systemSettings.findFirst();
         if (settings?.draftDeadline && new Date() > settings.draftDeadline) {
-            return new NextResponse("Draft deadline has passed. You can no longer modify the team.", { status: 403 });
+            return new NextResponse("Le iscrizioni sono chiuse.", { status: 403 });
         }
 
         const artists = await prisma.artist.findMany({
@@ -172,16 +189,27 @@ export async function PUT(req: Request) {
         });
 
         if (artists.length !== 5) {
-            return new NextResponse("Some artists were not found", { status: 400 });
+            return new NextResponse("Alcuni artisti non sono stati trovati.", { status: 400 });
         }
 
-        const totalCost = artists.reduce((sum: number, artist: { cost: number }) => sum + artist.cost, 0);
+        // ROLE VALIDATION
+        const counts = {
+            PRESENTATORE: artists.filter(a => a.type === "PRESENTATORE").length,
+            OSPITE: artists.filter(a => a.type === "OSPITE").length,
+            ARTISTA: artists.filter(a => a.type === "ARTISTA").length,
+        };
+
+        if (counts.PRESENTATORE !== 1 || counts.OSPITE !== 1 || counts.ARTISTA !== 3) {
+            return new NextResponse("Composizione squadra non valida.", { status: 400 });
+        }
+
+        const totalCost = artists.reduce((sum, artist) => sum + artist.cost, 0);
         if (totalCost > 100) {
-            return new NextResponse("Armoni insufficienti", { status: 400 });
+            return new NextResponse("Budget superato.", { status: 400 });
         }
 
         if (captainId && !artistIds.includes(captainId)) {
-            return new NextResponse("Il capitano deve essere uno dei membri della squadra", { status: 400 });
+            return new NextResponse("Il capitano deve essere in squadra.", { status: 400 });
         }
 
         const existingTeam = await prisma.team.findUnique({
@@ -190,25 +218,19 @@ export async function PUT(req: Request) {
         });
 
         if (!existingTeam) {
-            return new NextResponse("Team not found", { status: 404 });
+            return new NextResponse("Squadra non trovata.", { status: 404 });
         }
 
-        // Check if name is taken by another team
         const nameInUse = await prisma.team.findUnique({
             where: { name: teamName }
         });
         if (nameInUse && nameInUse.id !== existingTeam.id) {
-            return new NextResponse("Team name already taken", { status: 409 });
+            return new NextResponse("Nome squadra già in uso.", { status: 409 });
         }
 
-        // Update team and its score in leagues
-        const updatedScore = artists.reduce((sum: number, a: any) => {
-            const isCaptain = a.id === captainId;
-            return sum + (isCaptain ? a.totalScore * 2 : a.totalScore);
-        }, 0);
+        const updatedScore = await calculateTeamScore(artistIds, captainId);
 
         const updatedTeam = await prisma.$transaction(async (tx: any) => {
-            // 1. Update team artists
             const team = await tx.team.update({
                 where: { id: existingTeam.id },
                 data: {
@@ -221,7 +243,6 @@ export async function PUT(req: Request) {
                 }
             });
 
-            // 2. Update scores in all leagues
             await tx.teamLeague.updateMany({
                 where: { teamId: existingTeam.id },
                 data: {

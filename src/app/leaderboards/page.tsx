@@ -95,8 +95,8 @@ export default function LeaderboardsPage() {
         <main className="min-h-screen text-white p-6 md:p-12 pt-56 md:pt-44 pb-32">
             <div className="max-w-5xl mx-auto">
                 <div className="text-center mb-12">
-                    <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">Classifiche della <span className="text-oro">Piazza</span></h1>
-                    <p className="text-gray-400">Tieni d'occhio i punteggi di squadre e artisti in tempo reale.</p>
+                    <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">Classifiche <span className="text-oro">FantArte</span></h1>
+                    <p className="text-gray-400">Tieni d&apos;occhio i punteggi di squadre e artisti in tempo reale.</p>
                 </div>
 
                 {/* Tab Switcher (Teams vs Artists) */}
@@ -239,7 +239,7 @@ export default function LeaderboardsPage() {
                                     </div>
                                     <div className="flex-1">
                                         <h2 className="text-3xl font-black text-oro">{selectedTeam.team.name}</h2>
-                                        <p className="text-gray-400 text-sm font-bold uppercase tracking-widest mt-1">Squadra FantaPiazza</p>
+                                        <p className="text-gray-400 text-sm font-bold uppercase tracking-widest mt-1">Squadra FantArte</p>
                                     </div>
                                     <button
                                         onClick={() => setSelectedTeam(null)}
@@ -296,7 +296,7 @@ export default function LeaderboardsPage() {
                                 <div className="mt-6">
                                     <SocialShare
                                         url={`${window.location.origin}/team/${(selectedTeam.team as any).id || ""}`}
-                                        title={`Guarda la squadra ${selectedTeam.team.name} su FantaPiazza! 🏆`}
+                                        title={`Guarda la squadra ${selectedTeam.team.name} su FantArte! 🏆`}
                                     />
                                 </div>
                             </motion.div>

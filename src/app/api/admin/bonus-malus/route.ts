@@ -37,28 +37,34 @@ export async function POST(req: Request) {
         if (!user || user.role !== "ADMIN") return new NextResponse("Forbidden", { status: 403 });
 
         const body = await req.json();
-        const { artistId, points, description, ruleId } = body;
+        const { artistId, points, description, ruleId, category } = body;
 
         if (!artistId || points === undefined || !description) {
             return new NextResponse("Invalid request data.", { status: 400 });
         }
 
+        const pointVal = parseInt(points);
+        const pointCategory = category || "BONUS"; // Default to BONUS
+
         const result = await prisma.$transaction(async (tx: any) => {
             const event = await tx.bonusMalusEvent.create({
                 data: {
                     artistId,
-                    points: parseInt(points),
+                    points: pointVal,
+                    category: pointCategory,
                     description,
                     createdById: user.id,
                     ruleId: ruleId || null
                 }
             });
 
+            // Update artist's absolute score
             await tx.artist.update({
                 where: { id: artistId },
-                data: { totalScore: { increment: parseInt(points) } }
+                data: { totalScore: { increment: pointVal } }
             });
 
+            // Find all teams that have this artist
             const teamsWithArtist = await tx.team.findMany({
                 where: { artists: { some: { id: artistId } } },
                 select: { id: true, captainId: true }
@@ -72,17 +78,22 @@ export async function POST(req: Request) {
                 .filter((t: any) => t.captainId === artistId)
                 .map((t: any) => t.id);
 
+            // Update scores in leagues
+            // Logic: Captain doubles Special points only.
+            const isSpecial = pointCategory === "SPECIALE";
+
             if (normalTeamIds.length > 0) {
                 await tx.teamLeague.updateMany({
                     where: { teamId: { in: normalTeamIds } },
-                    data: { score: { increment: parseInt(points) } }
+                    data: { score: { increment: pointVal } }
                 });
             }
 
             if (captainTeamIds.length > 0) {
+                const captainIncrement = isSpecial ? pointVal * 2 : pointVal;
                 await tx.teamLeague.updateMany({
                     where: { teamId: { in: captainTeamIds } },
-                    data: { score: { increment: parseInt(points) * 2 } }
+                    data: { score: { increment: captainIncrement } }
                 });
             }
             return event;
@@ -111,7 +122,7 @@ export async function DELETE(req: Request) {
         const event = await prisma.bonusMalusEvent.findUnique({ where: { id } });
         if (!event) return new NextResponse("Event not found", { status: 404 });
 
-        const { artistId, points } = event;
+        const { artistId, points, category } = event;
 
         await prisma.$transaction(async (tx: any) => {
             // 1. Delete event
@@ -137,6 +148,8 @@ export async function DELETE(req: Request) {
                 .filter((t: any) => t.captainId === artistId)
                 .map((t: any) => t.id);
 
+            const isSpecial = category === "SPECIALE";
+
             if (normalTeamIds.length > 0) {
                 await tx.teamLeague.updateMany({
                     where: { teamId: { in: normalTeamIds } },
@@ -145,9 +158,10 @@ export async function DELETE(req: Request) {
             }
 
             if (captainTeamIds.length > 0) {
+                const captainDecrement = isSpecial ? points * 2 : points;
                 await tx.teamLeague.updateMany({
                     where: { teamId: { in: captainTeamIds } },
-                    data: { score: { decrement: points * 2 } }
+                    data: { score: { decrement: captainDecrement } }
                 });
             }
         });

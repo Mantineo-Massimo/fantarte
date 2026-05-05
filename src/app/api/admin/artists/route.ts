@@ -14,7 +14,7 @@ export async function POST(req: Request) {
         if (!user || user.role !== "ADMIN") return new NextResponse("Forbidden", { status: 403 });
 
         const body = await req.json();
-        const { name, cost, image } = body;
+        const { name, cost, image, type } = body;
 
         if (!name || cost === undefined) {
             return new NextResponse("Missing name or cost", { status: 400 });
@@ -25,6 +25,7 @@ export async function POST(req: Request) {
                 name,
                 cost: parseInt(cost),
                 image: image || null,
+                type: type || "ARTISTA",
                 totalScore: 0
             }
         });
@@ -35,7 +36,7 @@ export async function POST(req: Request) {
             for (const u of users) {
                 await sendEmail({
                     to: u.email,
-                    subject: `Nuova Artist FantaPiazza: ${name}`,
+                    subject: `Nuovo Armonia su FantArte: ${name}`,
                     body: newArtistEmail(name, parseInt(cost))
                 });
             }
@@ -59,7 +60,7 @@ export async function PUT(req: Request) {
         if (!user || user.role !== "ADMIN") return new NextResponse("Forbidden", { status: 403 });
 
         const body = await req.json();
-        const { id, name, cost, image } = body;
+        const { id, name, cost, image, type } = body;
 
         if (!id || !name || cost === undefined) {
             return new NextResponse("Missing id, name or cost", { status: 400 });
@@ -70,7 +71,8 @@ export async function PUT(req: Request) {
             data: {
                 name,
                 cost: parseInt(cost),
-                image: image || null
+                image: image || null,
+                type: type || "ARTISTA"
             }
         });
 

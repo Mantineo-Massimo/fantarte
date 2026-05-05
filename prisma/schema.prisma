@@ -25,6 +25,7 @@ model Artist {
   name       String
   cost       Int
   image      String?
+  type       ArtistType        @default(ARTISTA)
   totalScore Int               @default(0)
   createdAt  DateTime          @default(now())
   updatedAt  DateTime          @updatedAt
@@ -68,6 +69,7 @@ model BonusMalusEvent {
   id          String          @id @default(uuid())
   artistId    String
   points      Int
+  category    PointCategory   @default(BONUS)
   description String
   createdAt   DateTime        @default(now())
   createdById String?
@@ -87,12 +89,12 @@ model SystemSettings {
 
 model RuleDefinition {
   id          String            @id @default(uuid())
-  category    String
+  category    PointCategory     @default(BONUS)
   title       String
   description String
   points      Int
   createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
+  updatedAt     DateTime          @updatedAt
   events      BonusMalusEvent[]
 }
 
@@ -116,4 +118,16 @@ model News {
 enum Role {
   USER
   ADMIN
+}
+
+enum ArtistType {
+  ARTISTA
+  PRESENTATORE
+  OSPITE
+}
+
+enum PointCategory {
+  BONUS
+  MALUS
+  SPECIALE
 }
