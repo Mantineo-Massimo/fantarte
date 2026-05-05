@@ -13,6 +13,8 @@ const sectionVariants = {
     animate: { opacity: 1, y: 0 },
 };
 
+const Divider = () => <div className="border-t border-gray-800/60" />;
+
 export default function AccordoPage() {
     return (
         <main className="min-h-screen text-white p-6 md:p-12 pt-56 md:pt-44 pb-32">
@@ -32,7 +34,8 @@ export default function AccordoPage() {
                             Accordo di <span className="text-oro">Collaborazione</span>
                         </h1>
                         <p className="text-gray-400 text-sm">
-                            Accordo di Collaborazione e Contitolarità Dati — <strong className="text-gray-300">29 Aprile 2026</strong>
+                            Accordo di Collaborazione e Contitolarità Dati per la piattaforma{" "}
+                            <strong className="text-gray-300">FantArte</strong> — <strong className="text-gray-300">5 Maggio 2026</strong>
                         </p>
                     </div>
 
@@ -76,15 +79,17 @@ export default function AccordoPage() {
                                 <span className="w-5 h-5 rounded-full bg-oro/20 flex items-center justify-center text-oro font-black text-[10px]">1</span>
                                 Art. 1 — Oggetto dell&apos;Accordo
                             </h2>
-                            <p className="text-gray-300 leading-relaxed text-sm">
-                                Le parti concordano la gestione comune di un portale web unico finalizzato alla promozione di eventi studenteschi, alla divulgazione di news universitarie e all&apos;offerta di servizi agli associati.
+                            <p className="text-gray-300 leading-relaxed text-sm mb-4">
+                                Le associazioni Morgana e O.R.U.M. concordano la realizzazione e gestione comune della piattaforma web{" "}
+                                <strong className="text-white">FantArte</strong>, il fantagioco ufficiale dell&apos;evento{" "}
+                                <strong className="text-white">Piazza dell&apos;Arte</strong>. La piattaforma permette ai partecipanti di creare squadre di artisti, competere in classifiche e seguire in tempo reale i punteggi legati alle performance degli artisti durante l&apos;evento.
                             </p>
                             <div className="mt-4 bg-oro/5 border border-oro/20 rounded-2xl px-5 py-4 text-sm text-gray-300">
-                                Il dominio web è acquistato e tecnicamente intestato all&apos;<strong className="text-white">Associazione Morgana</strong>. L&apos;utilizzo pratico, i contenuti e il branding del portale sono condivisi <strong className="text-white">pariteticamente</strong> con l&apos;Associazione ORUM.
+                                Il dominio web e l&apos;infrastruttura tecnica sono acquistati e formalmente intestati all&apos;<strong className="text-white">Associazione Morgana</strong>. L&apos;utilizzo operativo, i contenuti, il branding e la gestione del gioco sono condivisi <strong className="text-white">pariteticamente</strong> tra le due associazioni.
                             </div>
                         </section>
 
-                        <div className="border-t border-gray-800/60" />
+                        <Divider />
 
                         {/* Art. 2 */}
                         <section>
@@ -93,22 +98,24 @@ export default function AccordoPage() {
                                 Art. 2 — Durata e Recesso
                             </h2>
                             <p className="text-gray-300 leading-relaxed text-sm mb-4">
-                                Il presente accordo ha validità per l&apos;intera durata del mandato di rappresentanza studentesca corrente (<strong className="text-white">Biennio Accademico 2025–2027</strong>) e si intenderà tacitamente rinnovato alla sua scadenza.
+                                Il presente accordo ha validità per l&apos;intera durata dell&apos;edizione corrente dell&apos;evento{" "}
+                                <strong className="text-white">Piazza dell&apos;Arte</strong> e della relativa competizione FantArte (<strong className="text-white">Anno 2026</strong>). Le parti potranno concordare il rinnovo per le edizioni future mediante accordo scritto.
                             </p>
                             <p className="text-gray-400 text-sm leading-relaxed mb-4">
-                                Ciascuna associazione ha la facoltà di recedere in qualsiasi momento, previa comunicazione scritta tramite PEC o raccomandata A/R con un <strong className="text-white">preavviso minimo di 30 giorni</strong>.
+                                Ciascuna associazione può recedere anticipatamente con comunicazione scritta tramite email certificata o raccomandata A/R, con un{" "}
+                                <strong className="text-white">preavviso minimo di 30 giorni</strong>.
                             </p>
                             <div className="space-y-3 text-sm">
                                 <div className="bg-white/[0.03] rounded-2xl p-4 border border-gray-800">
                                     <p className="text-gray-400"><span className="text-white font-bold">Dominio e infrastruttura</span> — In caso di recesso, rimarranno in capo all&apos;Associazione Morgana.</p>
                                 </div>
                                 <div className="bg-white/[0.03] rounded-2xl p-4 border border-gray-800">
-                                    <p className="text-gray-400"><span className="text-white font-bold">Dati degli utenti</span> — Gestiti in conformità al GDPR, garantendo il diritto di cancellazione o migrazione prima della scissione dei database.</p>
+                                    <p className="text-gray-400"><span className="text-white font-bold">Dati degli utenti</span> — Gestiti in conformità al GDPR: agli utenti sarà garantito il diritto di cancellazione o portabilità prima di qualsiasi scissione operativa.</p>
                                 </div>
                             </div>
                         </section>
 
-                        <div className="border-t border-gray-800/60" />
+                        <Divider />
 
                         {/* Art. 3 */}
                         <section>
@@ -117,17 +124,18 @@ export default function AccordoPage() {
                                 Art. 3 — Gestione Tecnica e Sviluppo
                             </h2>
                             <p className="text-gray-300 leading-relaxed text-sm mb-4">
-                                Le parti nominano congiuntamente il Sig. <strong className="text-white">Massimo Mantineo</strong> (C.F. MNTMSM03S10F158Y) quale <strong className="text-white">Responsabile Tecnico</strong> (e Data Processor ai fini Privacy), incaricato in via esclusiva dello sviluppo, aggiornamento, manutenzione ordinaria e straordinaria e sicurezza informatica della piattaforma web e dei database ad essa collegati.
+                                Le parti nominano congiuntamente il Sig. <strong className="text-white">Massimo Mantineo</strong> (C.F. MNTMSM03S10F158Y) quale{" "}
+                                <strong className="text-white">Responsabile Tecnico</strong> (e Data Processor ai fini Privacy), incaricato in via esclusiva dello sviluppo, aggiornamento, manutenzione ordinaria e straordinaria e sicurezza informatica della piattaforma FantArte e dei database ad essa collegati.
                             </p>
                             <div className="bg-white/[0.03] rounded-2xl p-5 border border-gray-800 text-sm">
                                 <p className="text-white font-bold mb-2">Assunzione di responsabilità e manleva</p>
                                 <p className="text-gray-400 leading-relaxed">
-                                    Il Responsabile Tecnico assume l&apos;intera ed esclusiva responsabilità per qualsiasi malfunzionamento, disservizio, vulnerabilità informatica o compromissione dell&apos;infrastruttura. I legali rappresentanti delle Associazioni ORUM e Morgana sono espressamente esonerati (manlevati) da qualsiasi responsabilità civile, penale o economica derivante da difetti tecnici o attacchi informatici.
+                                    Il Responsabile Tecnico assume l&apos;intera ed esclusiva responsabilità per qualsiasi malfunzionamento, disservizio, vulnerabilità informatica o compromissione dell&apos;infrastruttura. I legali rappresentanti delle Associazioni O.R.U.M. e Morgana sono espressamente esonerati (manlevati) da qualsiasi responsabilità civile, penale o economica derivante da difetti tecnici o attacchi informatici imputabili alla piattaforma.
                                 </p>
                             </div>
                         </section>
 
-                        <div className="border-t border-gray-800/60" />
+                        <Divider />
 
                         {/* Art. 4 */}
                         <section>
@@ -137,15 +145,18 @@ export default function AccordoPage() {
                             </h2>
                             <div className="space-y-3 text-sm">
                                 <div className="bg-white/[0.03] rounded-2xl p-4 border border-gray-800">
-                                    <p className="text-gray-400"><span className="text-white font-bold">Dominio</span> — Acquisto e mantenimento annuale a carico di <strong className="text-white">Associazione Morgana</strong>.</p>
+                                    <p className="text-gray-400"><span className="text-white font-bold">Dominio</span> — Acquisto e mantenimento annuale a carico dell&apos;<strong className="text-white">Associazione Morgana</strong>.</p>
                                 </div>
                                 <div className="bg-white/[0.03] rounded-2xl p-4 border border-gray-800">
-                                    <p className="text-gray-400"><span className="text-white font-bold">Hosting, SSL e infrastruttura</span> — Ripartiti al <strong className="text-white">50%</strong> tra le due associazioni, salvo diversi accordi interni annuali.</p>
+                                    <p className="text-gray-400"><span className="text-white font-bold">Hosting, SSL e infrastruttura</span> — Ripartiti al <strong className="text-white">50%</strong> tra le due associazioni, salvo diverso accordo scritto per singola edizione.</p>
+                                </div>
+                                <div className="bg-white/[0.03] rounded-2xl p-4 border border-gray-800">
+                                    <p className="text-gray-400"><span className="text-white font-bold">Compenso del Responsabile Tecnico</span> — Definito separatamente per iscritto tra le parti e il Responsabile Tecnico.</p>
                                 </div>
                             </div>
                         </section>
 
-                        <div className="border-t border-gray-800/60" />
+                        <Divider />
 
                         {/* Art. 5 */}
                         <section>
@@ -154,15 +165,31 @@ export default function AccordoPage() {
                                 Art. 5 — Contitolarità dei Dati Personali (GDPR)
                             </h2>
                             <p className="text-gray-300 leading-relaxed text-sm mb-4">
-                                Ai sensi dell&apos;art. 26 del Regolamento UE 2016/679 (GDPR), le associazioni ORUM e Morgana assumono il ruolo di <strong className="text-white">Contitolari del Trattamento</strong> e si impegnano a:
+                                Ai sensi dell&apos;art. 26 del Regolamento UE 2016/679 (GDPR), le associazioni O.R.U.M. e Morgana assumono il ruolo di{" "}
+                                <strong className="text-white">Contitolari del Trattamento</strong> per i dati personali raccolti attraverso la piattaforma FantArte, e si impegnano a:
                             </p>
                             <div className="space-y-3 text-sm">
                                 {[
-                                    { title: "Trasparenza", desc: "Garantire agli utenti un'informativa chiara sulle finalità e basi giuridiche del trattamento." },
-                                    { title: "Gestione delle Istanze", desc: "Rispondere alle richieste degli interessati. La parte che riceve la richiesta informa l'altra entro 48 ore lavorative." },
-                                    { title: "Data Breach", desc: "In caso di violazione, collaborare e darsi comunicazione scritta entro 24 ore dalla scoperta per notificare il Garante." },
-                                    { title: "Responsabilità e Sanzioni", desc: "Il Responsabile Tecnico si assume l'intera responsabilità per violazioni GDPR o data breach imputabili a difetti strutturali, tenendo indenni le due associazioni." },
-                                    { title: "Supporto Operativo", desc: "Il Responsabile Tecnico cura l'attuazione delle misure di sicurezza e la gestione dei database." },
+                                    {
+                                        title: "Trasparenza",
+                                        desc: "Garantire agli utenti una chiara informativa privacy, accessibile in ogni momento dalla piattaforma, sulle finalità, le basi giuridiche e le modalità del trattamento dei dati."
+                                    },
+                                    {
+                                        title: "Gestione delle Istanze degli Interessati",
+                                        desc: "Rispondere tempestivamente alle richieste degli utenti (accesso, rettifica, cancellazione, ecc.). La parte che riceve una richiesta informa l'altra entro 48 ore lavorative."
+                                    },
+                                    {
+                                        title: "Notifica di Data Breach",
+                                        desc: "In caso di violazione dei dati personali, collaborare e darsi reciproca comunicazione scritta entro 24 ore dalla scoperta, per consentire la notifica al Garante nei termini previsti dall'art. 33 GDPR (72 ore)."
+                                    },
+                                    {
+                                        title: "Responsabilità per Violazioni Tecniche",
+                                        desc: "Il Responsabile Tecnico si assume l'intera responsabilità per violazioni GDPR o data breach imputabili a difetti dell'infrastruttura tecnica, tenendo indenni entrambe le associazioni."
+                                    },
+                                    {
+                                        title: "Minimizzazione dei Dati",
+                                        desc: "Raccogliere esclusivamente i dati strettamente necessari alla fruizione del servizio FantArte, in conformità al principio di minimizzazione di cui all'art. 5, par. 1, lett. c) GDPR."
+                                    },
                                 ].map((item, i) => (
                                     <div key={item.title} className="flex gap-3 bg-white/[0.03] rounded-2xl p-4 border border-gray-800">
                                         <span className="w-5 h-5 rounded-full bg-oro/20 flex items-center justify-center text-oro font-black text-[10px] shrink-0 mt-0.5">{i + 1}</span>
@@ -175,30 +202,49 @@ export default function AccordoPage() {
                             </div>
                         </section>
 
-                        <div className="border-t border-gray-800/60" />
+                        <Divider />
 
                         {/* Art. 6 */}
                         <section>
                             <h2 className="text-oro font-black uppercase tracking-widest text-xs mb-4 flex items-center gap-2">
                                 <span className="w-5 h-5 rounded-full bg-oro/20 flex items-center justify-center text-oro font-black text-[10px]">6</span>
-                                Art. 6 — Tutela del Brand e dell&apos;Immagine
+                                Art. 6 — Regole del Gioco e Contenuti
+                            </h2>
+                            <p className="text-gray-300 leading-relaxed text-sm mb-3">
+                                Le regole della competizione FantArte, i criteri di assegnazione dei punteggi agli artisti, la composizione delle squadre e ogni altra modalità di gioco sono definiti{" "}
+                                <strong className="text-white">congiuntamente</strong> dalle due associazioni prima dell&apos;apertura delle registrazioni e pubblicati nella pagina Regolamento della piattaforma.
+                            </p>
+                            <p className="text-gray-400 leading-relaxed text-sm">
+                                Qualsiasi modifica sostanziale alle regole in corso di competizione dovrà essere concordata per iscritto da entrambe le parti e comunicata agli utenti con adeguato anticipo.
+                            </p>
+                        </section>
+
+                        <Divider />
+
+                        {/* Art. 7 */}
+                        <section>
+                            <h2 className="text-oro font-black uppercase tracking-widest text-xs mb-4 flex items-center gap-2">
+                                <span className="w-5 h-5 rounded-full bg-oro/20 flex items-center justify-center text-oro font-black text-[10px]">7</span>
+                                Art. 7 — Tutela del Brand e dell&apos;Immagine
                             </h2>
                             <p className="text-gray-300 leading-relaxed text-sm">
-                                Le associazioni sono autorizzate all&apos;utilizzo reciproco dei loghi e dei marchi <strong className="text-white">esclusivamente per la promozione delle attività congiunte</strong> presenti sul portale (es. locandine di eventi co-organizzati, comunicati stampa condivisi).
+                                Le associazioni sono autorizzate all&apos;utilizzo reciproco di loghi e marchi{" "}
+                                <strong className="text-white">esclusivamente nel contesto della piattaforma FantArte e dell&apos;evento Piazza dell&apos;Arte</strong> (es. materiali promozionali congiunti, comunicati stampa, locandine dell&apos;evento).
                             </p>
                             <p className="text-gray-400 leading-relaxed text-sm mt-3">
-                                Qualsiasi altro utilizzo del nome o dell&apos;immagine dell&apos;altra associazione per iniziative separate dovrà essere <strong className="text-white">autorizzato preventivamente per iscritto</strong>.
+                                Qualsiasi utilizzo del nome o dell&apos;immagine dell&apos;altra associazione per iniziative separate o esterne a FantArte dovrà essere{" "}
+                                <strong className="text-white">autorizzato preventivamente per iscritto</strong>.
                             </p>
                         </section>
 
                         {/* Firme */}
                         <div className="border-t border-gray-800/60 pt-8">
                             <p className="text-gray-500 text-xs text-center mb-6 italic">
-                                Letto, approvato e sottoscritto in <strong className="text-gray-400">Messina</strong>, lì <strong className="text-gray-400">29 Aprile 2026</strong>
+                                Letto, approvato e sottoscritto in <strong className="text-gray-400">Messina</strong>, lì <strong className="text-gray-400">5 Maggio 2026</strong>
                             </p>
                             <div className="grid md:grid-cols-2 gap-4 mb-4">
                                 <div className="bg-white/[0.03] rounded-2xl p-6 border border-gray-800 text-center">
-                                    <p className="text-white font-bold text-sm mb-1">Per Associazione ORUM</p>
+                                    <p className="text-white font-bold text-sm mb-1">Per Associazione O.R.U.M.</p>
                                     <p className="text-gray-400 text-xs italic mb-4">Luigi Grillo (Presidente)</p>
                                     <div className="border-b border-gray-700 w-32 mx-auto" />
                                 </div>
