@@ -13,6 +13,7 @@ export default function LoginPage() {
     const [data, setData] = useState({ email: "", password: "" });
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     const { searchParams } = new URL(typeof window !== "undefined" ? window.location.href : "http://localhost");
     const isVerified = searchParams.get("verified") === "true";
@@ -34,6 +35,36 @@ export default function LoginPage() {
             }
         } else {
             router.push("/");
+        }
+    };
+
+    const resendVerification = async () => {
+        if (!data.email) {
+            setError("Inserisci la tua email per rinviare la verifica.");
+            return;
+        }
+
+        setIsLoading(true);
+        setError("");
+        setSuccess("");
+
+        try {
+            const response = await fetch("/api/auth/resend", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: data.email }),
+            });
+
+            if (response.ok) {
+                setSuccess("Email di verifica inviata! Controlla la tua posta.");
+            } else {
+                const msg = await response.text();
+                setError(msg || "Errore nel rinvio dell'email.");
+            }
+        } catch (err) {
+            setError("Errore di connessione.");
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -89,7 +120,23 @@ export default function LoginPage() {
                         />
                     </div>
 
-                    {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+                    {error && (
+                        <div className="text-center space-y-2">
+                            <p className="text-red-500 text-sm">{error}</p>
+                            {error === "Email non verificata. Controlla la tua casella di posta." && (
+                                <button
+                                    type="button"
+                                    onClick={resendVerification}
+                                    disabled={isLoading}
+                                    className="text-oro text-xs font-bold hover:underline disabled:opacity-50"
+                                >
+                                    {isLoading ? "Invio in corso..." : "Rinvia email di verifica"}
+                                </button>
+                            )}
+                        </div>
+                    )}
+
+                    {success && <p className="text-green-500 text-sm text-center">{success}</p>}
 
                     <button
                         type="submit"

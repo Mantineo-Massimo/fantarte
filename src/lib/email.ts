@@ -27,7 +27,7 @@ export async function sendEmail({ to, subject, body }: { to: string; subject: st
                 Data: subject,
             },
         },
-        Source: process.env.EMAIL_FROM || "no-reply@fantapiazza.it",
+        Source: process.env.EMAIL_FROM || "no-reply@fantarte.it",
     };
 
     try {
