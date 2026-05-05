@@ -1,11 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import SocialShare from "@/components/SocialShare";
 import CountdownTimer from "@/components/CountdownTimer";
+import { FiUsers, FiStar, FiShield, FiTrendingUp, FiInfo, FiEdit3, FiSave, FiSearch, FiFilter, FiHelpCircle } from "react-icons/fi";
+import Link from "next/link";
 
 type ArtistType = "ARTISTA" | "PRESENTATORE" | "OSPITE";
 
@@ -33,9 +35,14 @@ export default function CreateTeamPage() {
     const [teamId, setTeamId] = useState<string | null>(null);
     const [captainId, setCaptainId] = useState<string | null>(null);
     const [initialFetchDone, setInitialFetchDone] = useState(false);
+    const [teamScore, setTeamScore] = useState<number>(0);
 
     const [deadline, setDeadline] = useState<string | null>(null);
     const [isExpired, setIsExpired] = useState(false);
+
+    // Filter/Search
+    const [searchTerm, setSearchTerm] = useState("");
+    const [activeFilter, setActiveFilter] = useState<ArtistType | "ALL">("ALL");
 
     useEffect(() => {
         if (status === "unauthenticated") {
@@ -61,6 +68,9 @@ export default function CreateTeamPage() {
                     setTeamName(data.name);
                     setTeamImage(data.image || null);
                     setSelectedArtists(data.artists || []);
+                    // Get score from Generale league if exists
+                    const generale = data.leagues?.find((l: any) => l.league.name === "Generale");
+                    if (generale) setTeamScore(generale.score);
                 }
                 setInitialFetchDone(true);
             })
@@ -96,7 +106,6 @@ export default function CreateTeamPage() {
     const spentBudget = selectedArtists.reduce((acc, curr) => acc + curr.cost, 0);
     const remainingBudget = 100 - spentBudget;
 
-    // Count by type
     const counts = {
         ARTISTA: selectedArtists.filter(a => a.type === "ARTISTA").length,
         PRESENTATORE: selectedArtists.filter(a => a.type === "PRESENTATORE").length,
@@ -110,22 +119,20 @@ export default function CreateTeamPage() {
             setSelectedArtists(selectedArtists.filter(a => a.id !== artist.id));
             if (captainId === artist.id) setCaptainId(null);
         } else {
-            // Check limits
             if (artist.type === "PRESENTATORE" && counts.PRESENTATORE >= 1) {
-                setError("Puoi selezionare solo 1 presentatore.");
+                setError("Hai già un Presentatore.");
                 return;
             }
             if (artist.type === "OSPITE" && counts.OSPITE >= 1) {
-                setError("Puoi selezionare solo 1 ospite.");
+                setError("Hai già un Ospite.");
                 return;
             }
             if (artist.type === "ARTISTA" && counts.ARTISTA >= 3) {
-                setError("Puoi selezionare massimo 3 artisti.");
+                setError("Massimo 3 Artisti consentiti.");
                 return;
             }
-            
             if (selectedArtists.length >= 5) {
-                setError("La squadra è già completa (5 membri).");
+                setError("La squadra è completa.");
                 return;
             }
             if (remainingBudget - artist.cost < 0) {
@@ -137,50 +144,18 @@ export default function CreateTeamPage() {
         }
     };
 
-    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-
-        setIsUploading(true);
-        setError("");
-
-        const formData = new FormData();
-        formData.append("file", file);
-
-        try {
-            const res = await fetch("/api/upload", {
-                method: "POST",
-                body: formData
-            });
-
-            if (!res.ok) {
-                const errorText = await res.text();
-                throw new Error(errorText || "Errore durante l'upload");
-            }
-            const data = await res.json();
-            setTeamImage(data.url);
-        } catch (err: any) {
-            setError(err.message);
-        } finally {
-            setIsUploading(false);
-        }
-    };
-
     const saveTeam = async () => {
-        if (isExpired) {
-            setError("Le iscrizioni sono chiuse!");
-            return;
-        }
+        if (isExpired) return;
         if (counts.ARTISTA !== 3 || counts.PRESENTATORE !== 1 || counts.OSPITE !== 1) {
-            setError("Composizione squadra non valida: servono 1 presentatore, 1 ospite e 3 artisti.");
+            setError("Composizione squadra non valida.");
             return;
         }
         if (!teamName.trim()) {
-            setError("Inserire un nome per la squadra.");
+            setError("Nome squadra mancante.");
             return;
         }
         if (!captainId) {
-            setError("Seleziona un capitano per raddoppiare i punti speciali!");
+            setError("Scegli un Capitano!");
             return;
         }
 
@@ -213,185 +188,275 @@ export default function CreateTeamPage() {
         }
     };
 
+    const filteredArtists = useMemo(() => {
+        return artists.filter(a => {
+            const matchesSearch = a.name.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesFilter = activeFilter === "ALL" || a.type === activeFilter;
+            return matchesSearch && matchesFilter;
+        });
+    }, [artists, searchTerm, activeFilter]);
+
     if (status === "loading" || !initialFetchDone) return <div className="min-h-screen bg-blunotte flex items-center justify-center text-white">Caricamento...</div>;
 
-    const getRoleColor = (type: ArtistType) => {
-        switch (type) {
-            case "PRESENTATORE": return "bg-viola/20 text-purple-400 border-purple-500/30";
-            case "OSPITE": return "bg-green-500/10 text-green-400 border-green-500/30";
-            case "ARTISTA": return "bg-oro/10 text-oro border-oro/30";
-            default: return "bg-gray-800 text-gray-400 border-gray-700";
-        }
-    };
-
     return (
-        <main className="min-h-screen text-white p-6 md:p-12 pt-56 md:pt-44 pb-32 relative">
-            <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <main className="min-h-screen text-white p-6 md:p-12 pt-56 md:pt-44 pb-32">
+            <div className="max-w-7xl mx-auto space-y-12">
 
-                {/* Sinistra: Lista Artisti */}
-                <div className="lg:col-span-2 space-y-6">
-                    <div className="mb-4">
-                        <h1 className="text-4xl font-extrabold tracking-tight mb-2">
-                            {isEditing ? "Gestisci la tua Squadra" : "Crea la tua Squadra"}
-                        </h1>
-                        <div className="flex flex-wrap gap-3 mt-4">
-                            <span className={`px-3 py-1 rounded-full text-xs font-bold border transition-colors ${counts.PRESENTATORE === 1 ? "bg-purple-500 text-white border-purple-400" : "bg-purple-500/10 text-purple-400 border-purple-500/20"}`}>
-                                1 Presentatore ({counts.PRESENTATORE}/1)
-                            </span>
-                            <span className={`px-3 py-1 rounded-full text-xs font-bold border transition-colors ${counts.OSPITE === 1 ? "bg-green-600 text-white border-green-500" : "bg-green-500/10 text-green-400 border-green-500/20"}`}>
-                                1 Ospite ({counts.OSPITE}/1)
-                            </span>
-                            <span className={`px-3 py-1 rounded-full text-xs font-bold border transition-colors ${counts.ARTISTA === 3 ? "bg-oro text-blunotte border-yellow-400" : "bg-oro/10 text-oro border-oro/20"}`}>
-                                3 Artisti ({counts.ARTISTA}/3)
-                            </span>
+                {/* Dashboard Header */}
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 border-b border-gray-800 pb-12">
+                    <div className="space-y-4">
+                        <div className="flex items-center gap-4">
+                             <div className="w-20 h-20 rounded-3xl bg-oro/10 border border-oro/30 flex items-center justify-center text-oro text-4xl shadow-lg">
+                                {isEditing ? <FiTrendingUp /> : <FiUsers />}
+                             </div>
+                             <div>
+                                <h1 className="text-4xl md:text-6xl font-black tracking-tighter">
+                                    {isEditing ? teamName : "Crea Squadra"}
+                                </h1>
+                                <p className="text-gray-400 font-bold uppercase tracking-widest text-xs mt-1">
+                                    {isEditing ? "La tua formazione attuale su FantArte" : "Benvenuto! Inizia a comporre il tuo roster"}
+                                </p>
+                             </div>
                         </div>
                     </div>
-
-                    {deadline && (
-                        <div className="mb-8 p-6 bg-[#131d36] rounded-3xl border border-gray-800 shadow-xl overflow-hidden relative">
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-oro opacity-5 rounded-full blur-3xl"></div>
-                            <CountdownTimer targetDate={deadline} />
+                    
+                    {isEditing && (
+                        <div className="flex gap-4">
+                            <div className="bg-[#131d36] px-6 py-4 rounded-2xl border border-gray-800 text-center shadow-xl">
+                                <p className="text-[10px] text-gray-500 font-black uppercase mb-1">Punti Totali</p>
+                                <p className="text-3xl font-black text-oro">{teamScore}</p>
+                            </div>
+                            <Link href="/supporto" className="bg-[#131d36] px-6 py-4 rounded-2xl border border-gray-800 flex items-center gap-2 hover:bg-white/5 transition-colors shadow-xl">
+                                <FiHelpCircle className="text-oro" />
+                                <span className="text-sm font-bold">Supporto</span>
+                            </Link>
                         </div>
                     )}
+                </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <AnimatePresence>
-                            {artists.map((artist) => {
-                                const isSelected = selectedArtists.some(a => a.id === artist.id);
-                                const canAfford = remainingBudget >= artist.cost || isSelected;
-                                const isDisabled = isExpired || (!canAfford && !isSelected);
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
 
-                                return (
-                                    <motion.div
-                                        key={artist.id}
-                                        layout
-                                        initial={{ opacity: 0, scale: 0.9 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        whileHover={{ scale: isDisabled ? 1 : 1.05 }}
-                                        whileTap={{ scale: isDisabled ? 1 : 0.95 }}
-                                        onClick={() => !isDisabled && toggleArtist(artist)}
-                                        className={`rounded-2xl border-2 transition-all p-4 overflow-hidden relative ${isSelected
-                                            ? "bg-[#1f2937] border-oro shadow-[0_0_15px_rgba(255,215,0,0.3)] cursor-pointer"
-                                            : isDisabled
-                                                ? "bg-[#0f172a] border-gray-800 opacity-50 cursor-not-allowed"
-                                                : "bg-[#131d36] border-gray-800 hover:border-gray-500 cursor-pointer"
-                                            }`}
-                                    >
-                                        <div className="flex flex-col gap-4">
-                                            <div className="flex justify-between items-start">
-                                                <div className="z-10">
-                                                    <h3 className="text-xl font-bold truncate pr-2">{artist.name}</h3>
-                                                    <span className={`inline-block mt-1 px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest border ${getRoleColor(artist.type)}`}>
-                                                        {artist.type}
-                                                    </span>
+                    {/* Left Column: Visual Formation (Stage) */}
+                    <div className="lg:col-span-7 space-y-8">
+                        <div className="relative bg-gradient-to-b from-[#131d36] to-[#0a0f1c] rounded-[40px] p-8 border border-gray-800 shadow-2xl overflow-hidden aspect-[4/3] md:aspect-[16/9] flex flex-col justify-center">
+                            
+                            {/* Stage Background Elements */}
+                            <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+                                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-oro rounded-full blur-[120px]"></div>
+                            </div>
+
+                            <div className="relative z-10 grid grid-cols-3 gap-6 max-w-4xl mx-auto w-full">
+                                
+                                {/* Row 1: Presenter and Guest */}
+                                <div className="col-span-3 flex justify-center gap-8 mb-4">
+                                    <StageSlot 
+                                        label="PRESENTATORE" 
+                                        artist={selectedArtists.find(a => a.type === "PRESENTATORE")}
+                                        isCaptain={captainId === selectedArtists.find(a => a.type === "PRESENTATORE")?.id}
+                                        onSetCaptain={() => setCaptainId(selectedArtists.find(a => a.type === "PRESENTATORE")?.id || null)}
+                                        onRemove={() => toggleArtist(selectedArtists.find(a => a.type === "PRESENTATORE")!)}
+                                        isExpired={isExpired}
+                                    />
+                                    <StageSlot 
+                                        label="OSPITE" 
+                                        artist={selectedArtists.find(a => a.type === "OSPITE")}
+                                        isCaptain={captainId === selectedArtists.find(a => a.type === "OSPITE")?.id}
+                                        onSetCaptain={() => setCaptainId(selectedArtists.find(a => a.type === "OSPITE")?.id || null)}
+                                        onRemove={() => toggleArtist(selectedArtists.find(a => a.type === "OSPITE")!)}
+                                        isExpired={isExpired}
+                                    />
+                                </div>
+
+                                {/* Row 2: 3 Artists */}
+                                <div className="col-span-3 flex justify-center gap-6">
+                                    {[0, 1, 2].map(i => (
+                                        <StageSlot 
+                                            key={i}
+                                            label="ARTISTA" 
+                                            artist={selectedArtists.filter(a => a.type === "ARTISTA")[i]}
+                                            isCaptain={captainId === selectedArtists.filter(a => a.type === "ARTISTA")[i]?.id}
+                                            onSetCaptain={() => setCaptainId(selectedArtists.filter(a => a.type === "ARTISTA")[i]?.id || null)}
+                                            onRemove={() => toggleArtist(selectedArtists.filter(a => a.type === "ARTISTA")[i]!)}
+                                            isExpired={isExpired}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Stage Floor */}
+                            <div className="absolute bottom-0 left-0 w-full h-1/4 bg-gradient-to-t from-black/60 to-transparent pointer-events-none"></div>
+                        </div>
+
+                        {/* Team Actions & Info */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="bg-[#131d36]/50 p-6 rounded-3xl border border-gray-800 space-y-4">
+                                <label className="block text-[10px] text-gray-500 font-black uppercase tracking-widest">Dati della Squadra</label>
+                                <input
+                                    type="text"
+                                    value={teamName}
+                                    onChange={(e) => setTeamName(e.target.value)}
+                                    placeholder="Inserisci nome squadra..."
+                                    disabled={isExpired}
+                                    className="w-full bg-black/40 border border-gray-700 rounded-xl px-4 py-4 text-white font-bold focus:border-oro transition-all outline-none"
+                                />
+                                <div className="flex justify-between items-center bg-black/20 p-4 rounded-xl">
+                                    <span className="text-sm text-gray-400">Budget Residuo:</span>
+                                    <span className={`text-xl font-black ${remainingBudget < 0 ? "text-red-500" : "text-green-400"}`}>
+                                        {remainingBudget} <small className="text-[10px] uppercase">Armoni</small>
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div className="bg-[#131d36]/50 p-6 rounded-3xl border border-gray-800 flex flex-col justify-between">
+                                <p className="text-sm text-gray-400 italic">
+                                    💡 <strong className="text-oro">Consiglio:</strong> Scegli con cura il Capitano. Solo i suoi <strong className="text-white">Punti Speciali</strong> verranno raddoppiati!
+                                </p>
+                                <button
+                                    onClick={saveTeam}
+                                    disabled={selectedArtists.length !== 5 || !teamName.trim() || !captainId || loading || isExpired}
+                                    className="w-full mt-4 py-5 bg-gradient-to-r from-oro to-ocra text-blunotte font-black rounded-2xl transform active:scale-95 transition-all shadow-xl hover:shadow-oro/30 disabled:opacity-30 disabled:grayscale"
+                                >
+                                    {loading ? "SALVATAGGIO..." : isEditing ? "AGGIORNA SQUADRA" : "FONDA SQUADRA"}
+                                </button>
+                            </div>
+                        </div>
+                        {error && <p className="text-red-500 font-bold text-center bg-red-500/10 p-4 rounded-xl border border-red-500/30">{error}</p>}
+                    </div>
+
+                    {/* Right Column: Artist Market */}
+                    <div className="lg:col-span-5 space-y-6">
+                        <div className="bg-[#131d36] rounded-[40px] p-8 border border-gray-800 shadow-2xl h-[800px] flex flex-col">
+                            <div className="flex justify-between items-center mb-8">
+                                <h2 className="text-2xl font-black tracking-tighter">Mercato <span className="text-oro">Armoni</span></h2>
+                                <div className="bg-oro/10 px-3 py-1 rounded-full border border-oro/20 text-[10px] font-black text-oro">DISPONIBILI: {artists.length}</div>
+                            </div>
+
+                            {/* Search & Filter */}
+                            <div className="space-y-4 mb-8">
+                                <div className="relative">
+                                    <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" />
+                                    <input 
+                                        type="text" 
+                                        placeholder="Cerca artista..." 
+                                        value={searchTerm}
+                                        onChange={e => setSearchTerm(e.target.value)}
+                                        className="w-full bg-black/40 border border-gray-800 rounded-2xl pl-12 pr-4 py-4 text-white focus:border-oro transition-all outline-none"
+                                    />
+                                </div>
+                                <div className="flex gap-2 overflow-x-auto pb-2 custom-scrollbar">
+                                    {["ALL", "PRESENTATORE", "OSPITE", "ARTISTA"].map(f => (
+                                        <button
+                                            key={f}
+                                            onClick={() => setActiveFilter(f as any)}
+                                            className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap border transition-all ${activeFilter === f ? "bg-oro text-blunotte border-oro" : "bg-black/40 text-gray-500 border-gray-800 hover:border-gray-600"}`}
+                                        >
+                                            {f === "ALL" ? "TUTTI" : f}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Artist List */}
+                            <div className="flex-1 overflow-y-auto pr-2 space-y-3 custom-scrollbar">
+                                {filteredArtists.map(artist => {
+                                    const isSelected = selectedArtists.some(a => a.id === artist.id);
+                                    const canAfford = remainingBudget >= artist.cost || isSelected;
+                                    return (
+                                        <button
+                                            key={artist.id}
+                                            disabled={isExpired || (!canAfford && !isSelected)}
+                                            onClick={() => toggleArtist(artist)}
+                                            className={`w-full flex items-center justify-between p-4 rounded-2xl border-2 transition-all group ${isSelected ? "bg-oro text-blunotte border-oro" : "bg-black/20 border-gray-800 hover:border-gray-600 disabled:opacity-30 disabled:grayscale"}`}
+                                        >
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-12 h-12 rounded-xl bg-gray-900 overflow-hidden border border-white/10">
+                                                    {artist.image ? <img src={artist.image} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-xs text-gray-600">{artist.name.charAt(0)}</div>}
                                                 </div>
-                                                <div className="flex flex-col items-end gap-1 z-10">
-                                                    <span className={`px-2 py-1 rounded-lg text-[10px] font-black uppercase tracking-tighter ${isSelected ? "bg-white/20 text-white" : "bg-gray-800 text-gray-400"}`}>
-                                                        {artist.cost} ARMONI
-                                                    </span>
-                                                    {isSelected && (
-                                                        <button
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                setCaptainId(artist.id);
-                                                            }}
-                                                            className={`px-2 py-1 rounded-lg text-[10px] font-black uppercase transition-all ${captainId === artist.id
-                                                                ? "bg-oro text-blunotte shadow-[0_0_10px_rgba(255,215,0,0.5)]"
-                                                                : "bg-black/40 text-gray-400 hover:bg-black/60 hover:text-white"
-                                                                }`}
-                                                        >
-                                                            {captainId === artist.id ? "★ Capitano" : "Capitano?"}
-                                                        </button>
-                                                    )}
+                                                <div className="text-left">
+                                                    <p className="font-bold leading-tight">{artist.name}</p>
+                                                    <p className={`text-[8px] font-black uppercase tracking-tighter ${isSelected ? "text-blunotte/60" : "text-oro"}`}>{artist.type}</p>
                                                 </div>
                                             </div>
-
-                                            <div className="h-40 w-full rounded-xl bg-[#0a0f1c] overflow-hidden">
-                                                {artist.image ? (
-                                                    <img src={artist.image} alt={artist.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                                                ) : (
-                                                    <div className="w-full h-full flex items-center justify-center text-gray-800">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                                        </svg>
-                                                    </div>
-                                                )}
+                                            <div className="text-right">
+                                                <p className="text-lg font-black">{artist.cost}</p>
+                                                <p className={`text-[8px] font-bold uppercase ${isSelected ? "text-blunotte/60" : "text-gray-500"}`}>ARMONI</p>
                                             </div>
-                                        </div>
-                                    </motion.div>
-                                );
-                            })}
-                        </AnimatePresence>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                {/* Destra: Riepilogo */}
-                <div className="lg:col-span-1 border-l-0 lg:border-l border-gray-800 pl-0 lg:pl-8">
-                    <div className="sticky top-24 bg-[#131d36] rounded-3xl p-6 shadow-2xl border border-gray-800">
-                        <h2 className="text-2xl font-bold mb-6 border-b border-gray-800 pb-4">Riepilogo Squadra</h2>
-
-                        <div className="mb-6">
-                            <label className="block text-sm font-medium text-gray-400 mb-2 uppercase tracking-widest font-bold">Nome Squadra</label>
-                            <input
-                                type="text"
-                                value={teamName}
-                                onChange={(e) => setTeamName(e.target.value)}
-                                maxLength={30}
-                                disabled={isExpired}
-                                placeholder="Es. I Bardi di Piazza"
-                                className="w-full bg-[#0a0f1c] border border-gray-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-oro transition-colors disabled:opacity-50"
-                            />
-                        </div>
-
-                        <div className="space-y-4 mb-8">
-                            <div className="flex justify-between items-center text-lg">
-                                <span className="text-gray-400">Budget</span>
-                                <span className={`font-mono font-bold text-2xl ${remainingBudget < 0 ? "text-red-500" : "text-green-500"}`}>
-                                    {remainingBudget} / 100
-                                </span>
-                            </div>
-                            <div className="flex justify-between items-center text-sm">
-                                <span className="text-gray-500">Capitano raddoppia i <strong className="text-oro">Punti Speciali</strong></span>
-                            </div>
-                        </div>
-
-                        <div className="space-y-3 min-h-[250px]">
-                            {selectedArtists.length === 0 ? (
-                                <p className="text-gray-500 text-center italic mt-10">Inizia a comporre la tua squadra</p>
-                            ) : (
-                                selectedArtists.map(a => (
-                                    <div key={a.id} className="flex justify-between bg-[#0a0f1c] px-4 py-3 rounded-xl text-sm items-center border border-gray-800 relative">
-                                        <div className="flex flex-col">
-                                            <span className="font-medium text-gray-200">{a.name}</span>
-                                            <span className="text-[10px] text-gray-500 font-bold uppercase">{a.type}</span>
-                                        </div>
-                                        <div className="flex items-center gap-3">
-                                            {captainId === a.id && <span className="text-oro text-xs font-black">★ CAPITANO</span>}
-                                            <span className="text-oro font-bold text-lg">{a.cost}</span>
-                                        </div>
-                                    </div>
-                                ))
-                            )}
-                        </div>
-
-                        {error && <div className="mt-4 p-3 bg-red-900/50 border border-red-500 rounded-xl text-red-200 text-sm">{error}</div>}
-
-                        <button
-                            onClick={saveTeam}
-                            disabled={selectedArtists.length !== 5 || !teamName.trim() || !captainId || loading || remainingBudget < 0 || isExpired}
-                            className={`w-full mt-8 py-4 rounded-xl font-bold text-lg transition-all transform active:scale-95 shadow-xl
-                                ${isExpired
-                                    ? "bg-gray-800 text-gray-500 cursor-not-allowed border border-gray-700"
-                                    : "bg-gradient-to-r from-oro to-ocra text-blunotte hover:shadow-[0_0_30px_rgba(255,215,0,0.6)] disabled:opacity-50 disabled:cursor-not-allowed"
-                                }
-                            `}
-                        >
-                            {loading ? "Salvataggio..." : isExpired ? "Iscrizioni Chiuse" : (isEditing ? "Salva Modifiche" : "Fonda Squadra")}
-                        </button>
+                {/* Deadline Footer */}
+                {deadline && (
+                    <div className="bg-[#131d36] rounded-3xl p-8 border border-gray-800 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8 overflow-hidden relative">
+                         <div className="absolute top-0 left-0 w-full h-full bg-oro/5 pointer-events-none blur-3xl rounded-full translate-x-1/2 -translate-y-1/2"></div>
+                         <div>
+                            <h3 className="text-xl font-black mb-2 uppercase tracking-tighter">Tempo Rimasto per Modifiche</h3>
+                            <p className="text-gray-400 text-sm">Al termine del countdown la squadra verrà congelata per l&apos;inizio della Piazza.</p>
+                         </div>
+                         <div className="w-full md:w-auto">
+                            <CountdownTimer targetDate={deadline} />
+                         </div>
                     </div>
-                </div>
+                )}
 
             </div>
         </main>
+    );
+}
+
+function StageSlot({ label, artist, isCaptain, onSetCaptain, onRemove, isExpired }: { 
+    label: string, 
+    artist?: Artist, 
+    isCaptain: boolean, 
+    onSetCaptain: () => void,
+    onRemove: () => void,
+    isExpired: boolean
+}) {
+    return (
+        <div className="flex flex-col items-center gap-4">
+            <div className={`relative w-24 h-24 md:w-32 md:h-32 rounded-full border-4 transition-all flex items-center justify-center overflow-hidden ${artist ? "border-oro shadow-[0_0_20px_rgba(255,215,0,0.3)] bg-gray-900" : "border-dashed border-gray-700 bg-black/30"}`}>
+                {artist ? (
+                    <>
+                        <img src={artist.image || ""} className="w-full h-full object-cover opacity-60" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col items-center justify-end pb-3">
+                            <p className="text-[10px] md:text-xs font-black text-white text-center px-2 line-clamp-1">{artist.name}</p>
+                        </div>
+                        {!isExpired && (
+                            <button 
+                                onClick={(e) => { e.stopPropagation(); onRemove(); }}
+                                className="absolute top-2 right-2 w-6 h-6 bg-red-500 rounded-full text-white flex items-center justify-center text-xs hover:bg-red-600 transition-colors shadow-lg"
+                            >
+                                ×
+                            </button>
+                        )}
+                        {isCaptain && (
+                            <div className="absolute -top-1 -left-1 bg-oro text-blunotte p-1.5 rounded-full shadow-lg border-2 border-blunotte animate-pulse">
+                                <FiStar size={12} />
+                            </div>
+                        )}
+                    </>
+                ) : (
+                    <div className="flex flex-col items-center text-gray-700">
+                         <FiUsers size={24} />
+                    </div>
+                )}
+            </div>
+            
+            <div className="flex flex-col items-center gap-2">
+                <span className="text-[9px] font-black text-gray-500 uppercase tracking-widest">{label}</span>
+                {artist && !isExpired && (
+                    <button
+                        onClick={onSetCaptain}
+                        className={`px-3 py-1 rounded-full text-[8px] font-black uppercase transition-all border ${isCaptain ? "bg-oro text-blunotte border-oro" : "bg-black/40 text-gray-500 border-gray-800 hover:border-oro hover:text-oro"}`}
+                    >
+                        {isCaptain ? "CAPITANO" : "FARE CAPITANO"}
+                    </button>
+                )}
+            </div>
+        </div>
     );
 }

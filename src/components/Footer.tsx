@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { FiInstagram, FiFacebook, FiMail, FiGlobe, FiCode } from "react-icons/fi";
+import { FiInstagram, FiFacebook, FiMail, FiGlobe, FiCode, FiHelpCircle } from "react-icons/fi";
 import { motion } from "framer-motion";
 
 export default function Footer() {
@@ -16,10 +16,10 @@ export default function Footer() {
             <div className="absolute -top-24 -right-24 w-96 h-96 bg-viola/5 rounded-full blur-[100px] pointer-events-none" />
 
             <div className="max-w-7xl mx-auto px-6 pt-20 pb-12 relative">
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 lg:gap-8 mb-20">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 mb-20">
                     
                     {/* Brand Info */}
-                    <div className="lg:col-span-2 space-y-8">
+                    <div className="lg:col-span-5 space-y-8">
                         <div className="flex flex-col items-center lg:items-start gap-4">
                             <motion.div 
                                 whileHover={{ scale: 1.02 }}
@@ -36,78 +36,66 @@ export default function Footer() {
                             <p className="text-gray-400 text-base leading-relaxed max-w-md text-center lg:text-left">
                                 Il fantagioco ufficiale della <strong className="text-oro font-bold">Piazza dell&apos;Arte</strong>. 
                                 Un&apos;esperienza immersiva dove il talento incontra la strategia, 
-                                nata dalla collaborazione tra le associazioni storiche di Messina.
+                                nata dalla collaborazione tra <strong className="text-white">Morgana</strong> e <strong className="text-white">Orume</strong>.
                             </p>
                         </div>
                         
-                        <div className="flex flex-col gap-4">
-                            <div className="flex items-center gap-3 justify-center lg:justify-start">
-                                <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-oro">
-                                    <FiGlobe size={18} />
-                                </div>
-                                <div>
-                                    <p className="text-white text-xs font-black uppercase tracking-widest">Contitolarità</p>
-                                    <p className="text-gray-500 text-sm">Associazione Morgana & O.R.U.M.</p>
+                        <div className="flex flex-wrap gap-8 justify-center lg:justify-start pt-4">
+                            <div className="space-y-4">
+                                <p className="text-white text-[10px] font-black uppercase tracking-[0.2em] opacity-50">Morgana</p>
+                                <div className="flex gap-4">
+                                    <a href="#" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:text-oro transition-colors"><FiInstagram size={18} /></a>
+                                    <a href="#" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:text-oro transition-colors"><FiFacebook size={18} /></a>
+                                    <a href="mailto:associazione.morgana@gmail.com" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:text-oro transition-colors"><FiMail size={18} /></a>
                                 </div>
                             </div>
-                            <div className="flex items-center gap-3 justify-center lg:justify-start">
-                                <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-viola">
-                                    <FiCode size={18} />
-                                </div>
-                                <div>
-                                    <p className="text-white text-xs font-black uppercase tracking-widest">Technical Lead</p>
-                                    <p className="text-gray-500 text-sm">Massimo Mantineo</p>
+                            <div className="space-y-4">
+                                <p className="text-white text-[10px] font-black uppercase tracking-[0.2em] opacity-50">Orume</p>
+                                <div className="flex gap-4">
+                                    <a href="#" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:text-oro transition-colors"><FiInstagram size={18} /></a>
+                                    <a href="#" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:text-oro transition-colors"><FiFacebook size={18} /></a>
+                                    <a href="mailto:orum.unime@gmail.com" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:text-oro transition-colors"><FiMail size={18} /></a>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     {/* Navigation */}
-                    <div className="grid grid-cols-2 gap-8 text-center lg:text-left">
+                    <div className="lg:col-span-4 grid grid-cols-2 gap-8 text-center lg:text-left pt-2">
                         <div className="space-y-6">
-                            <h4 className="text-white font-black uppercase tracking-[0.2em] text-xs">Piattaforma</h4>
-                            <nav className="flex flex-col gap-4 text-sm text-gray-400">
+                            <h4 className="text-white font-black uppercase tracking-[0.2em] text-[10px] opacity-40">Piattaforma</h4>
+                            <nav className="flex flex-col gap-4 text-sm text-gray-400 font-bold">
                                 <Link href="/" className="hover:text-oro transition-colors">Home</Link>
                                 <Link href="/regolamento" className="hover:text-oro transition-colors">Regolamento</Link>
                                 <Link href="/leaderboards" className="hover:text-oro transition-colors">Classifiche</Link>
-                                <Link href="/team/create" className="hover:text-oro transition-colors">Crea Squadra</Link>
+                                <Link href="/team/create" className="hover:text-oro transition-colors">Squadra</Link>
                             </nav>
                         </div>
                         <div className="space-y-6">
-                            <h4 className="text-white font-black uppercase tracking-[0.2em] text-xs">Legale</h4>
-                            <nav className="flex flex-col gap-4 text-sm text-gray-400">
-                                <Link href="/privacy" className="hover:text-oro transition-colors">Privacy Policy</Link>
+                            <h4 className="text-white font-black uppercase tracking-[0.2em] text-[10px] opacity-40">Legale & Info</h4>
+                            <nav className="flex flex-col gap-4 text-sm text-gray-400 font-bold">
+                                <Link href="/privacy" className="hover:text-oro transition-colors">Privacy</Link>
                                 <Link href="/accordo" className="hover:text-oro transition-colors">Collaborazione</Link>
-                                <Link href="/faq" className="hover:text-oro transition-colors">Domande Frequenti</Link>
-                                <Link href="/contatti" className="hover:text-oro transition-colors">Supporto</Link>
+                                <Link href="/supporto" className="hover:text-oro transition-colors">FAQ & Supporto</Link>
                             </nav>
                         </div>
                     </div>
 
-                    {/* Social & Contact */}
-                    <div className="flex flex-col items-center lg:items-end space-y-8">
-                        <h4 className="text-white font-black uppercase tracking-[0.2em] text-xs">Social & Socialize</h4>
-                        <div className="flex gap-4">
-                            {[
-                                { icon: FiInstagram, href: "https://www.instagram.com/piazzadellarte_/", color: "hover:bg-gradient-to-tr hover:from-yellow-400 hover:via-red-500 hover:to-purple-500" },
-                                { icon: FiFacebook, href: "https://www.facebook.com/PiazzadellArte", color: "hover:bg-[#1877F2]" },
-                                { icon: FiMail, href: "mailto:info@fantarte.it", color: "hover:bg-oro hover:text-blunotte" }
-                            ].map((social, i) => (
-                                <motion.a
-                                    key={i}
-                                    href={social.href}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    whileHover={{ y: -5 }}
-                                    className={`w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 ${social.color}`}
-                                >
-                                    <social.icon size={22} />
-                                </motion.a>
-                            ))}
+                    {/* Technical & Contact */}
+                    <div className="lg:col-span-3 flex flex-col items-center lg:items-end space-y-10 pt-2">
+                        <div className="text-center lg:text-right space-y-4">
+                            <h4 className="text-white font-black uppercase tracking-[0.2em] text-[10px] opacity-40">Hai bisogno di aiuto?</h4>
+                            <div className="space-y-1">
+                                <a href="mailto:associazione.morgana@gmail.com" className="block text-oro font-black hover:underline text-xs tracking-tighter">associazione.morgana@gmail.com</a>
+                                <a href="mailto:orum.unime@gmail.com" className="block text-oro font-black hover:underline text-xs tracking-tighter">orum.unime@gmail.com</a>
+                            </div>
                         </div>
-                        <div className="text-center lg:text-right">
-                            <p className="text-gray-500 text-xs uppercase tracking-widest mb-1">Hai bisogno di aiuto?</p>
-                            <a href="mailto:info@fantarte.it" className="text-oro font-bold hover:underline tracking-tight">info@fantarte.it</a>
+                        
+                        <div className="flex flex-col items-center lg:items-end gap-2">
+                            <div className="flex items-center gap-3">
+                                <FiCode className="text-gray-500" />
+                                <span className="text-[10px] text-gray-500 font-black uppercase tracking-widest">Built by Massimo Mantineo</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -115,7 +103,7 @@ export default function Footer() {
                 {/* Bottom Bar */}
                 <div className="pt-10 border-t border-gray-800/50 flex flex-col md:flex-row justify-between items-center gap-6">
                     <p className="text-gray-600 text-[10px] uppercase tracking-[0.3em] font-medium">
-                        &copy; {new Date().getFullYear()} <span className="text-gray-400">FantArte</span>. All Rights Reserved.
+                        &copy; {new Date().getFullYear()} <span className="text-gray-400">FantArte</span>. Piazza dell&apos;Arte Messina.
                     </p>
                     
                     <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10">
@@ -124,8 +112,11 @@ export default function Footer() {
                     </div>
 
                     <div className="flex gap-6">
-                        <Link href="/privacy" className="text-gray-700 hover:text-white text-[10px] uppercase tracking-widest transition-colors font-bold">Privacy</Link>
-                        <Link href="/accordo" className="text-gray-700 hover:text-white text-[10px] uppercase tracking-widest transition-colors font-bold">Accordo</Link>
+                         <div className="flex items-center gap-4 text-gray-500 text-[10px] font-black uppercase tracking-widest">
+                            <span>Morgana</span>
+                            <span className="w-1 h-1 bg-gray-800 rounded-full" />
+                            <span>O.R.U.M.</span>
+                         </div>
                     </div>
                 </div>
             </div>
