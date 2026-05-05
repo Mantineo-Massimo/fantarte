@@ -147,40 +147,65 @@ export default function Home() {
           </motion.div>
         </section>
 
-        {/* Sponsors & Partners Section */}
+        {/* Sponsors & Partners Marquee */}
         {sponsors.length > 0 && (
-          <section className="py-24 px-6 max-w-7xl mx-auto">
-            <motion.div 
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              className="text-center mb-16"
-            >
+          <section className="py-24 relative overflow-hidden group">
+            <div className="max-w-7xl mx-auto px-6 mb-12 text-center md:text-left">
               <p className="text-oro text-[10px] font-black uppercase tracking-[0.4em] mb-4">In Collaborazione Con</p>
               <h2 className="text-4xl font-black tracking-tighter">Partner & <span className="text-oro">Sponsor</span></h2>
-            </motion.div>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
-              {sponsors.map((p, i) => (
-                <motion.div 
-                  key={p.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  viewport={{ once: true }}
-                  className="glass p-8 rounded-[2.5rem] border border-white/5 flex flex-col items-center justify-center grayscale hover:grayscale-0 transition-all cursor-pointer group"
-                >
-                  <div className="w-full aspect-square relative mb-4 flex items-center justify-center">
-                    {p.logoUrl ? (
-                      <img src={p.logoUrl} alt={p.name} className="max-w-full max-h-full object-contain group-hover:scale-110 transition-transform" />
-                    ) : (
-                      <span className="text-2xl font-black text-gray-500 group-hover:text-oro">{p.name.charAt(0)}</span>
-                    )}
-                  </div>
-                  <p className="font-black text-[10px] uppercase tracking-widest text-center">{p.name}</p>
-                </motion.div>
-              ))}
             </div>
+
+            <div className="flex overflow-hidden relative">
+              <div className="flex animate-marquee whitespace-nowrap gap-12 py-4">
+                {/* Primo set di sponsor */}
+                {sponsors.map((p) => (
+                  <div 
+                    key={`s1-${p.id}`}
+                    className="glass w-64 h-32 p-6 rounded-[2rem] border border-white/5 flex items-center gap-6 grayscale hover:grayscale-0 transition-all cursor-pointer hover:border-oro/20 shrink-0"
+                  >
+                    <div className="w-16 h-16 relative flex items-center justify-center shrink-0">
+                      {p.logoUrl ? (
+                        <img src={p.logoUrl} alt={p.name} className="max-w-full max-h-full object-contain" />
+                      ) : (
+                        <div className="w-full h-full rounded-xl bg-white/5 flex items-center justify-center border border-white/10">
+                           <span className="text-xl font-black text-gray-500">{p.name.charAt(0)}</span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="overflow-hidden">
+                      <p className="font-black text-[10px] uppercase tracking-widest truncate">{p.name}</p>
+                      <p className="text-[8px] font-black text-gray-600 uppercase tracking-widest">Official Partner</p>
+                    </div>
+                  </div>
+                ))}
+                
+                {/* Duplicato per scroll infinito */}
+                {sponsors.map((p) => (
+                  <div 
+                    key={`s2-${p.id}`}
+                    className="glass w-64 h-32 p-6 rounded-[2rem] border border-white/5 flex items-center gap-6 grayscale hover:grayscale-0 transition-all cursor-pointer hover:border-oro/20 shrink-0"
+                  >
+                    <div className="w-16 h-16 relative flex items-center justify-center shrink-0">
+                      {p.logoUrl ? (
+                        <img src={p.logoUrl} alt={p.name} className="max-w-full max-h-full object-contain" />
+                      ) : (
+                        <div className="w-full h-full rounded-xl bg-white/5 flex items-center justify-center border border-white/10">
+                           <span className="text-xl font-black text-gray-500">{p.name.charAt(0)}</span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="overflow-hidden">
+                      <p className="font-black text-[10px] uppercase tracking-widest truncate">{p.name}</p>
+                      <p className="text-[8px] font-black text-gray-600 uppercase tracking-widest">Official Partner</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Gradient Overlays per sfumare i lati */}
+            <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-blunotte to-transparent z-10 pointer-events-none" />
+            <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-blunotte to-transparent z-10 pointer-events-none" />
           </section>
         )}
 
