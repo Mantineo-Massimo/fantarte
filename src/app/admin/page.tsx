@@ -62,6 +62,7 @@ export default function AdminDashboard() {
     const [newType, setNewType] = useState<"ARTISTA" | "PRESENTATORE" | "OSPITE">("ARTISTA");
     const [newRole, setNewRole] = useState("Official Partner");
     const [newLink, setNewLink] = useState("");
+    const [editingSponsorId, setEditingSponsorId] = useState<string | null>(null);
 
     // Points State
     const [selectedArtistId, setSelectedArtistId] = useState("");
@@ -242,23 +243,41 @@ export default function AdminDashboard() {
         if (!newName || !newImage) return;
         setSponsorsLoading(true);
         try {
+            const method = editingSponsorId ? "PUT" : "POST";
             const res = await fetch("/api/admin/sponsors", {
-                method: "POST",
+                method,
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name: newName, logoUrl: newImage, role: newRole, linkUrl: newLink })
+                body: JSON.stringify({ 
+                    id: editingSponsorId,
+                    name: newName, 
+                    logoUrl: newImage, 
+                    role: newRole, 
+                    linkUrl: newLink 
+                })
             });
             if (!res.ok) throw new Error("Errore salvataggio sponsor");
-            setSuccess("Sponsor aggiunto!");
+            setSuccess(editingSponsorId ? "Sponsor aggiornato!" : "Sponsor aggiunto!");
             setNewName("");
             setNewImage(null);
             setNewRole("Official Partner");
             setNewLink("");
+            setEditingSponsorId(null);
             loadSponsors();
         } catch (err: any) {
             setError(err.message);
         } finally {
             setSponsorsLoading(false);
         }
+    };
+
+    const handleEditSponsor = (s: any) => {
+        setNewName(s.name);
+        setNewImage(s.logoUrl);
+        setNewRole(s.role || "Official Partner");
+        setNewLink(s.linkUrl || "");
+        setEditingSponsorId(s.id);
+        // Scroll to top of the sponsor section
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const handleDeleteSponsor = async (id: string) => {
@@ -1312,7 +1331,7 @@ export default function AdminDashboard() {
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8">
                             <div className="bg-[#131d36] p-8 rounded-3xl border border-gray-800 shadow-xl">
                                 <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
-                                    <FiPlus className="text-oro" /> Aggiungi Nuovo Sponsor
+                                    <FiPlus className="text-oro" /> {editingSponsorId ? "Modifica Sponsor" : "Aggiungi Nuovo Sponsor"}
                                 </h2>
                                 <form onSubmit={handleAddSponsor} className="grid grid-cols-1 md:grid-cols-5 gap-6 items-end">
                                     <div className="space-y-2">
@@ -1356,53 +1375,80 @@ export default function AdminDashboard() {
                                                 <FiUpload className={isUploading ? "animate-bounce" : ""} />
                                                 {isUploading ? "..." : "Carica"}
                                                 <input type="file" className="hidden" onChange={handleImageUpload} accept="image/*" />
-                                            </label>
-                                            {newImage && (
-                                                <div className="w-12 h-12 rounded-lg border border-gray-800 overflow-hidden bg-white flex items-center justify-center p-1 shrink-0">
-                                                    <img src={newImage} alt="Preview" className="w-full h-full object-contain" />
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                    <button
-                                        type="submit"
-                                        disabled={sponsorsLoading || !newName || !newImage}
-                                        className="bg-oro text-blunotte font-black py-4 rounded-xl hover:bg-yellow-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-oro/20 uppercase tracking-widest text-xs"
-                                    >
-                                        Salva
-                                    </button>
-                                </form>
-                            </div>
+                                             </label>
+                                             {newImage && (
+                                                 <div className="w-12 h-12 rounded-lg border border-gray-800 overflow-hidden bg-white flex items-center justify-center p-1 shrink-0">
+                                                     <img src={newImage} alt="Preview" className="w-full h-full object-contain" />
+                                                 </div>
+                                             )}
+                                         </div>
+                                     </div>
+                                     <div className="flex flex-col gap-2">
+                                         <button
+                                             type="submit"
+                                             disabled={sponsorsLoading || !newName || !newImage}
+                                             className="w-full bg-oro text-blunotte font-black py-4 rounded-xl hover:bg-yellow-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-oro/20 uppercase tracking-widest text-xs"
+                                         >
+                                             {editingSponsorId ? "Aggiorna Sponsor" : "Salva"}
+                                         </button>
+                                         {editingSponsorId && (
+                                             <button
+                                                 type="button"
+                                                 onClick={() => {
+                                                     setEditingSponsorId(null);
+                                                     setNewName("");
+                                                     setNewImage(null);
+                                                     setNewRole("Official Partner");
+                                                     setNewLink("");
+                                                 }}
+                                                 className="w-full bg-white/5 text-white py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-white/10 transition-all"
+                                             >
+                                                 Annulla Modifica
+                                             </button>
+                                         )}
+                                     </div>
+                                 </form>
+                             </div>
 
-                            <div className="bg-[#131d36] p-8 rounded-3xl border border-gray-800 shadow-xl overflow-hidden">
-                                <h2 className="text-2xl font-bold mb-8 flex items-center gap-3">
-                                    <FiStar className="text-oro" /> Sponsor Attivi
-                                </h2>
-                                {sponsorsLoading ? (
-                                    <div className="text-center py-20 text-gray-600 animate-pulse">Caricamento sponsor...</div>
-                                ) : (
-                                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-                                        {sponsors.map(s => (
-                                            <div key={s.id} className="relative group bg-[#0a0f1c] p-4 rounded-2xl border border-gray-800 hover:border-oro/30 transition-all text-center">
-                                                <button
-                                                    onClick={() => handleDeleteSponsor(s.id)}
-                                                    className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 shadow-lg"
-                                                >
-                                                    <FiTrash2 size={14} />
-                                                </button>
-                                                <div className="aspect-[3/2] bg-white rounded-lg flex items-center justify-center p-3 mb-3">
-                                                    <img src={s.logoUrl} alt={s.name} className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-500" />
-                                                </div>
-                                                <div className="text-[10px] font-black uppercase text-white tracking-wider truncate mb-1">{s.name}</div>
-                                                <div className="text-[8px] font-black uppercase text-oro tracking-widest">{s.role || "Official Partner"}</div>
-                                            </div>
-                                        ))}
-                                        {sponsors.length === 0 && (
-                                            <div className="col-span-full py-20 text-center text-gray-600 italic">Nessuno sponsor inserito.</div>
-                                        )}
-                                    </div>
-                                )}
-                            </div>
+                             <div className="bg-[#131d36] p-8 rounded-3xl border border-gray-800 shadow-xl overflow-hidden">
+                                 <h2 className="text-2xl font-bold mb-8 flex items-center gap-3">
+                                     <FiStar className="text-oro" /> Sponsor Attivi
+                                 </h2>
+                                 {sponsorsLoading ? (
+                                     <div className="text-center py-20 text-gray-600 animate-pulse">Caricamento sponsor...</div>
+                                 ) : (
+                                     <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                                         {sponsors.map(s => (
+                                             <div key={s.id} className="relative group bg-[#0a0f1c] p-4 rounded-2xl border border-gray-800 hover:border-oro/30 transition-all text-center">
+                                                 <div className="absolute -top-2 -right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                                                     <button
+                                                         onClick={() => handleEditSponsor(s)}
+                                                         className="w-8 h-8 rounded-full bg-oro text-blunotte flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
+                                                         title="Modifica"
+                                                     >
+                                                         <FiEdit2 size={14} />
+                                                     </button>
+                                                     <button
+                                                         onClick={() => handleDeleteSponsor(s.id)}
+                                                         className="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
+                                                         title="Elimina"
+                                                     >
+                                                         <FiTrash2 size={14} />
+                                                     </button>
+                                                 </div>
+                                                 <div className="aspect-[3/2] bg-white rounded-lg flex items-center justify-center p-3 mb-3">
+                                                     <img src={s.logoUrl} alt={s.name} className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-500" />
+                                                 </div>
+                                                 <div className="text-[10px] font-black uppercase text-white tracking-wider truncate mb-1">{s.name}</div>
+                                                 <div className="text-[8px] font-black uppercase text-oro tracking-widest">{s.role || "Official Partner"}</div>
+                                             </div>
+                                         ))}
+                                         {sponsors.length === 0 && (
+                                             <div className="col-span-full py-20 text-center text-gray-600 italic">Nessuno sponsor inserito.</div>
+                                         )}
+                                     </div>
+                                 )}
+                             </div>
                         </motion.div>
                     )}
 

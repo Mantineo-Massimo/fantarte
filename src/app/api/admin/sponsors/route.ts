@@ -55,6 +55,38 @@ export async function POST(req: Request) {
     }
 }
 
+export async function PUT(req: Request) {
+    try {
+        const session = await getServerSession(authOptions);
+        if (!session?.user?.id) return new NextResponse("Unauthorized", { status: 401 });
+
+        const user = await prisma.user.findUnique({ where: { id: session.user.id } });
+        if (!user || user.role !== "ADMIN") return new NextResponse("Forbidden", { status: 403 });
+
+        const body = await req.json();
+        const { id, name, logoUrl, role, linkUrl } = body;
+
+        if (!id || !name || !logoUrl) {
+            return new NextResponse("Missing required fields", { status: 400 });
+        }
+
+        const sponsor = await prisma.sponsor.update({
+            where: { id },
+            data: {
+                name,
+                logoUrl,
+                role: role || "Official Partner",
+                linkUrl
+            }
+        });
+
+        return NextResponse.json(sponsor);
+    } catch (error) {
+        console.error("ADMIN_PUT_SPONSOR_ERROR", error);
+        return new NextResponse("Internal Error", { status: 500 });
+    }
+}
+
 export async function DELETE(req: Request) {
     try {
         const session = await getServerSession(authOptions);
