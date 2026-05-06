@@ -103,7 +103,7 @@ export default function ArtistsPage() {
                                     <div className="h-px flex-1 bg-gradient-to-r from-oro/50 to-transparent mx-12 hidden md:block" />
                                     <div className="text-gray-600 font-mono text-sm hidden md:block">0{presentatori.length}</div>
                                 </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-8">
                                     {presentatori.map((a, idx) => (
                                         <ArtistCard key={a.id} artist={a} index={idx} />
                                     ))}
@@ -122,7 +122,7 @@ export default function ArtistsPage() {
                                     <div className="h-px flex-1 bg-gradient-to-r from-viola/50 to-transparent mx-12 hidden md:block" />
                                     <div className="text-gray-600 font-mono text-sm hidden md:block">0{ospiti.length}</div>
                                 </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-8">
                                     {ospiti.map((a, idx) => (
                                         <ArtistCard key={a.id} artist={a} index={idx} />
                                     ))}
@@ -141,7 +141,7 @@ export default function ArtistsPage() {
                                     <div className="h-px flex-1 bg-gradient-to-r from-ocra/50 to-transparent mx-12 hidden md:block" />
                                     <div className="text-gray-600 font-mono text-sm hidden md:block">{concorrenti.length}</div>
                                 </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-8">
                                     {concorrenti.map((a, idx) => (
                                         <ArtistCard key={a.id} artist={a} index={idx} />
                                     ))}
@@ -170,7 +170,7 @@ function ArtistCard({ artist, index }: { artist: Artist; index: number }) {
             transition={{ delay: index * 0.05 }}
             className="group relative"
         >
-            <div className="glass rounded-[2.5rem] border border-white/5 overflow-hidden transition-all duration-500 hover:border-oro/30 hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)] h-full flex flex-col">
+            <div className="glass rounded-3xl md:rounded-[2.5rem] border border-white/5 overflow-hidden transition-all duration-500 hover:border-oro/30 hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)] h-full flex flex-col">
                 {/* Image Section */}
                 <div className="relative aspect-square overflow-hidden">
                     {artist.image ? (
@@ -187,36 +187,36 @@ function ArtistCard({ artist, index }: { artist: Artist; index: number }) {
                     <div className="absolute inset-0 bg-gradient-to-t from-blunotte via-transparent to-transparent opacity-60" />
                     
                     {/* Floating Stats */}
-                    <div className="absolute top-6 right-6 flex flex-col gap-2">
-                        <div className="glass px-4 py-2 rounded-2xl border border-white/10 flex items-center gap-2 backdrop-blur-md">
-                            <span className="text-[10px] font-black text-oro uppercase tracking-widest">{artist.cost}</span>
-                            <span className="text-[8px] font-bold text-gray-400">Armoni</span>
+                    <div className="absolute top-3 right-3 md:top-6 md:right-6 flex flex-col gap-2">
+                        <div className="bg-oro px-3 py-1.5 md:px-4 md:py-2 rounded-xl md:rounded-2xl flex items-center gap-1.5 md:gap-2 shadow-xl">
+                            <span className="text-[8px] md:text-[10px] font-black text-blunotte uppercase tracking-widest">{artist.cost}</span>
+                            <span className="text-[6px] md:text-[8px] font-bold text-blunotte/70 uppercase tracking-widest">Armoni</span>
                         </div>
                     </div>
 
-                    <div className="absolute bottom-6 left-6 right-6">
-                        <h3 className="text-3xl font-black tracking-tighter truncate group-hover:text-oro transition-colors">
+                    <div className="absolute bottom-4 left-4 right-4 md:bottom-6 md:left-6 md:right-6">
+                        <h3 className="text-xl md:text-3xl font-black tracking-tighter truncate group-hover:text-oro transition-colors">
                             {artist.name}
                         </h3>
                     </div>
                 </div>
 
                 {/* Info Section */}
-                <div className="p-6 md:p-8 flex flex-col justify-between flex-1">
-                    <div className="flex items-center justify-between mb-6">
+                <div className="p-4 md:p-8 flex flex-col justify-between flex-1">
+                    <div className="flex items-center justify-between mb-4 md:mb-6">
                         <div className="flex flex-col">
-                            <span className="text-[9px] font-black text-gray-500 uppercase tracking-[0.2em] mb-1">Ruolo</span>
-                            <span className="text-xs font-bold text-white uppercase tracking-widest">{artist.type}</span>
+                            <span className="text-[8px] md:text-[9px] font-black text-gray-500 uppercase tracking-[0.2em] mb-1">Ruolo</span>
+                            <span className="text-[10px] md:text-xs font-bold text-white uppercase tracking-widest">{artist.type}</span>
                         </div>
                         <div className="flex flex-col items-end">
-                            <span className="text-[9px] font-black text-gray-500 uppercase tracking-[0.2em] mb-1">Score</span>
-                            <span className="text-xl font-black text-oro font-mono">{artist.totalScore}</span>
+                            <span className="text-[8px] md:text-[9px] font-black text-gray-500 uppercase tracking-[0.2em] mb-1">Score</span>
+                            <span className="text-lg md:text-xl font-black text-oro font-mono">{artist.totalScore}</span>
                         </div>
                     </div>
 
                     <Link 
                         href={`/team/create`}
-                        className="w-full py-4 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-widest text-center group-hover:bg-oro group-hover:text-blunotte transition-all"
+                        className="w-full py-3 md:py-4 bg-white/5 border border-white/10 rounded-xl md:rounded-2xl text-[8px] md:text-[10px] font-black uppercase tracking-widest text-center group-hover:bg-oro group-hover:text-blunotte transition-all"
                     >
                         Aggiungi al Team
                     </Link>

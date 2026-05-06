@@ -509,8 +509,10 @@ function SelectionArtistCard({
                         </span>
                     </div>
                     <div className="text-right shrink-0">
-                        <p className="text-sm md:text-2xl font-black tracking-tighter leading-none">{artist.cost}</p>
-                        <p className="text-[6px] md:text-[8px] font-black text-gray-500 uppercase tracking-widest">Armoni</p>
+                        <div className="bg-oro px-3 py-1.5 md:px-4 md:py-2 rounded-xl md:rounded-2xl shadow-xl flex flex-col items-end">
+                            <p className="text-xs md:text-xl font-black tracking-tighter leading-none text-blunotte">{artist.cost}</p>
+                            <p className="text-[6px] md:text-[8px] font-black text-blunotte/70 uppercase tracking-widest">Armoni</p>
+                        </div>
                     </div>
                 </div>
 

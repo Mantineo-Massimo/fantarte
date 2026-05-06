@@ -94,7 +94,7 @@ export default async function TeamProfilePage({ params }: { params: Promise<{ id
 
                 {/* Artists Section */}
                 <div className="mb-16">
-                    <h2 className="text-xs font-black uppercase tracking-[0.4em] text-gray-500 mb-8 ml-2">I 5 Armoni in squadra</h2>
+                    <h2 className="text-xs font-black uppercase tracking-[0.4em] text-gray-500 mb-8 ml-2">I 5 Artisti in squadra</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {team.artists.map((artist: any) => (
                             <div key={artist.id} className="bg-[#131d36]/50 backdrop-blur-md rounded-[2rem] border border-gray-800/50 p-6 flex items-center gap-6 group hover:border-oro/40 hover:bg-[#131d36]/80 transition-all duration-500">
@@ -114,7 +114,7 @@ export default async function TeamProfilePage({ params }: { params: Promise<{ id
                                         )}
                                     </div>
                                     <div className="flex items-center gap-3">
-                                        <span className="text-[10px] font-black text-gray-600 uppercase tracking-widest">{artist.cost} Armoni</span>
+                                        <span className="text-[10px] font-black text-oro uppercase tracking-widest">{artist.cost} Armoni</span>
                                         <span className="w-1 h-1 bg-gray-800 rounded-full"></span>
                                         <span className="text-[10px] font-black text-oro/80 uppercase tracking-widest">{artist.totalScore} Punti</span>
                                     </div>

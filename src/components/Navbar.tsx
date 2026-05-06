@@ -63,9 +63,9 @@ export default function Navbar() {
                         <Image
                             src="/fanta-logo.png"
                             alt="FantArte"
-                            width={140}
-                            height={50}
-                            className={`w-auto transition-all duration-300 ${scrolled ? "h-6" : "h-9"}`}
+                            width={220}
+                            height={80}
+                            className={`w-auto transition-all duration-300 ${scrolled ? "h-9" : "h-16"}`}
                         />
                     </Link>
 
