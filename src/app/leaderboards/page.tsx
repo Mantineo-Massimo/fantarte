@@ -295,64 +295,175 @@ function RankRow({ index, data, type, onClick }: { index: number, data: any, typ
 }
 
 function TeamModal({ teamResult, onClose, onArtistClick }: { teamResult: TeamResult, onClose: () => void, onArtistClick: (a: Artist) => void }) {
+    const topArtist = [...teamResult.team.artists].sort((a, b) => b.totalScore - a.totalScore)[0];
+    
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} onClick={onClose} className="absolute inset-0 bg-black/90 backdrop-blur-md" />
             <motion.div 
-                initial={{ opacity: 0, scale: 0.9, y: 50 }} 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }} 
+                exit={{ opacity: 0 }}
+                onClick={onClose} 
+                className="absolute inset-0 bg-[#0a0f1c]/95 backdrop-blur-2xl" 
+            />
+            
+            <motion.div 
+                initial={{ opacity: 0, scale: 0.9, y: 100 }} 
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                className="relative w-full max-w-xl glass p-12 rounded-[4rem] border border-white/10 shadow-3xl overflow-hidden"
+                exit={{ opacity: 0, scale: 0.9, y: 100 }}
+                className="relative w-full max-w-2xl glass rounded-[4rem] border border-white/10 shadow-[0_50px_100px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col max-h-[90vh]"
             >
-                <div className="absolute top-0 right-0 w-64 h-64 bg-oro opacity-[0.03] blur-3xl -translate-y-1/2 translate-x-1/2" />
+                {/* Dynamic Background Glow */}
+                <div className="absolute top-0 right-0 w-full h-[300px] bg-gradient-to-b from-oro/10 to-transparent pointer-events-none" />
+                <div className="absolute top-[-50px] right-[-50px] w-64 h-64 bg-oro/20 blur-[100px] rounded-full pointer-events-none" />
                 
-                <div className="flex justify-between items-start mb-12">
-                    <div className="flex gap-6 items-center">
-                         <div className="w-24 h-24 rounded-[30px] bg-black border-2 border-oro/30 overflow-hidden">
-                            {teamResult.team.image ? <img src={teamResult.team.image} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center font-black text-gray-800">T</div>}
-                         </div>
-                         <div>
-                            <h2 className="text-4xl font-black text-oro mb-2">{teamResult.team.name}</h2>
-                            <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest">
-                               <FiTrendingUp className="text-oro" /> Rank #{teamResult.score > 0 ? "Competitor" : "New Entry"}
-                            </div>
-                         </div>
-                    </div>
-                    <button onClick={onClose} className="p-4 bg-white/5 rounded-2xl hover:bg-red-500/10 hover:text-red-500 transition-all"><FiX size={24} /></button>
-                </div>
-
-                <div className="space-y-4 mb-12">
-                    <p className="text-gray-500 text-[10px] font-black uppercase tracking-widest mb-4">Membri della Squadra</p>
-                    <div className="grid grid-cols-1 gap-3">
-                        {teamResult.team.artists.map(a => (
-                            <div 
-                                key={a.id} 
-                                onClick={() => onArtistClick(a)}
-                                className="flex items-center justify-between p-4 bg-white/5 rounded-3xl border border-white/5 hover:border-oro/30 cursor-pointer transition-all group/art"
-                            >
-                                <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 rounded-2xl bg-black border border-white/10 overflow-hidden">
-                                        {a.image && <img src={a.image} className="w-full h-full object-cover" />}
-                                    </div>
-                                    <div>
-                                        <p className="font-bold text-sm group-hover/art:text-oro transition-colors">{a.name}</p>
-                                        <div className="flex gap-2">
-                                            {teamResult.team.captainId === a.id && <span className="text-[8px] bg-oro text-blunotte font-black px-1.5 py-0.5 rounded-md uppercase">Capitano</span>}
-                                        </div>
-                                    </div>
+                {/* Header Section */}
+                <div className="relative p-8 md:p-12 pb-6 flex flex-col md:flex-row items-center gap-10 text-center md:text-left">
+                    <div className="relative group shrink-0">
+                        <div className="absolute inset-0 bg-oro blur-2xl opacity-20 group-hover:opacity-40 transition-opacity" />
+                        <div className="w-32 h-32 md:w-40 md:h-40 rounded-[2.5rem] bg-black border-2 border-oro/30 overflow-hidden relative z-10">
+                            {teamResult.team.image ? (
+                                <img src={teamResult.team.image} alt={teamResult.team.name} className="w-full h-full object-cover" />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center font-black text-6xl text-gray-800">
+                                    {teamResult.team.name.charAt(0)}
                                 </div>
-                                <span className="font-black text-xl text-oro/60">{a.totalScore}</span>
+                            )}
+                        </div>
+                        <div className="absolute -bottom-2 -right-2 w-12 h-12 bg-oro rounded-2xl flex items-center justify-center text-blunotte shadow-xl z-20 border-4 border-blunotte">
+                            <FiAward size={24} />
+                        </div>
+                    </div>
+
+                    <div className="flex-1 space-y-4">
+                        <div className="space-y-1">
+                            <p className="text-oro font-black uppercase tracking-[0.4em] text-[10px]">Squadra Ufficiale</p>
+                            <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-white leading-none">
+                                {teamResult.team.name}
+                            </h2>
+                        </div>
+                        
+                        <div className="flex flex-wrap justify-center md:justify-start gap-4">
+                            <div className="px-5 py-2 rounded-2xl bg-white/5 border border-white/10 flex items-center gap-3">
+                                <FiTrendingUp className="text-oro" size={14} />
+                                <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">
+                                    Score: <span className="text-white">{teamResult.score}</span>
+                                </span>
                             </div>
-                        ))}
+                            <div className="px-5 py-2 rounded-2xl bg-white/5 border border-white/10 flex items-center gap-3">
+                                <FiUsers className="text-viola" size={14} />
+                                <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">
+                                    5 Artisti
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button 
+                        onClick={onClose} 
+                        className="absolute top-8 right-8 p-4 bg-white/5 hover:bg-red-500/10 hover:text-red-500 rounded-3xl transition-all group"
+                    >
+                        <FiX size={24} className="group-hover:rotate-90 transition-transform duration-300" />
+                    </button>
+                </div>
+
+                {/* Artists List - Scrollable */}
+                <div className="flex-1 overflow-y-auto px-8 md:px-12 pb-12 pt-6 custom-scrollbar">
+                    <div className="space-y-8">
+                        <div>
+                            <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-600 mb-6 ml-2">La Formazione</h3>
+                            <div className="grid grid-cols-1 gap-4">
+                                {teamResult.team.artists.map((artist, idx) => {
+                                    const isTop = artist.id === topArtist.id;
+                                    const isCaptain = teamResult.team.captainId === artist.id;
+
+                                    return (
+                                        <motion.div 
+                                            key={artist.id}
+                                            initial={{ opacity: 0, x: -20 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            transition={{ delay: idx * 0.05 }}
+                                            onClick={() => onArtistClick(artist)}
+                                            className={`group/art relative flex items-center justify-between p-6 rounded-[2.5rem] border transition-all cursor-pointer overflow-hidden
+                                                ${isTop ? "bg-oro/5 border-oro/20" : "bg-white/5 border-white/5 hover:border-white/10"}
+                                            `}
+                                        >
+                                            {/* Highlight Background */}
+                                            {isTop && (
+                                                <div className="absolute top-0 right-0 w-32 h-full bg-gradient-to-l from-oro/10 to-transparent pointer-events-none" />
+                                            )}
+
+                                            <div className="flex items-center gap-6 relative z-10">
+                                                <div className="relative">
+                                                    <div className={`w-16 h-16 rounded-2xl bg-black border overflow-hidden transition-transform group-hover/art:scale-110 duration-500
+                                                        ${isTop ? "border-oro/50" : "border-white/10"}
+                                                    `}>
+                                                        {artist.image ? (
+                                                            <img src={artist.image} alt={artist.name} className="w-full h-full object-cover" />
+                                                        ) : (
+                                                            <div className="w-full h-full flex items-center justify-center font-black text-2xl text-gray-800">
+                                                                {artist.name.charAt(0)}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    {isCaptain && (
+                                                        <div className="absolute -top-2 -left-2 bg-oro text-blunotte text-[8px] font-black px-2 py-0.5 rounded-lg shadow-lg border-2 border-blunotte uppercase tracking-tighter">
+                                                            Cap
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                
+                                                <div className="min-w-0">
+                                                    <h4 className={`text-xl font-black transition-colors truncate ${isTop ? "text-oro" : "text-white group-hover/art:text-oro"}`}>
+                                                        {artist.name}
+                                                    </h4>
+                                                    <p className="text-[10px] font-black uppercase tracking-widest text-gray-500">
+                                                        Performance Artistica
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div className="text-right relative z-10 shrink-0">
+                                                <span className={`text-3xl font-black tracking-tighter ${isTop ? "text-oro drop-shadow-[0_0_10px_rgba(255,215,0,0.3)]" : "text-white/60"}`}>
+                                                    {artist.totalScore}
+                                                </span>
+                                                <p className="text-[8px] font-black uppercase tracking-widest text-gray-700">Punti Accumulati</p>
+                                            </div>
+                                        </motion.div>
+                                    );
+                                })}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div className="flex justify-between items-center pt-8 border-t border-white/5">
-                    <div>
-                        <p className="text-[10px] font-black uppercase tracking-widest text-gray-500">Punteggio Totale</p>
-                        <p className="text-4xl font-black tracking-tighter text-oro">{teamResult.score}</p>
+                {/* Footer Actions */}
+                <div className="p-8 md:p-12 pt-8 bg-white/5 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-8 relative z-20">
+                    <div className="flex items-center gap-6">
+                        <div className="text-center md:text-left">
+                            <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-1">Top Performer</p>
+                            <p className="text-white font-bold text-sm truncate max-w-[150px]">{topArtist.name}</p>
+                        </div>
+                        <div className="w-px h-10 bg-white/10" />
+                        <div className="text-center md:text-left">
+                            <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-1">Status Squadra</p>
+                            <p className="text-green-500 font-black text-[10px] uppercase tracking-tighter italic">Verified Talent</p>
+                        </div>
                     </div>
-                    <div className="flex gap-4">
-                         <SocialShare url={`${window.location.origin}/leaderboards`} title={`La squadra ${teamResult.team.name} spacca su FantArte! 🎠`} />
+                    
+                    <div className="flex items-center gap-4 w-full md:w-auto">
+                        <div className="flex-1 md:flex-none">
+                             <SocialShare 
+                                url={`${typeof window !== 'undefined' ? window.location.origin : ''}/leaderboards`} 
+                                title={`Guarda la formazione di ${teamResult.team.name} su FantArte! 🎠`} 
+                            />
+                        </div>
+                        <button 
+                            onClick={onClose}
+                            className="flex-1 md:flex-none px-8 py-4 bg-white text-blunotte font-black rounded-2xl text-[10px] uppercase tracking-widest hover:bg-oro transition-all"
+                        >
+                            Chiudi Vista
+                        </button>
                     </div>
                 </div>
             </motion.div>
@@ -362,52 +473,102 @@ function TeamModal({ teamResult, onClose, onArtistClick }: { teamResult: TeamRes
 
 function ArtistModal({ artist, onClose, loading }: { artist: Artist, onClose: () => void, loading: boolean }) {
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} onClick={onClose} className="absolute inset-0 bg-black/90 backdrop-blur-md" />
+        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+            <motion.div 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }} 
+                exit={{ opacity: 0 }}
+                onClick={onClose} 
+                className="absolute inset-0 bg-[#0a0f1c]/90 backdrop-blur-xl" 
+            />
+            
             <motion.div 
                 initial={{ opacity: 0, scale: 0.9, x: 50 }} 
                 animate={{ opacity: 1, scale: 1, x: 0 }}
-                className="relative w-full max-w-md glass p-12 rounded-[4rem] border border-white/10 shadow-3xl overflow-hidden"
+                exit={{ opacity: 0, scale: 0.9, x: 50 }}
+                className="relative w-full max-w-md glass rounded-[3rem] border border-white/10 shadow-3xl overflow-hidden flex flex-col"
             >
-                <div className="flex justify-between items-start mb-12">
+                <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-oro/10 to-transparent pointer-events-none" />
+                
+                <div className="p-10 pb-6 flex justify-between items-start relative z-10">
                     <div className="flex gap-6 items-center">
-                         <div className="w-20 h-20 rounded-[25px] bg-black border-2 border-oro/30 overflow-hidden">
-                            {artist.image ? <img src={artist.image} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center font-black text-gray-800">A</div>}
+                         <div className="relative group">
+                             <div className="absolute inset-0 bg-oro blur-xl opacity-20" />
+                             <div className="w-20 h-20 rounded-[22px] bg-black border-2 border-oro/30 overflow-hidden relative z-10">
+                                {artist.image ? (
+                                    <img src={artist.image} alt={artist.name} className="w-full h-full object-cover" />
+                                ) : (
+                                    <div className="w-full h-full flex items-center justify-center font-black text-3xl text-gray-800">
+                                        {artist.name.charAt(0)}
+                                    </div>
+                                )}
+                             </div>
                          </div>
                          <div>
-                            <h2 className="text-3xl font-black text-oro mb-1">{artist.name}</h2>
-                            <p className="text-[10px] font-black uppercase tracking-widest text-gray-500">Cronologia Eventi</p>
+                            <h2 className="text-3xl font-black text-white mb-1">{artist.name}</h2>
+                            <p className="text-[9px] font-black uppercase tracking-[0.3em] text-oro">Cronologia Eventi</p>
                          </div>
                     </div>
-                    <button onClick={onClose} className="p-4 bg-white/5 rounded-2xl hover:bg-red-500/10 hover:text-red-500 transition-all"><FiX size={24} /></button>
+                    <button onClick={onClose} className="p-3 bg-white/5 rounded-2xl hover:bg-red-500/10 hover:text-red-500 transition-all">
+                        <FiX size={20} />
+                    </button>
                 </div>
 
-                <div className="space-y-4 max-h-[350px] overflow-y-auto pr-4 custom-scrollbar mb-10">
+                <div className="flex-1 space-y-3 px-10 pb-10 max-h-[400px] overflow-y-auto custom-scrollbar relative z-10">
                     {loading ? (
-                        <div className="flex flex-col items-center justify-center py-20 opacity-50">
-                            <FiZap className="animate-bounce text-oro mb-4" size={32} />
-                            <p className="text-xs font-black uppercase tracking-widest">Sincronizzando Punti...</p>
+                        <div className="flex flex-col items-center justify-center py-24 opacity-50">
+                            <motion.div 
+                                animate={{ rotate: 360 }}
+                                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                                className="mb-6"
+                            >
+                                <FiZap className="text-oro" size={40} />
+                            </motion.div>
+                            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-oro">Sincronizzando Punti...</p>
                         </div>
                     ) : artist.events && artist.events.length > 0 ? (
-                        artist.events.map(ev => (
-                            <div key={ev.id} className="p-6 bg-white/5 rounded-3xl border border-white/5 flex justify-between items-center gap-4">
+                        artist.events.map((ev, idx) => (
+                            <motion.div 
+                                key={ev.id} 
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: idx * 0.05 }}
+                                className="p-5 bg-white/5 rounded-3xl border border-white/5 flex justify-between items-center gap-6 group hover:bg-white/10 transition-colors"
+                            >
                                 <div className="flex-1">
-                                    <p className="text-sm font-bold text-white/80 mb-1">{ev.description}</p>
-                                    <p className="text-[8px] font-black uppercase tracking-widest text-gray-600">{new Date(ev.createdAt).toLocaleDateString('it-IT')}</p>
+                                    <p className="text-xs font-bold text-white mb-1 group-hover:text-oro transition-colors leading-tight">{ev.description}</p>
+                                    <p className="text-[8px] font-black uppercase tracking-widest text-gray-600">
+                                        {new Date(ev.createdAt).toLocaleDateString('it-IT', { day: '2-digit', month: 'short' })}
+                                    </p>
                                 </div>
-                                <span className={`text-xl font-black ${ev.points >= 0 ? "text-green-500" : "text-red-500"}`}>
+                                <div className={`text-xl font-black tracking-tighter shrink-0 ${ev.points >= 0 ? "text-green-500" : "text-red-500"}`}>
                                     {ev.points > 0 ? `+${ev.points}` : ev.points}
-                                </span>
-                            </div>
+                                </div>
+                            </motion.div>
                         ))
                     ) : (
-                        <p className="text-center py-20 text-gray-600 italic">Nessun evento registrato.</p>
+                        <div className="flex flex-col items-center justify-center py-20 opacity-30">
+                            <FiStar size={48} className="mb-4" />
+                            <p className="text-[10px] font-black uppercase tracking-widest">Nessun evento registrato</p>
+                        </div>
                     )}
                 </div>
 
-                <div className="flex justify-between items-center pt-8 border-t border-white/5">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-gray-500">Bilancio Finale</p>
-                    <p className="text-4xl font-black tracking-tighter text-oro">{artist.totalScore} pt</p>
+                <div className="p-10 pt-8 bg-white/5 border-t border-white/10 flex justify-between items-center relative z-10">
+                    <div>
+                        <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-1">Bilancio Finale</p>
+                        <div className="flex items-baseline gap-2">
+                            <span className="text-4xl font-black tracking-tighter text-oro drop-shadow-[0_0_15px_rgba(255,215,0,0.3)]">
+                                {artist.totalScore}
+                            </span>
+                            <span className="text-xs font-black text-gray-600 uppercase tracking-widest">PT</span>
+                        </div>
+                    </div>
+                    <div className="h-full">
+                         <div className="px-5 py-2.5 rounded-2xl bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
+                            Perform. Rate: <span className="text-white">Elite</span>
+                         </div>
+                    </div>
                 </div>
             </motion.div>
         </div>
