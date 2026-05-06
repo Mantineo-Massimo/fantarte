@@ -17,7 +17,7 @@ export async function sendEmail({ to, subject, body, text }: { to: string; subje
             to: [to],
             subject: subject,
             html: body,
-            text: text || body.replace(/<[^>]*>?/gm, ""), // Fallback: strip HTML tags if text not provided
+            text: text || body.replace(/<[^>]*>?/gm, ""),
         });
 
         if (error) {
@@ -28,6 +28,31 @@ export async function sendEmail({ to, subject, body, text }: { to: string; subje
         return { success: true, result: data };
     } catch (error) {
         console.error("EMAIL_SEND_ERROR", error);
+        return { success: false, error };
+    }
+}
+
+export async function sendBatch(emails: { to: string; subject: string; body: string }[]) {
+    try {
+        const client = getResendClient();
+        // Resend batch limit is 100 emails per call
+        const { data, error } = await client.batch.send(
+            emails.map(email => ({
+                from: process.env.EMAIL_FROM || "onboarding@resend.dev",
+                to: [email.to],
+                subject: email.subject,
+                html: email.body,
+            }))
+        );
+
+        if (error) {
+            console.error("EMAIL_BATCH_ERROR", error);
+            return { success: false, error };
+        }
+
+        return { success: true, result: data };
+    } catch (error) {
+        console.error("EMAIL_BATCH_ERROR", error);
         return { success: false, error };
     }
 }

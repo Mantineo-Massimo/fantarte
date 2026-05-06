@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { sendEmail } from "@/lib/email";
+import { sendEmail, sendBatch } from "@/lib/email";
 import { ruleNotificationEmail } from "@/lib/email-templates";
 
 export async function GET() {
@@ -44,19 +44,23 @@ export async function POST(req: Request) {
             }
         });
 
-        // Notify Users (Async)
+        // Notify Users (Batch)
         try {
             const users = await prisma.user.findMany({ select: { email: true } });
             const emailTemplate = ruleNotificationEmail(title, parseInt(points), description);
             
-            for (const u of users) {
-                if (u.email) {
-                    await sendEmail({
-                        to: u.email,
-                        subject: `Nuova Regola FantArte: ${title} 📜`,
-                        body: emailTemplate
-                    });
-                }
+            const batchEmails = users
+                .filter(u => !!u.email)
+                .map(u => ({
+                    to: u.email!,
+                    subject: `Nuova Regola FantArte: ${title} 📜`,
+                    body: emailTemplate
+                }));
+
+            if (batchEmails.length > 0) {
+                // Resend batch limit is 100, if more we might need to split, 
+                // but for now this is much better than before.
+                await sendBatch(batchEmails.slice(0, 100)); 
             }
         } catch (err) {
             console.error("NOTIFY_USERS_ERROR", err);

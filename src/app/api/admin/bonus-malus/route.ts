@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
-import { sendEmail } from "@/lib/email";
+import { sendEmail, sendBatch } from "@/lib/email";
 import { artistPointsEmail } from "@/lib/email-templates";
 
 export const dynamic = 'force-dynamic';
@@ -112,15 +112,17 @@ export async function POST(req: Request) {
             return { event, artistName: artist.name, usersToNotify };
         });
 
-        // Async Notify Users
+        // Async Notify Users (Batch)
         try {
             const emailBody = artistPointsEmail(artistName, pointVal, description);
-            for (const email of usersToNotify) {
-                await sendEmail({
-                    to: email,
-                    subject: `Punti per ${artistName}! ⚡ FantArte`,
-                    body: emailBody
-                });
+            const batchEmails = usersToNotify.map((email: string) => ({
+                to: email,
+                subject: `Punti per ${artistName}! ⚡ FantArte`,
+                body: emailBody
+            }));
+
+            if (batchEmails.length > 0) {
+                await sendBatch(batchEmails.slice(0, 100));
             }
         } catch (err) {
             console.error("NOTIFY_USERS_POINTS_ERROR", err);
