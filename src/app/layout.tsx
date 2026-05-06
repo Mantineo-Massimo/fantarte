@@ -29,10 +29,11 @@ export const metadata: Metadata = {
     siteName: "FantArte",
     images: [
       {
-        url: "/og-preview.webp",
+        url: "https://fantarte.it/og-preview.webp",
         width: 1200,
         height: 1200,
         alt: "FantArte Preview",
+        type: "image/webp",
       },
     ],
     locale: "it_IT",
@@ -42,7 +43,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "FantArte | Piazza dell'Arte",
     description: "Il Fantagioco dove l'Arte incontra la Piazza",
-    images: ["/og-preview.webp"],
+    images: ["https://fantarte.it/og-preview.webp"],
   },
   icons: {
     icon: [

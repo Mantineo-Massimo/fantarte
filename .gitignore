@@ -65,3 +65,4 @@ documenti_legali/**/*.fls
 .idea/
 *.swp
 *.swo
+.env*.local
