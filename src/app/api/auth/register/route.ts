@@ -8,10 +8,10 @@ import crypto from "crypto";
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const { email, password } = body;
+        const { email, password, name } = body;
 
-        if (!email || !password) {
-            return new NextResponse("Email and password are required", { status: 400 });
+        if (!email || !password || !name) {
+            return new NextResponse("Email, password and name are required", { status: 400 });
         }
 
         const existingUser = await prisma.user.findUnique({
@@ -28,6 +28,7 @@ export async function POST(req: Request) {
         const user = await prisma.user.create({
             data: {
                 email,
+                name,
                 password: hashedPassword,
                 verificationToken
             }

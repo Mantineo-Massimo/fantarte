@@ -9,7 +9,7 @@ import { FiArrowLeft } from "react-icons/fi";
 
 export default function RegisterPage() {
     const router = useRouter();
-    const [data, setData] = useState({ email: "", password: "" });
+    const [data, setData] = useState({ name: "", email: "", password: "" });
     const [acceptTerms, setAcceptTerms] = useState(false);
     const [acceptMarketing, setAcceptMarketing] = useState(false);
     const [error, setError] = useState("");
@@ -85,6 +85,17 @@ export default function RegisterPage() {
                 </div>
 
                 <form onSubmit={registerUser} className="space-y-6">
+                    <div>
+                        <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-2 ml-1">Nome Completo</label>
+                        <input
+                            type="text"
+                            placeholder="Mario Rossi"
+                            value={data.name}
+                            onChange={(e) => setData({ ...data, name: e.target.value })}
+                            className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-gray-700 focus:outline-none focus:border-oro/50 focus:ring-1 focus:ring-oro/20 transition-all font-medium"
+                            required
+                        />
+                    </div>
                     <div>
                         <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-2 ml-1">Email</label>
                         <input
