@@ -305,7 +305,16 @@ export default function CreateTeamPage() {
                                             <div className="flex flex-col items-center">
                                                 <div className="relative w-40 h-40 md:w-56 md:h-56 rounded-[2.5rem] overflow-hidden bg-white/[0.02] border border-dashed border-white/10 group hover:border-oro/30 transition-all flex items-center justify-center cursor-pointer shadow-2xl">
                                                     {teamImage ? (
-                                                        <img src={teamImage} alt="Preview" className="w-full h-full object-cover" />
+                                                        <>
+                                                            <img src={teamImage} alt="Preview" className="w-full h-full object-cover" />
+                                                            <button 
+                                                                onClick={(e) => { e.stopPropagation(); setTeamImage(null); }}
+                                                                className="absolute top-3 right-3 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors z-20 shadow-lg"
+                                                                title="Rimuovi immagine"
+                                                            >
+                                                                <FiX size={16} />
+                                                            </button>
+                                                        </>
                                                     ) : (
                                                         <div className="flex flex-col items-center text-gray-600 group-hover:text-oro transition-colors">
                                                             <FiCamera size={28} className="mb-3" />
@@ -405,8 +414,20 @@ export default function CreateTeamPage() {
 
                                         <div className="bg-white/[0.02] p-5 md:p-10 rounded-[2rem] md:rounded-[3rem] border border-white/5 shadow-2xl space-y-8 relative overflow-hidden">
                                             <div className="flex flex-col md:flex-row items-center gap-5 md:gap-10">
-                                                <div className="w-20 h-20 md:w-32 md:h-32 rounded-2xl md:rounded-[2rem] overflow-hidden border border-oro/30 shadow-2xl shrink-0">
-                                                    {teamImage ? <img src={teamImage} className="w-full h-full object-cover" /> : <div className="w-full h-full bg-black flex items-center justify-center text-3xl font-black text-oro opacity-20">F</div>}
+                                                <div className="relative w-20 h-20 md:w-32 md:h-32 rounded-2xl md:rounded-[2rem] overflow-hidden border border-oro/30 shadow-2xl shrink-0 group">
+                                                    {teamImage ? (
+                                                        <>
+                                                            <img src={teamImage} className="w-full h-full object-cover" />
+                                                            <button 
+                                                                onClick={() => setTeamImage(null)}
+                                                                className="absolute inset-0 bg-red-500/80 text-white opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center font-black text-[10px] uppercase"
+                                                            >
+                                                                Rimuovi
+                                                            </button>
+                                                        </>
+                                                    ) : (
+                                                        <div className="w-full h-full bg-black flex items-center justify-center text-3xl font-black text-oro opacity-20">F</div>
+                                                    )}
                                                 </div>
                                                 <div className="flex-1 text-center md:text-left">
                                                     <h3 className="text-2xl md:text-4xl font-black mb-1 tracking-tighter uppercase truncate">{teamName}</h3>
