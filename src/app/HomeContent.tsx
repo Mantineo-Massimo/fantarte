@@ -229,8 +229,8 @@ export default function Home({ initialSponsors, initialDeadline }: { initialSpon
             <div className="flex flex-wrap justify-center gap-6 md:gap-10">
               <a href="https://www.instagram.com/associazione.morgana" target="_blank" rel="noopener noreferrer" className="group">
                 <div className="bg-white/[0.02] p-8 md:p-10 rounded-[2.5rem] border border-white/5 hover:border-oro/30 transition-all duration-500 flex flex-col items-center text-center w-40 md:w-56 shadow-2xl">
-                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-oro/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                    <FiInstagram className="text-oro text-3xl md:text-4xl" />
+                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-white/5 p-4 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <img src="/morgana.webp" alt="Morgana Logo" className="w-full h-full object-contain" />
                   </div>
                   <span className="font-black uppercase tracking-[0.2em] text-xs md:text-sm">Morgana</span>
                 </div>
@@ -238,8 +238,8 @@ export default function Home({ initialSponsors, initialDeadline }: { initialSpon
               
               <a href="https://www.instagram.com/orum_unime" target="_blank" rel="noopener noreferrer" className="group">
                 <div className="bg-white/[0.02] p-8 md:p-10 rounded-[2.5rem] border border-white/5 hover:border-oro/30 transition-all duration-500 flex flex-col items-center text-center w-40 md:w-56 shadow-2xl">
-                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-oro/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                    <FiInstagram className="text-oro text-3xl md:text-4xl" />
+                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-white/5 p-4 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <img src="/orum.webp" alt="O.R.U.M. Logo" className="w-full h-full object-contain" />
                   </div>
                   <span className="font-black uppercase tracking-[0.2em] text-xs md:text-sm">O.R.U.M.</span>
                 </div>
