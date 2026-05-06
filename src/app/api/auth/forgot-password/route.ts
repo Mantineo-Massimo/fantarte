@@ -53,6 +53,7 @@ export async function POST(req: Request) {
             to: email,
             subject: "Recupero Password - FantArte",
             body: emailBody,
+            text: `Recupero Password - FantArte\n\nHai richiesto di reimpostare la password del tuo account FantArte. Clicca sul link qui sotto per procedere:\n\n${resetLink}\n\nQuesto link scadrà tra 1 ora. Se non hai richiesto tu il ripristino, ignora questa email.`,
         });
 
         return new NextResponse("Se l'email è registrata, riceverai un link di ripristino.", { status: 200 });

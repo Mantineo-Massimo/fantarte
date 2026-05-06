@@ -9,7 +9,7 @@ function getResendClient() {
     return resend;
 }
 
-export async function sendEmail({ to, subject, body }: { to: string; subject: string; body: string }) {
+export async function sendEmail({ to, subject, body, text }: { to: string; subject: string; body: string; text?: string }) {
     try {
         const client = getResendClient();
         const { data, error } = await client.emails.send({
@@ -17,6 +17,7 @@ export async function sendEmail({ to, subject, body }: { to: string; subject: st
             to: [to],
             subject: subject,
             html: body,
+            text: text || body.replace(/<[^>]*>?/gm, ""), // Fallback: strip HTML tags if text not provided
         });
 
         if (error) {
