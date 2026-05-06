@@ -298,7 +298,7 @@ function TeamModal({ teamResult, onClose, onArtistClick }: { teamResult: TeamRes
     const topArtist = [...teamResult.team.artists].sort((a, b) => b.totalScore - a.totalScore)[0];
     
     return (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4">
             <motion.div 
                 initial={{ opacity: 0 }} 
                 animate={{ opacity: 1 }} 
@@ -443,7 +443,7 @@ function TeamModal({ teamResult, onClose, onArtistClick }: { teamResult: TeamRes
 
 function ArtistModal({ artist, onClose, loading }: { artist: Artist, onClose: () => void, loading: boolean }) {
     return (
-        <div className="fixed inset-0 z-[210] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4">
             <motion.div 
                 initial={{ opacity: 0 }} 
                 animate={{ opacity: 1 }} 

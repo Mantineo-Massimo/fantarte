@@ -51,7 +51,7 @@ export default function Navbar() {
     return (
         <>
             <header 
-                className={`fixed top-0 w-full z-[100] transition-all duration-300 border-b ${
+                className={`fixed top-0 w-full z-40 transition-all duration-300 border-b ${
                     scrolled 
                     ? "h-16 bg-blunotte/80 backdrop-blur-xl border-white/10" 
                     : "h-24 bg-transparent border-transparent"
