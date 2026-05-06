@@ -254,7 +254,7 @@ function PodiumCard({ rank, data, type, featured, onClick }: { rank: number, dat
                     <div className="w-full h-full flex items-center justify-center text-4xl font-black text-gray-800">{name.charAt(0)}</div>
                 )}
             </div>
-            <h3 className={`text-2xl font-black mb-2 ${rank === 1 ? "text-oro" : "text-white"}`}>{name}</h3>
+            <h3 className={`text-xl md:text-2xl font-black mb-2 whitespace-normal leading-tight ${rank === 1 ? "text-oro" : "text-white"}`}>{name}</h3>
             <div className="flex items-center gap-2 px-6 py-2 rounded-2xl bg-white/5 border border-white/10">
                 <span className="text-2xl font-black tracking-tighter">{score}</span>
                 <span className="text-[10px] font-black uppercase tracking-widest text-gray-500">Punti</span>
@@ -284,7 +284,7 @@ function RankRow({ index, data, type, onClick }: { index: number, data: any, typ
                         <div className="w-full h-full flex items-center justify-center font-black text-gray-800">{name.charAt(0)}</div>
                     )}
                 </div>
-                <h4 className="font-black text-xl group-hover:text-oro transition-colors">{name}</h4>
+                <h4 className="font-black text-xl group-hover:text-oro transition-colors whitespace-normal leading-tight">{name}</h4>
             </div>
             <div className="text-right">
                 <p className="font-black text-2xl tracking-tighter">{score}</p>

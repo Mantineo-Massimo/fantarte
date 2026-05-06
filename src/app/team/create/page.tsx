@@ -297,7 +297,8 @@ export default function CreateTeamPage() {
                                                     type="text"
                                                     value={teamName}
                                                     onChange={e => setTeamName(e.target.value)}
-                                                    placeholder="Nome del Team..."
+                                                    maxLength={30}
+                                                    placeholder="Nome del Team (max 30 car.)..."
                                                     className="relative w-full bg-white/[0.02] border border-white/5 rounded-2xl px-6 py-5 md:px-10 md:py-8 text-lg md:text-2xl font-black text-center focus:border-oro/50 outline-none transition-all placeholder:opacity-20 shadow-xl"
                                                 />
                                             </div>
@@ -430,7 +431,7 @@ export default function CreateTeamPage() {
                                                     )}
                                                 </div>
                                                 <div className="flex-1 text-center md:text-left">
-                                                    <h3 className="text-2xl md:text-4xl font-black mb-1 tracking-tighter uppercase truncate">{teamName}</h3>
+                                                    <h3 className="text-2xl md:text-4xl font-black mb-1 tracking-tighter uppercase whitespace-normal leading-tight">{teamName}</h3>
                                                     <p className="text-oro font-black text-[8px] md:text-[9px] uppercase tracking-[0.3em]">La tua squadra è pronta.</p>
                                                 </div>
                                             </div>
