@@ -32,7 +32,7 @@ export default function Navbar() {
 
     const navLinks = [
         { href: "/", label: "Home" },
-        { href: "/artisti", label: "Artisti" },
+        { href: "/artisti", label: "Partecipanti" },
         { href: "/leaderboards", label: "Classifiche" },
         { href: "/regole", label: "Regole" },
     ];

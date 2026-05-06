@@ -94,14 +94,14 @@ export default function RegolePage() {
                             icon={FiZap} 
                             step="02" 
                             title="Formazione" 
-                            text="Scegli i tuoi 5 artisti preferiti. Ogni artista ha un costo: gestisci il tuo budget con saggezza."
+                            text="Scegli i tuoi 5 partecipanti preferiti. Ogni partecipante ha un costo: gestisci il tuo budget con saggezza."
                             color="viola"
                         />
                         <StepCard 
                             icon={FiTarget} 
                             step="03" 
                             title="Competizione" 
-                            text="Guarda le serate live! I tuoi artisti accumuleranno punti in base a ciò che faranno sul palco."
+                            text="Guarda le serate live! I tuoi partecipanti accumuleranno punti in base a ciò che faranno sul palco."
                             color="ocra"
                         />
                     </div>
