@@ -52,27 +52,26 @@ export default function Navbar() {
 
     return (
         <>
-            <header className={`fixed top-0 w-full z-[100] transition-all duration-700 pointer-events-none
-                ${scrolled ? "pt-4" : "pt-8"}
+            <header className={`fixed top-0 w-full z-[100] transition-all duration-500 pointer-events-none
+                ${scrolled ? "pt-2" : "pt-6"}
             `}>
-                <div className="max-w-5xl mx-auto px-4 w-full">
-                    <nav className={`pointer-events-auto relative flex items-center justify-between px-8 transition-all duration-700 ease-out glass rounded-[2.5rem] shadow-2xl border border-white/5
-                        ${scrolled ? "h-16 py-2" : "h-24 py-4"}
+                <div className="max-w-7xl mx-auto px-4 w-full">
+                    <nav className={`pointer-events-auto relative flex items-center justify-between px-6 transition-all duration-500 ease-in-out glass rounded-[2rem] shadow-2xl border border-white/10
+                        ${scrolled ? "h-16" : "h-20"}
                     `}>
-                        <div className="flex items-center">
+                        <div className="flex items-center min-w-[140px]">
                             <Link href="/" className="flex-shrink-0 group">
                                 <Image
                                     src="/fanta-logo.png"
                                     alt="FantArte"
-                                    width={200}
-                                    height={80}
-                                    className={`w-auto object-contain transition-all duration-700 ${scrolled ? "h-8" : "h-14"}`}
+                                    width={160}
+                                    height={60}
+                                    className={`w-auto object-contain transition-all duration-500 ${scrolled ? "h-7" : "h-9"}`}
                                 />
                             </Link>
                         </div>
 
-                        {/* Desktop Revolution Menu */}
-                        <div className="hidden md:flex items-center gap-1">
+                        <div className="hidden lg:flex items-center gap-1">
                             {filteredNavLinks.map((link) => {
                                 const Icon = link.icon;
                                 const isActive = pathname === link.href;
@@ -80,7 +79,7 @@ export default function Navbar() {
                                     <Link
                                         key={link.href}
                                         href={link.href}
-                                        className={`relative flex items-center gap-2 px-6 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${isActive
+                                        className={`relative flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-semibold transition-all duration-300 ${isActive
                                             ? "text-oro"
                                             : "text-gray-400 hover:text-white"
                                             }`}
@@ -88,10 +87,10 @@ export default function Navbar() {
                                         {isActive && (
                                             <motion.div 
                                                 layoutId="nav-pill" 
-                                                className="absolute inset-0 bg-white/5 rounded-2xl border border-white/5" 
+                                                className="absolute inset-0 bg-white/5 rounded-xl border border-white/10" 
                                             />
                                         )}
-                                        <Icon size={14} className="relative z-10" />
+                                        <Icon size={16} className="relative z-10" />
                                         <span className="relative z-10">{link.label}</span>
                                     </Link>
                                 );
@@ -123,7 +122,7 @@ export default function Navbar() {
                             ) : (
                                 <Link
                                     href="/auth/login"
-                                    className="px-8 py-3 bg-oro text-blunotte font-black rounded-full hover:scale-105 active:scale-95 transition-all ml-4 text-[10px] uppercase tracking-widest shadow-[0_0_20px_rgba(255,215,0,0.3)]"
+                                    className="px-6 py-2.5 bg-oro text-blunotte font-semibold rounded-xl hover:scale-105 active:scale-95 transition-all ml-4 text-sm shadow-[0_0_20px_rgba(255,215,0,0.2)]"
                                 >
                                     Accedi
                                 </Link>
@@ -131,12 +130,12 @@ export default function Navbar() {
                         </div>
 
                         {/* Mobile Toggle */}
-                        <div className="flex md:hidden items-center">
+                        <div className="flex lg:hidden items-center">
                             <button
                                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                                className="p-3 text-gray-400 hover:text-white transition-all bg-white/5 rounded-2xl"
+                                className="p-2.5 text-gray-400 hover:text-white transition-all bg-white/5 rounded-xl border border-white/5"
                             >
-                                {isMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+                                {isMenuOpen ? <FiX size={22} /> : <FiMenu size={22} />}
                             </button>
                         </div>
                     </nav>
