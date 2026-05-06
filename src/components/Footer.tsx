@@ -20,15 +20,21 @@ export default function Footer() {
                     
                     {/* Brand / Logo Section */}
                     <div className="lg:col-span-4 space-y-8">
-                        <motion.div whileHover={{ scale: 1.02 }} className="inline-block">
-                            <Image
-                                src="/fanta-logo.png"
-                                alt="FantArte"
-                                width={240}
-                                height={90}
-                                className="h-14 w-auto object-contain drop-shadow-[0_0_20px_rgba(255,215,0,0.3)]"
-                            />
-                        </motion.div>
+                        <div className="flex flex-col md:flex-row items-center gap-6">
+                            <motion.div whileHover={{ scale: 1.02 }} className="inline-block shrink-0">
+                                <Image
+                                    src="/fanta-logo.png"
+                                    alt="FantArte"
+                                    width={240}
+                                    height={90}
+                                    className="h-14 w-auto object-contain drop-shadow-[0_0_20px_rgba(255,215,0,0.3)]"
+                                />
+                            </motion.div>
+                            <div className="flex items-center gap-4 border-l border-white/10 pl-6 h-10">
+                                <Image src="/morgana.png" alt="Morgana" width={100} height={40} className="h-8 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
+                                <Image src="/orum.png" alt="O.R.U.M." width={100} height={40} className="h-8 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
+                            </div>
+                        </div>
                         <p className="text-gray-500 text-lg leading-relaxed font-medium max-w-sm">
                             Il fantagioco dove l&apos;arte prende vita. 
                             Creato per celebrare il talento e la strategia 
@@ -48,7 +54,7 @@ export default function Footer() {
                             <h4 className="font-display text-white text-xs font-bold uppercase tracking-[0.4em] opacity-40">Esplora</h4>
                             <nav className="flex flex-col gap-5">
                                 <FooterLink href="/" label="Home" />
-                                <FooterLink href="/artisti" label="Artisti" />
+                                <FooterLink href="/artisti" label="Partecipanti" />
                                 <FooterLink href="/leaderboards" label="Classifiche" />
                                 <FooterLink href="/team/create" label="Mia Squadra" />
                                 <FooterLink href="/supporto" label="Supporto" />
