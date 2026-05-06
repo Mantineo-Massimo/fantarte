@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { sendEmail } from "@/lib/email";
+import { ruleNotificationEmail } from "@/lib/email-templates";
 
 export async function GET() {
     try {
@@ -46,19 +47,16 @@ export async function POST(req: Request) {
         // Notify Users (Async)
         try {
             const users = await prisma.user.findMany({ select: { email: true } });
+            const emailTemplate = ruleNotificationEmail(title, parseInt(points), description);
+            
             for (const u of users) {
-                await sendEmail({
-                    to: u.email,
-                    subject: `Nuova Regola FantaPiazza: ${title}`,
-                    body: `
-                        <h2 style="color: #bc9c5d;">Nuova Regola Aggiunta!</h2>
-                        <p>È stata aggiunta una nuova regola al regolamento di FantaPiazza:</p>
-                        <p><strong>${title}</strong> (${points}pt)</p>
-                        <p>${description}</p>
-                        <hr/>
-                        <p>In bocca al lupo per la tua squadra!</p>
-                    `
-                });
+                if (u.email) {
+                    await sendEmail({
+                        to: u.email,
+                        subject: `Nuova Regola FantArte: ${title} 📜`,
+                        body: emailTemplate
+                    });
+                }
             }
         } catch (err) {
             console.error("NOTIFY_USERS_ERROR", err);

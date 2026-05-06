@@ -220,7 +220,7 @@ export default function CreateTeamPage() {
                 setError(await res.text() || "Errore nel salvataggio.");
             } else {
                 router.refresh();
-                router.push("/leaderboards");
+                router.push("/");
             }
         } catch {
             setError("Errore di rete.");

@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { sendEmail } from "@/lib/email";
+import { welcomeEmail } from "@/lib/email-templates";
 
 export async function GET(req: Request) {
     try {
@@ -29,6 +31,17 @@ export async function GET(req: Request) {
                 verificationToken: null // Clear token after use
             }
         });
+
+        // Send Welcome Email
+        try {
+            await sendEmail({
+                to: user.email!,
+                subject: "Benvenuto in Piazza dell'Arte! 🎠",
+                body: welcomeEmail(user.name || "Partecipante")
+            });
+        } catch (err) {
+            console.error("WELCOME_EMAIL_ERROR", err);
+        }
 
         return NextResponse.json({ success: true });
 

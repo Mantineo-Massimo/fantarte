@@ -3,6 +3,9 @@ import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
+import { sendEmail } from "@/lib/email";
+import { artistPointsEmail } from "@/lib/email-templates";
+
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
@@ -46,7 +49,7 @@ export async function POST(req: Request) {
         const pointVal = parseInt(points);
         const pointCategory = category || "BONUS"; // Default to BONUS
 
-        const result = await prisma.$transaction(async (tx: any) => {
+        const { event, artistName, usersToNotify } = await prisma.$transaction(async (tx: any) => {
             const event = await tx.bonusMalusEvent.create({
                 data: {
                     artistId,
@@ -59,15 +62,21 @@ export async function POST(req: Request) {
             });
 
             // Update artist's absolute score
-            await tx.artist.update({
+            const artist = await tx.artist.update({
                 where: { id: artistId },
                 data: { totalScore: { increment: pointVal } }
             });
 
-            // Find all teams that have this artist
+            // Find all teams that have this artist to get user emails
             const teamsWithArtist = await tx.team.findMany({
                 where: { artists: { some: { id: artistId } } },
-                select: { id: true, captainId: true }
+                select: { 
+                    id: true, 
+                    captainId: true,
+                    user: {
+                        select: { email: true }
+                    }
+                }
             });
 
             const normalTeamIds = teamsWithArtist
@@ -79,7 +88,6 @@ export async function POST(req: Request) {
                 .map((t: any) => t.id);
 
             // Update scores in leagues
-            // Logic: Captain doubles Special points only.
             const isSpecial = pointCategory === "SPECIALE";
 
             if (normalTeamIds.length > 0) {
@@ -96,10 +104,29 @@ export async function POST(req: Request) {
                     data: { score: { increment: captainIncrement } }
                 });
             }
-            return event;
+
+            const usersToNotify = teamsWithArtist
+                .map((t: any) => t.user?.email)
+                .filter((email: string | null) => !!email);
+
+            return { event, artistName: artist.name, usersToNotify };
         });
 
-        return NextResponse.json(result);
+        // Async Notify Users
+        try {
+            const emailBody = artistPointsEmail(artistName, pointVal, description);
+            for (const email of usersToNotify) {
+                await sendEmail({
+                    to: email,
+                    subject: `Punti per ${artistName}! ⚡ FantArte`,
+                    body: emailBody
+                });
+            }
+        } catch (err) {
+            console.error("NOTIFY_USERS_POINTS_ERROR", err);
+        }
+
+        return NextResponse.json(event);
     } catch (error) {
         console.error("ADMIN_EVENT_ERROR", error);
         return new NextResponse("Internal Error", { status: 500 });
