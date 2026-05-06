@@ -222,6 +222,24 @@ export const artistPointsEmail = (artistName: string, points: number, descriptio
     </div>
 `);
 
+export const newArtistEmail = (name: string, cost: number) => emailWrapper(`
+    <div class="badge">Nuovo Ingresso</div>
+    <h1 class="h1">Un nuovo <span class="gold-text">Protagonista</span> 🎭</h1>
+    <p class="text">
+        Grandi novità! Un nuovo membro si è appena unito alla competizione di FantArte.
+    </p>
+    <div style="background: rgba(255,255,255,0.03); padding: 30px; border-radius: 24px; border: 1px solid rgba(188,156,93,0.1); margin: 30px 0;">
+        <h2 style="font-size: 24px; color: #ffffff; margin: 0 0 5px 0;">${name}</h2>
+        <p style="font-size: 14px; color: ${APP_COLOR_GOLD}; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; margin: 0;">VALORE: ${cost} ARMONI</p>
+    </div>
+    <p class="text">
+        Controlla subito se può fare al caso tuo e aggiorna la tua formazione!
+    </p>
+    <div class="button-container">
+        <a href="${BASE_URL}/team/create" class="button">Gestisci Squadra</a>
+    </div>
+`);
+
 export const ruleNotificationEmail = (title: string, points: number, description: string) => emailWrapper(`
     <div class="badge">Nuova Regola</div>
     <h1 class="h1">Aggiornamento <span class="gold-text">Regolamento</span> 📜</h1>
