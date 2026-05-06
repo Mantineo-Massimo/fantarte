@@ -97,7 +97,7 @@ export default function Home() {
             className="grid grid-cols-1 md:grid-cols-3 gap-6"
           >
             {/* Box 1: Glory */}
-            <motion.div variants={fadeIn} className="md:col-span-2 bento-card">
+            <motion.div variants={fadeIn} className="md:col-span-2 bento-card group">
               <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-oro/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <FiTrendingUp className="text-oro text-5xl mb-10 group-hover:scale-110 transition-transform duration-500" />
               <h2 className="text-5xl font-black tracking-tighter mb-6 uppercase">Scali la <span className="text-oro">Gloria.</span></h2>
@@ -108,7 +108,7 @@ export default function Home() {
             </motion.div>
 
             {/* Box 2: Team */}
-            <motion.div variants={fadeIn} className="bento-card flex flex-col justify-between">
+            <motion.div variants={fadeIn} className="bento-card group flex flex-col justify-between">
               <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-viola/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <div>
                 <FiUsers className="text-viola text-5xl mb-10 group-hover:scale-110 transition-transform duration-500" />
@@ -120,7 +120,7 @@ export default function Home() {
             </motion.div>
 
             {/* Box 3: Social */}
-            <motion.div variants={fadeIn} className="bento-card">
+            <motion.div variants={fadeIn} className="bento-card group">
               <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-ocra/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <FiMessageCircle className="text-ocra text-5xl mb-10 group-hover:scale-110 transition-transform duration-500" />
               <h2 className="text-5xl font-black tracking-tighter mb-6 uppercase">Unisciti alla <span className="text-ocra">Piazza</span></h2>
