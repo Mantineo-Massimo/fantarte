@@ -23,12 +23,20 @@ const stagger = {
 
 export default function Home() {
   const [sponsors, setSponsors] = useState<any[]>([]);
+  const [deadline, setDeadline] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/sponsors")
       .then(res => res.json())
       .then(data => setSponsors(data))
       .catch(err => console.error("Failed to load sponsors", err));
+
+    fetch("/api/settings")
+      .then(res => res.json())
+      .then(data => {
+        if (data?.draftDeadline) setDeadline(data.draftDeadline);
+      })
+      .catch(err => console.error("Failed to load settings", err));
   }, []);
 
   return (
@@ -73,7 +81,7 @@ export default function Home() {
             <motion.div variants={fadeIn} className="w-full max-w-2xl glass-oro p-10 md:p-14 rounded-[3rem] border border-white/10 shadow-3xl mb-16 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-64 h-64 bg-oro opacity-[0.02] blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:opacity-5 transition-opacity" />
               <p className="text-gray-500 font-bold uppercase tracking-[0.4em] text-[10px] mb-10">Inizio della Gara</p>
-              <CountdownTimer targetDate="2026-05-18T18:00:00" />
+              <CountdownTimer targetDate={deadline || "2026-05-18T18:00:00"} />
             </motion.div>
 
             <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-5 w-full sm:w-auto px-4 sm:px-0">
