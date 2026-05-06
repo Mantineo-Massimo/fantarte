@@ -217,6 +217,7 @@ export default function CreateTeamPage() {
             if (!res.ok) {
                 setError(await res.text() || "Errore nel salvataggio.");
             } else {
+                router.refresh(); // Pulisce la cache di Next.js
                 router.push("/leaderboards");
             }
         } catch {
