@@ -41,7 +41,7 @@ export default function ArtistsPage() {
             .finally(() => setLoading(false));
     }, []);
 
-    const filteredArtists = artists.filter(a => 
+    const filteredArtists = artists.filter(a =>
         a.name.toLowerCase().includes(search.toLowerCase())
     );
 
@@ -91,7 +91,7 @@ export default function ArtistsPage() {
                     </div>
                 ) : (
                     <div className="max-w-7xl mx-auto space-y-32">
-                        
+
                         {/* PRESENTATORI */}
                         {presentatori.length > 0 && (
                             <section>
@@ -136,7 +136,7 @@ export default function ArtistsPage() {
                                 <div className="flex items-end justify-between mb-12 px-2">
                                     <div>
                                         <p className="text-ocra text-[10px] font-black uppercase tracking-[0.4em] mb-4">Cuore della Gara</p>
-                                        <h2 className="text-4xl md:text-5xl font-black tracking-tighter italic">Artisti in Gara</h2>
+                                        <h2 className="text-4xl md:text-5xl font-black tracking-tighter italic">Artisti</h2>
                                     </div>
                                     <div className="h-px flex-1 bg-gradient-to-r from-ocra/50 to-transparent mx-12 hidden md:block" />
                                     <div className="text-gray-600 font-mono text-sm hidden md:block">{concorrenti.length}</div>
@@ -168,9 +168,9 @@ function ArtistCard({ artist, index }: { artist: Artist; index: number }) {
                 {/* Image Section */}
                 <div className="relative aspect-square overflow-hidden">
                     {artist.image ? (
-                        <img 
-                            src={artist.image} 
-                            alt={artist.name} 
+                        <img
+                            src={artist.image}
+                            alt={artist.name}
                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                         />
                     ) : (
@@ -179,7 +179,7 @@ function ArtistCard({ artist, index }: { artist: Artist; index: number }) {
                         </div>
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-blunotte via-transparent to-transparent opacity-60" />
-                    
+
                     {/* Floating Stats */}
                     <div className="absolute top-3 right-3 md:top-6 md:right-6 flex flex-col gap-2">
                         <div className="bg-oro px-3 py-1.5 md:px-4 md:py-2 rounded-xl md:rounded-2xl flex items-center gap-1.5 md:gap-2 shadow-xl">
@@ -208,7 +208,7 @@ function ArtistCard({ artist, index }: { artist: Artist; index: number }) {
                         </div>
                     </div>
 
-                    <Link 
+                    <Link
                         href={`/team/create`}
                         className="w-full py-3 md:py-4 bg-white/5 border border-white/10 rounded-xl md:rounded-2xl text-[8px] md:text-[10px] font-black uppercase tracking-widest text-center group-hover:bg-oro group-hover:text-blunotte transition-all"
                     >
