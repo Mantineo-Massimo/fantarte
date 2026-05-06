@@ -287,8 +287,8 @@ export default function CreateTeamPage() {
                                 {step === 0 && (
                                     <div className="max-w-2xl mx-auto text-center space-y-8">
                                         <header>
-                                            <h1 className="text-3xl md:text-5xl font-black tracking-tighter mb-2 uppercase">Fonda il tuo <span className="text-oro text-glow">Impero</span></h1>
-                                            <p className="text-gray-500 text-xs md:text-sm font-medium italic">Scegli un nome e un&apos;immagine per la tua squadra.</p>
+                                            <h1 className="text-3xl md:text-5xl font-black tracking-tighter mb-2 uppercase">Crea la tua <span className="text-oro text-glow">Squadra</span></h1>
+                                            <p className="text-gray-500 text-xs md:text-sm font-medium italic">Scegli un nome e un&apos;immagine per il tuo team.</p>
                                         </header>
 
                                         <div className="space-y-8">
@@ -410,11 +410,7 @@ export default function CreateTeamPage() {
                                                 </div>
                                                 <div className="flex-1 text-center md:text-left">
                                                     <h3 className="text-2xl md:text-4xl font-black mb-1 tracking-tighter uppercase truncate">{teamName}</h3>
-                                                    <p className="text-oro font-black text-[8px] md:text-[9px] uppercase tracking-[0.3em]">Impero pronto per la Gara.</p>
-                                                </div>
-                                                <div className="text-center md:text-right">
-                                                    <p className="text-[8px] font-black text-gray-600 uppercase mb-1 tracking-widest">Budget</p>
-                                                    <p className="text-3xl md:text-4xl font-black text-oro">{remainingBudget}<span className="text-xs opacity-20">/100</span></p>
+                                                    <p className="text-oro font-black text-[8px] md:text-[9px] uppercase tracking-[0.3em]">La tua squadra è pronta.</p>
                                                 </div>
                                             </div>
 
