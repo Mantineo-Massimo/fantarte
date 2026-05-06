@@ -189,7 +189,7 @@ function ArtistCard({ artist, index }: { artist: Artist; index: number }) {
                     </div>
 
                     <div className="absolute bottom-4 left-4 right-4 md:bottom-6 md:left-6 md:right-6">
-                        <h3 className="text-xl md:text-3xl font-black tracking-tighter truncate group-hover:text-oro transition-colors">
+                        <h3 className="text-xl md:text-2xl font-black mb-6 group-hover:text-oro transition-colors whitespace-normal leading-tight">
                             {artist.name}
                         </h3>
                     </div>

@@ -442,7 +442,7 @@ export default function CreateTeamPage() {
                                                         <div className="w-8 h-8 md:w-12 md:h-12 rounded-lg md:rounded-xl overflow-hidden mb-2 border border-white/5">
                                                             {a.image && <img src={a.image} className="w-full h-full object-cover" />}
                                                         </div>
-                                                        <p className="font-black text-[7px] md:text-[9px] truncate w-full mb-1">{a.name}</p>
+                                                        <p className="font-black text-[7px] md:text-[9px] whitespace-normal leading-tight w-full mb-1">{a.name}</p>
                                                         {captainId === a.id && <FiStar className="text-oro" size={8} />}
                                                     </div>
                                                 ))}
@@ -540,7 +540,7 @@ function SelectionArtistCard({
             <div className="flex flex-col h-full space-y-3">
                 <div className="flex justify-between items-start">
                     <div className="overflow-hidden">
-                        <h3 className="font-black text-[8px] md:text-sm leading-none mb-1 truncate">{artist.name}</h3>
+                        <h3 className="font-black text-[9px] md:text-sm leading-tight mb-1 whitespace-normal">{artist.name}</h3>
                         <span className="text-[6px] md:text-[8px] font-black uppercase text-oro/60 tracking-widest">
                             {artist.cost} Arm.
                         </span>
