@@ -172,7 +172,7 @@ export default function Home({ initialSponsors, initialDeadline }: { initialSpon
             </div>
 
             <div className="flex overflow-hidden relative">
-              <div className="flex animate-marquee whitespace-nowrap gap-12 py-4">
+              <div className="flex animate-marquee-slow whitespace-nowrap gap-12 py-4">
                 {/* Ripetiamo la lista più volte per assicurarci che non ci siano mai buchi, anche con pochi sponsor */}
                 {[...Array(6)].map((_, setIndex) => (
                   <div key={`set-${setIndex}`} className="flex gap-12">
@@ -218,9 +218,39 @@ export default function Home({ initialSponsors, initialDeadline }: { initialSpon
           </section>
         )}
 
+        {/* Associazioni Organizzatrici Section */}
+        <section className="py-24 max-w-7xl mx-auto px-6 relative">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-12 glass p-10 md:p-16 rounded-[3rem] border border-white/5 bg-white/[0.01]">
+            <div>
+              <p className="text-oro text-[10px] font-black uppercase tracking-[0.4em] mb-4 text-center md:text-left">Promosso Da</p>
+              <h2 className="text-4xl md:text-6xl font-black tracking-tighter uppercase text-center md:text-left">Associazioni <br className="hidden md:block" /> <span className="text-oro">Organizzatrici</span></h2>
+            </div>
+            
+            <div className="flex flex-wrap justify-center gap-6 md:gap-10">
+              <a href="https://www.instagram.com/associazione.morgana" target="_blank" rel="noopener noreferrer" className="group">
+                <div className="bg-white/[0.02] p-8 md:p-10 rounded-[2.5rem] border border-white/5 hover:border-oro/30 transition-all duration-500 flex flex-col items-center text-center w-40 md:w-56 shadow-2xl">
+                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-oro/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <FiInstagram className="text-oro text-3xl md:text-4xl" />
+                  </div>
+                  <span className="font-black uppercase tracking-[0.2em] text-xs md:text-sm">Morgana</span>
+                </div>
+              </a>
+              
+              <a href="https://www.instagram.com/orum_unime" target="_blank" rel="noopener noreferrer" className="group">
+                <div className="bg-white/[0.02] p-8 md:p-10 rounded-[2.5rem] border border-white/5 hover:border-oro/30 transition-all duration-500 flex flex-col items-center text-center w-40 md:w-56 shadow-2xl">
+                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-oro/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <FiInstagram className="text-oro text-3xl md:text-4xl" />
+                  </div>
+                  <span className="font-black uppercase tracking-[0.2em] text-xs md:text-sm">O.R.U.M.</span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </section>
+
         {/* Decorative Marquee */}
         <section className="py-24 bg-white/[0.02] border-y border-white/5 overflow-hidden">
-          <div className="flex animate-marquee whitespace-nowrap">
+          <div className="flex animate-marquee-fast whitespace-nowrap">
             {[...Array(10)].map((_, i) => (
               <span key={i} className="font-display text-7xl md:text-[10rem] font-black uppercase tracking-tighter mx-12 text-white/[0.03] select-none">
                 Piazza dell&apos;Arte <span className="text-oro/10">•</span> FantArte <span className="text-oro/10">•</span>
