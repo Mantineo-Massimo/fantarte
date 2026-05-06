@@ -13,9 +13,9 @@ const globalForPrisma = global as unknown as {
 if (!globalForPrisma.pool) {
     globalForPrisma.pool = new Pool({
         connectionString,
-        max: 10, // Increased for production peak (2000 users)
+        max: 5, // Lowered per-instance max to allow more horizontal scaling without hitting DB limits
         idleTimeoutMillis: 30000,
-        connectionTimeoutMillis: 5000,
+        connectionTimeoutMillis: 10000,
     })
 }
 
@@ -23,6 +23,9 @@ const adapter = new PrismaPg(globalForPrisma.pool)
 
 export const prisma =
     globalForPrisma.prisma ||
-    new PrismaClient({ adapter })
+    new PrismaClient({ 
+        adapter,
+        log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error']
+    })
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma

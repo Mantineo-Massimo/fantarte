@@ -81,6 +81,12 @@ export default function CreateTeamPage() {
             .catch(err => console.error("Failed to load settings", err));
     }, []);
 
+    // Scroll to top when step changes
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }, [step]);
+
+
     const spentBudget = selectedArtists.reduce((acc, curr) => acc + curr.cost, 0);
     const remainingBudget = 100 - spentBudget;
 
@@ -460,17 +466,17 @@ export default function CreateTeamPage() {
                     </div>
 
                     {/* Navigation Footer */}
-                    <div className="p-4 md:p-8 border-t border-white/5 bg-white/[0.02]">
-                        <div className="flex justify-between items-center gap-4">
+                    <div className="p-3 md:p-8 border-t border-white/5 bg-white/[0.02]">
+                        <div className="flex justify-between items-center gap-2 md:gap-4">
                             <button
                                 onClick={prevStep}
                                 disabled={step === 0 || loading}
-                                className={`flex items-center gap-2 px-6 py-4 rounded-xl font-black text-[8px] md:text-[10px] uppercase tracking-widest transition-all ${step === 0 ? "opacity-0 invisible" : "text-gray-600 hover:text-white"}`}
+                                className={`flex items-center gap-1.5 px-3 md:px-6 py-3 md:py-4 rounded-xl font-black text-[7px] md:text-[10px] uppercase tracking-widest transition-all ${step === 0 ? "opacity-0 invisible" : "text-gray-600 hover:text-white"}`}
                             >
                                 <FiArrowLeft /> Indietro
                             </button>
 
-                            <div className="flex gap-4 md:gap-8 items-center bg-black/30 px-6 py-3 md:px-8 md:py-4 rounded-full border border-white/5">
+                            <div className="flex gap-2 md:gap-8 items-center bg-black/30 px-3 py-2 md:px-8 md:py-4 rounded-full border border-white/5">
                                 <div className="flex flex-col items-center">
                                     <span className="text-[6px] font-black text-gray-700 uppercase tracking-widest mb-0.5">Budget</span>
                                     <span className={`text-sm md:text-lg font-black ${remainingBudget < 0 ? "text-red-500" : "text-white"}`}>{remainingBudget}</span>
@@ -486,7 +492,7 @@ export default function CreateTeamPage() {
                                 <button
                                     onClick={saveTeam}
                                     disabled={loading || isExpired}
-                                    className="flex items-center justify-center gap-2 px-8 py-4 md:px-10 md:py-5 bg-gradient-to-r from-oro to-ocra text-blunotte rounded-xl font-black text-[8px] md:text-[10px] uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all"
+                                    className="flex items-center justify-center gap-1.5 px-4 py-3 md:px-10 md:py-5 bg-gradient-to-r from-oro to-ocra text-blunotte rounded-xl font-black text-[7px] md:text-[10px] uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all"
                                 >
                                     {loading ? "..." : "Conferma"} <FiCheck />
                                 </button>
@@ -494,7 +500,7 @@ export default function CreateTeamPage() {
                                 <button
                                     onClick={nextStep}
                                     disabled={loading}
-                                    className="flex items-center justify-center gap-2 px-8 py-4 md:px-10 md:py-5 bg-oro text-blunotte rounded-xl font-black text-[8px] md:text-[10px] uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all"
+                                    className="flex items-center justify-center gap-1.5 px-4 py-3 md:px-10 md:py-5 bg-oro text-blunotte rounded-xl font-black text-[7px] md:text-[10px] uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all"
                                 >
                                     Prosegui <FiArrowRight />
                                 </button>

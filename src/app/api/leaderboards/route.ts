@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-export const revalidate = 0; // Disable cache to show real-time updates
+export const revalidate = 30; // Cache for 30 seconds to handle high traffic
 
 export async function GET() {
     try {
@@ -24,7 +24,6 @@ export async function GET() {
                                         name: true,
                                         image: true,
                                         totalScore: true
-                                        // Events are NOT pre-loaded here to save bandwidth and memory
                                     }
                                 }
                             }
@@ -32,7 +31,8 @@ export async function GET() {
                     },
                     orderBy: {
                         score: 'desc'
-                    }
+                    },
+                    take: 150 // Limit to top 150 teams for performance
                 }
             }
         });

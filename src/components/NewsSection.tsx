@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { FiArrowRight, FiCalendar } from "react-icons/fi";
 import Link from "next/link";
@@ -13,22 +13,9 @@ type NewsItem = {
     createdAt: string;
 };
 
-export default function NewsSection() {
-    const [news, setNews] = useState<NewsItem[]>([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        fetch("/api/news")
-            .then(res => res.json())
-            .then(data => {
-                if (Array.isArray(data)) setNews(data);
-                setLoading(false);
-            })
-            .catch(err => {
-                console.error("Error loading news:", err);
-                setLoading(false);
-            });
-    }, []);
+export default function NewsSection({ initialNews }: { initialNews: NewsItem[] }) {
+    const [news] = useState<NewsItem[]>(initialNews);
+    const [loading] = useState(false);
 
     if (loading) return (
         <div className="max-w-7xl mx-auto px-6 py-20">
