@@ -166,7 +166,6 @@ export default function CreateTeamPage() {
                 setError("Scegli un Ospite per proseguire.");
                 return;
             }
-            setStep(2);
             setStep(3);
         } else if (step === 3) {
             if (counts.ARTISTA !== 3) {
@@ -244,28 +243,27 @@ export default function CreateTeamPage() {
     ];
 
     return (
-        <main className="min-h-screen bg-blunotte text-white pt-44 md:pt-48 pb-20 relative overflow-hidden">
+        <main className="min-h-screen bg-blunotte text-white pt-40 md:pt-44 pb-20 relative overflow-hidden">
             {/* Background Effects */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_50%_0%,rgba(255,215,0,0.08),transparent_70%)] pointer-events-none" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_50%_0%,rgba(255,215,0,0.06),transparent_70%)] pointer-events-none" />
 
-            <div className="max-w-6xl mx-auto px-4 md:px-6 relative z-10">
+            <div className="max-w-5xl mx-auto px-4 md:px-6 relative z-10">
                 
-                {/* Stepper Header (NOW OUTSIDE CONTAINER AND COMPACT) */}
-                <div className="flex justify-between items-center mb-12 px-2 md:px-8">
+                {/* Stepper Header (Compact) */}
+                <div className="flex justify-between items-center mb-8 px-2 md:px-16">
                     {steps.map((s, i) => (
                         <div key={i} className="flex-1 flex flex-col items-center relative group">
-                            {/* Line between steps */}
                             {i < steps.length - 1 && (
-                                <div className={`absolute top-5 md:top-6 left-[50%] w-full h-[1px] ${i < step ? "bg-oro" : "bg-white/10"} z-0`} />
+                                <div className={`absolute top-4 md:top-5 left-[50%] w-full h-[1px] ${i < step ? "bg-oro" : "bg-white/5"} z-0`} />
                             )}
                             
                             <div 
-                                className={`relative z-10 w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center border-2 transition-all duration-500 
-                                ${i === step ? "bg-oro border-oro text-blunotte shadow-[0_0_30px_rgba(255,215,0,0.4)] scale-110" : i < step ? "bg-oro/20 border-oro/50 text-oro" : "bg-blunotte border-white/10 text-gray-600"}`}
+                                className={`relative z-10 w-8 h-8 md:w-11 md:h-11 rounded-lg md:rounded-xl flex items-center justify-center border transition-all duration-500 
+                                ${i === step ? "bg-oro border-oro text-blunotte shadow-[0_0_20px_rgba(255,215,0,0.4)] scale-110" : i < step ? "bg-oro/10 border-oro/30 text-oro" : "bg-blunotte border-white/5 text-gray-700"}`}
                             >
-                                <s.icon size={i === step ? 20 : 16} />
+                                <s.icon size={i === step ? 16 : 14} />
                             </div>
-                            <span className={`mt-3 text-[7px] md:text-[9px] font-black uppercase tracking-widest text-center transition-colors ${i === step ? "text-oro" : "text-gray-600"}`}>
+                            <span className={`mt-2 text-[6px] md:text-[8px] font-black uppercase tracking-widest text-center transition-colors ${i === step ? "text-oro" : "text-gray-700"}`}>
                                 {s.title}
                             </span>
                         </div>
@@ -273,10 +271,10 @@ export default function CreateTeamPage() {
                 </div>
 
                 {/* Main Selection Container */}
-                <div className="glass rounded-[2.5rem] md:rounded-[4rem] border border-white/10 shadow-3xl flex flex-col bg-white/[0.02] backdrop-blur-3xl relative">
+                <div className="glass rounded-[2rem] md:rounded-[3rem] border border-white/5 flex flex-col bg-white/[0.01] backdrop-blur-3xl relative">
                     
                     {/* Step Content Area */}
-                    <div className="p-6 md:p-16 min-h-[450px]">
+                    <div className="p-5 md:p-10 min-h-[400px]">
                         <AnimatePresence mode="wait">
                             <motion.div
                                 key={step}
@@ -287,32 +285,31 @@ export default function CreateTeamPage() {
                             >
                                 {/* STEP 0: IDENTITY */}
                                 {step === 0 && (
-                                    <div className="max-w-3xl mx-auto text-center space-y-10">
+                                    <div className="max-w-2xl mx-auto text-center space-y-8">
                                         <header>
-                                            <h1 className="text-4xl md:text-8xl font-black tracking-tighter mb-4 uppercase">Fonda il tuo <span className="text-oro text-glow">Impero</span></h1>
-                                            <p className="text-gray-500 text-sm md:text-base font-medium italic px-4">Scegli un nome epico e un&apos;immagine 1:1 per la tua squadra.</p>
+                                            <h1 className="text-3xl md:text-5xl font-black tracking-tighter mb-2 uppercase">Fonda il tuo <span className="text-oro text-glow">Impero</span></h1>
+                                            <p className="text-gray-500 text-xs md:text-sm font-medium italic">Scegli un nome e un&apos;immagine per la tua squadra.</p>
                                         </header>
 
-                                        <div className="space-y-10">
+                                        <div className="space-y-8">
                                             <div className="relative group px-4">
-                                                <div className="absolute -inset-1 bg-gradient-to-r from-oro to-ocra rounded-[2.5rem] blur opacity-10 group-focus-within:opacity-30 transition duration-500" />
                                                 <input
                                                     type="text"
                                                     value={teamName}
                                                     onChange={e => setTeamName(e.target.value)}
                                                     placeholder="Nome del Team..."
-                                                    className="relative w-full bg-white/[0.03] border border-white/10 rounded-[2.5rem] px-6 py-6 md:px-12 md:py-10 text-xl md:text-4xl font-black text-center focus:border-oro outline-none transition-all placeholder:opacity-20 shadow-2xl"
+                                                    className="relative w-full bg-white/[0.02] border border-white/5 rounded-2xl px-6 py-5 md:px-10 md:py-8 text-lg md:text-2xl font-black text-center focus:border-oro/50 outline-none transition-all placeholder:opacity-20 shadow-xl"
                                                 />
                                             </div>
 
                                             <div className="flex flex-col items-center">
-                                                <div className="relative w-48 h-48 md:w-64 md:h-64 rounded-[3rem] overflow-hidden bg-white/[0.03] border-2 border-dashed border-white/10 group hover:border-oro/50 transition-all flex items-center justify-center cursor-pointer shadow-2xl">
+                                                <div className="relative w-40 h-40 md:w-56 md:h-56 rounded-[2.5rem] overflow-hidden bg-white/[0.02] border border-dashed border-white/10 group hover:border-oro/30 transition-all flex items-center justify-center cursor-pointer shadow-2xl">
                                                     {teamImage ? (
                                                         <img src={teamImage} alt="Preview" className="w-full h-full object-cover" />
                                                     ) : (
-                                                        <div className="flex flex-col items-center text-gray-500 group-hover:text-oro transition-colors">
-                                                            <FiCamera size={32} className="mb-4 md:size-10" />
-                                                            <span className="text-[9px] font-black uppercase tracking-widest text-center px-6">Carica Foto <br/> (1:1 consigliata)</span>
+                                                        <div className="flex flex-col items-center text-gray-600 group-hover:text-oro transition-colors">
+                                                            <FiCamera size={28} className="mb-3" />
+                                                            <span className="text-[8px] font-black uppercase tracking-widest text-center px-6">Carica Foto</span>
                                                         </div>
                                                     )}
                                                     <input 
@@ -321,11 +318,6 @@ export default function CreateTeamPage() {
                                                         onChange={handleImageUpload}
                                                         className="absolute inset-0 opacity-0 cursor-pointer"
                                                     />
-                                                    {isUploading && (
-                                                        <div className="absolute inset-0 bg-blunotte/80 flex items-center justify-center">
-                                                            <div className="w-8 h-8 border-4 border-oro/20 border-t-oro rounded-full animate-spin" />
-                                                        </div>
-                                                    )}
                                                 </div>
                                             </div>
                                         </div>
@@ -334,32 +326,32 @@ export default function CreateTeamPage() {
 
                                 {/* STEPS 1, 2, 3: ARTIST SELECTION */}
                                 {(step === 1 || step === 2 || step === 3) && (
-                                    <div className="space-y-10">
-                                        <div className="text-center px-4">
-                                            <h2 className="text-4xl md:text-7xl font-black tracking-tighter uppercase mb-2">
+                                    <div className="space-y-8">
+                                        <div className="text-center">
+                                            <h2 className="text-3xl md:text-5xl font-black tracking-tighter uppercase mb-2">
                                                 {step === 1 && <>Scegli il <span className="text-oro">Presentatore</span></>}
                                                 {step === 2 && <>Scegli l&apos;<span className="text-viola">Ospite</span></>}
                                                 {step === 3 && <>Scegli i tuoi <span className="text-ocra">3 Artisti</span></>}
                                             </h2>
-                                            <p className="text-gray-500 text-sm md:text-base font-medium italic">
-                                                {step === 1 && "La voce che guiderà la tua Piazza."}
-                                                {step === 2 && "Il tocco di classe della tua formazione."}
-                                                {step === 3 && "Il cuore pulsante del tuo quintetto."}
+                                            <p className="text-gray-500 text-xs md:text-sm font-medium italic">
+                                                {step === 1 && "La voce della tua Piazza."}
+                                                {step === 2 && "Il tocco di classe."}
+                                                {step === 3 && "Il cuore del quintetto."}
                                             </p>
                                         </div>
 
-                                        <div className="relative max-w-xl mx-auto mb-10 group px-4">
-                                            <FiSearch className="absolute left-10 top-1/2 -translate-y-1/2 text-gray-600 group-focus-within:text-oro transition-colors" />
+                                        <div className="relative max-w-lg mx-auto mb-8 group px-4">
+                                            <FiSearch className="absolute left-10 top-1/2 -translate-y-1/2 text-gray-700" />
                                             <input 
                                                 type="text" 
                                                 placeholder="Cerca un artista..."
                                                 value={searchTerm}
                                                 onChange={e => setSearchTerm(e.target.value)}
-                                                className="w-full bg-white/[0.03] border border-white/10 rounded-full py-4 pl-14 pr-8 focus:border-oro/40 outline-none transition-all shadow-xl text-sm"
+                                                className="w-full bg-white/[0.02] border border-white/5 rounded-full py-3.5 pl-14 pr-8 focus:border-oro/30 outline-none transition-all shadow-lg text-xs"
                                             />
                                         </div>
 
-                                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-8">
+                                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
                                             {filteredArtists.map(artist => (
                                                 <SelectionArtistCard 
                                                     key={artist.id} 
@@ -375,32 +367,28 @@ export default function CreateTeamPage() {
 
                                 {/* STEP 4: CAPTAIN */}
                                 {step === 4 && (
-                                    <div className="max-w-4xl mx-auto space-y-10 text-center">
-                                        <header className="px-4">
-                                            <h2 className="text-5xl md:text-8xl font-black tracking-tighter uppercase mb-4">Nomina il <span className="text-oro text-glow">Capitano</span></h2>
-                                            <p className="text-gray-500 font-medium italic">Il capitano raddoppia i suoi punti!</p>
+                                    <div className="max-w-3xl mx-auto space-y-8 text-center">
+                                        <header>
+                                            <h2 className="text-4xl md:text-6xl font-black tracking-tighter uppercase mb-2">Nomina il <span className="text-oro">Capitano</span></h2>
+                                            <p className="text-gray-500 text-xs md:text-sm font-medium italic">Punti raddoppiati per il leader!</p>
                                         </header>
 
-                                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6 pt-6 px-4">
+                                        <div className="grid grid-cols-3 md:grid-cols-5 gap-3 pt-6 px-2">
                                             {selectedArtists.map(artist => (
                                                 <div 
                                                     key={artist.id}
                                                     onClick={() => setCaptainId(artist.id)}
-                                                    className={`relative cursor-pointer rounded-[2.5rem] md:rounded-[3rem] p-3 md:p-4 transition-all duration-500 group border-2 ${captainId === artist.id ? "bg-oro/[0.05] border-oro shadow-[0_0_50px_rgba(255,215,0,0.3)] scale-105 z-10" : "bg-white/[0.03] border-white/5 hover:border-white/20"}`}
+                                                    className={`relative cursor-pointer rounded-2xl md:rounded-[2rem] p-2 md:p-3 transition-all duration-500 group border ${captainId === artist.id ? "bg-oro/[0.03] border-oro/50 shadow-xl scale-105" : "bg-white/[0.01] border-white/5"}`}
                                                 >
-                                                    <div className="aspect-square rounded-[1.5rem] md:rounded-[2rem] overflow-hidden mb-3 md:mb-4 border border-white/10 shadow-lg">
+                                                    <div className="aspect-square rounded-xl md:rounded-[1.5rem] overflow-hidden mb-2 border border-white/5 shadow-lg">
                                                         {artist.image ? (
                                                             <img src={artist.image} alt={artist.name} className="w-full h-full object-cover" />
                                                         ) : (
-                                                            <div className="w-full h-full bg-black flex items-center justify-center text-4xl font-black opacity-10">{artist.name.charAt(0)}</div>
+                                                            <div className="w-full h-full bg-black flex items-center justify-center text-xl font-black opacity-10">{artist.name.charAt(0)}</div>
                                                         )}
                                                     </div>
-                                                    <h3 className="font-black text-[10px] md:text-sm leading-tight mb-2 truncate px-2">{artist.name}</h3>
-                                                    {captainId === artist.id && (
-                                                        <div className="flex justify-center">
-                                                            <div className="bg-oro text-blunotte text-[6px] md:text-[7px] font-black px-2 py-1 md:px-3 md:py-1.5 rounded-full uppercase tracking-widest shadow-xl">Capitano ★</div>
-                                                        </div>
-                                                    )}
+                                                    <h3 className="font-black text-[8px] md:text-[11px] leading-tight mb-1 truncate px-1">{artist.name}</h3>
+                                                    {captainId === artist.id && <div className="text-oro text-[6px] font-black uppercase tracking-widest">★ Capitano</div>}
                                                 </div>
                                             ))}
                                         </div>
@@ -409,38 +397,35 @@ export default function CreateTeamPage() {
 
                                 {/* STEP 5: REVIEW */}
                                 {step === 5 && (
-                                    <div className="max-w-4xl mx-auto space-y-10 px-4">
+                                    <div className="max-w-3xl mx-auto space-y-8 px-2">
                                         <header className="text-center">
-                                            <h2 className="text-5xl md:text-8xl font-black tracking-tighter uppercase mb-4">Ultimo <span className="text-oro text-glow">Riepilogo</span></h2>
-                                            <p className="text-gray-500 font-medium italic">Tutto pronto?</p>
+                                            <h2 className="text-4xl md:text-6xl font-black tracking-tighter uppercase mb-2">Ultimo <span className="text-oro">Riepilogo</span></h2>
+                                            <p className="text-gray-500 text-xs md:text-sm font-medium italic">Pronto per la sfida?</p>
                                         </header>
 
-                                        <div className="bg-white/[0.03] p-6 md:p-14 rounded-[3rem] border border-white/10 shadow-3xl space-y-10 relative overflow-hidden">
-                                            <div className="absolute top-0 right-0 w-64 h-64 bg-oro opacity-5 blur-[100px] -translate-y-1/2 translate-x-1/2" />
-                                            
-                                            <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10">
-                                                <div className="w-24 h-24 md:w-40 md:h-40 rounded-[2rem] md:rounded-[3rem] overflow-hidden border-2 border-oro shadow-2xl shrink-0">
-                                                    {teamImage ? <img src={teamImage} className="w-full h-full object-cover" /> : <div className="w-full h-full bg-black flex items-center justify-center text-5xl font-black text-oro opacity-20">F</div>}
+                                        <div className="bg-white/[0.02] p-5 md:p-10 rounded-[2rem] md:rounded-[3rem] border border-white/5 shadow-2xl space-y-8 relative overflow-hidden">
+                                            <div className="flex flex-col md:flex-row items-center gap-5 md:gap-10">
+                                                <div className="w-20 h-20 md:w-32 md:h-32 rounded-2xl md:rounded-[2rem] overflow-hidden border border-oro/30 shadow-2xl shrink-0">
+                                                    {teamImage ? <img src={teamImage} className="w-full h-full object-cover" /> : <div className="w-full h-full bg-black flex items-center justify-center text-3xl font-black text-oro opacity-20">F</div>}
                                                 </div>
                                                 <div className="flex-1 text-center md:text-left">
-                                                    <h3 className="text-3xl md:text-6xl font-black mb-2 tracking-tighter uppercase truncate w-full">{teamName}</h3>
-                                                    <p className="text-oro font-black text-[9px] md:text-[10px] uppercase tracking-[0.4em]">Il tuo Impero è pronto.</p>
+                                                    <h3 className="text-2xl md:text-4xl font-black mb-1 tracking-tighter uppercase truncate">{teamName}</h3>
+                                                    <p className="text-oro font-black text-[8px] md:text-[9px] uppercase tracking-[0.3em]">Impero pronto per la Gara.</p>
                                                 </div>
                                                 <div className="text-center md:text-right">
-                                                    <p className="text-[9px] font-black text-gray-500 uppercase mb-1 tracking-widest">Budget</p>
-                                                    <p className="text-4xl md:text-5xl font-black text-oro">{remainingBudget}<span className="text-sm opacity-20 ml-1">/100</span></p>
+                                                    <p className="text-[8px] font-black text-gray-600 uppercase mb-1 tracking-widest">Budget</p>
+                                                    <p className="text-3xl md:text-4xl font-black text-oro">{remainingBudget}<span className="text-xs opacity-20">/100</span></p>
                                                 </div>
                                             </div>
 
-                                            <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
+                                            <div className="grid grid-cols-3 md:grid-cols-5 gap-2 md:gap-3">
                                                 {selectedArtists.map(a => (
-                                                    <div key={a.id} className="bg-white/[0.05] p-3 md:p-5 rounded-[1.5rem] md:rounded-[2.5rem] border border-white/5 flex flex-col items-center text-center relative overflow-hidden">
-                                                        <div className="w-10 h-10 md:w-16 md:h-16 rounded-xl md:rounded-2xl overflow-hidden mb-2 md:mb-3 border border-white/10 shadow-md">
+                                                    <div key={a.id} className="bg-white/[0.03] p-3 rounded-2xl border border-white/5 flex flex-col items-center text-center relative overflow-hidden">
+                                                        <div className="w-8 h-8 md:w-12 md:h-12 rounded-lg md:rounded-xl overflow-hidden mb-2 border border-white/5">
                                                             {a.image && <img src={a.image} className="w-full h-full object-cover" />}
                                                         </div>
-                                                        <p className="font-black text-[8px] md:text-[10px] truncate w-full mb-1">{a.name}</p>
-                                                        <span className="text-[6px] md:text-[7px] font-black uppercase text-gray-600 tracking-widest">{a.type.slice(0, 5)}</span>
-                                                        {captainId === a.id && <FiStar className="absolute top-2 right-2 text-oro" size={10} />}
+                                                        <p className="font-black text-[7px] md:text-[9px] truncate w-full mb-1">{a.name}</p>
+                                                        {captainId === a.id && <FiStar className="text-oro" size={8} />}
                                                     </div>
                                                 ))}
                                             </div>
@@ -452,25 +437,25 @@ export default function CreateTeamPage() {
                     </div>
 
                     {/* Navigation Footer */}
-                    <div className="p-6 md:p-12 border-t border-white/5 bg-white/[0.03]">
-                        <div className="flex flex-col md:flex-row justify-between items-center gap-6 md:gap-8">
+                    <div className="p-4 md:p-8 border-t border-white/5 bg-white/[0.02]">
+                        <div className="flex justify-between items-center gap-4">
                             <button
                                 onClick={prevStep}
                                 disabled={step === 0 || loading}
-                                className={`flex items-center gap-2 px-8 py-4 rounded-2xl font-black text-[9px] uppercase tracking-widest transition-all ${step === 0 ? "opacity-0 invisible" : "hover:bg-white/5 text-gray-500 hover:text-white"}`}
+                                className={`flex items-center gap-2 px-6 py-4 rounded-xl font-black text-[8px] md:text-[10px] uppercase tracking-widest transition-all ${step === 0 ? "opacity-0 invisible" : "text-gray-600 hover:text-white"}`}
                             >
                                 <FiArrowLeft /> Indietro
                             </button>
 
-                            <div className="flex gap-6 md:gap-10 items-center bg-black/40 px-8 py-4 md:px-10 md:py-6 rounded-full border border-white/5 shadow-inner">
+                            <div className="flex gap-4 md:gap-8 items-center bg-black/30 px-6 py-3 md:px-8 md:py-4 rounded-full border border-white/5">
                                 <div className="flex flex-col items-center">
-                                    <span className="text-[6px] md:text-[7px] font-black text-gray-600 uppercase tracking-[0.3em] mb-1">Armoni</span>
-                                    <span className={`text-xl md:text-2xl font-black ${remainingBudget < 0 ? "text-red-500" : "text-white"}`}>{remainingBudget}</span>
+                                    <span className="text-[6px] font-black text-gray-700 uppercase tracking-widest mb-0.5">Budget</span>
+                                    <span className={`text-sm md:text-lg font-black ${remainingBudget < 0 ? "text-red-500" : "text-white"}`}>{remainingBudget}</span>
                                 </div>
-                                <div className="w-[1px] h-6 md:h-8 bg-white/10" />
+                                <div className="w-[1px] h-5 bg-white/10" />
                                 <div className="flex flex-col items-center">
-                                    <span className="text-[6px] md:text-[7px] font-black text-gray-600 uppercase tracking-[0.3em] mb-1">Team</span>
-                                    <span className="text-xl md:text-2xl font-black text-white">{selectedArtists.length}<span className="text-xs opacity-20 ml-1">/5</span></span>
+                                    <span className="text-[6px] font-black text-gray-700 uppercase tracking-widest mb-0.5">Team</span>
+                                    <span className="text-sm md:text-lg font-black text-white">{selectedArtists.length}/5</span>
                                 </div>
                             </div>
 
@@ -478,15 +463,15 @@ export default function CreateTeamPage() {
                                 <button
                                     onClick={saveTeam}
                                     disabled={loading || isExpired}
-                                    className="w-full md:w-auto flex items-center justify-center gap-3 px-10 py-5 md:px-14 md:py-6 bg-gradient-to-r from-oro to-ocra text-blunotte rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-[0_20px_50px_rgba(255,215,0,0.3)] hover:scale-105 active:scale-95 transition-all"
+                                    className="flex items-center justify-center gap-2 px-8 py-4 md:px-10 md:py-5 bg-gradient-to-r from-oro to-ocra text-blunotte rounded-xl font-black text-[8px] md:text-[10px] uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all"
                                 >
-                                    {loading ? "Fondazione..." : "Conferma Impero"} <FiCheck />
+                                    {loading ? "..." : "Conferma"} <FiCheck />
                                 </button>
                             ) : (
                                 <button
                                     onClick={nextStep}
                                     disabled={loading}
-                                    className="w-full md:w-auto flex items-center justify-center gap-3 px-10 py-5 md:px-14 md:py-6 bg-oro text-blunotte rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-[0_20px_50px_rgba(255,215,0,0.3)] hover:scale-105 active:scale-95 transition-all"
+                                    className="flex items-center justify-center gap-2 px-8 py-4 md:px-10 md:py-5 bg-oro text-blunotte rounded-xl font-black text-[8px] md:text-[10px] uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all"
                                 >
                                     Prosegui <FiArrowRight />
                                 </button>
@@ -496,13 +481,13 @@ export default function CreateTeamPage() {
                 </div>
 
                 {error && (
-                    <div className="fixed top-40 left-1/2 -translate-x-1/2 z-[200] w-full max-w-sm px-6">
+                    <div className="fixed top-32 left-1/2 -translate-x-1/2 z-[200] w-full max-w-xs px-4">
                         <motion.div 
                             initial={{ opacity: 0, y: -20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="bg-red-500 text-white px-8 py-5 rounded-[2rem] font-black text-[10px] uppercase tracking-widest shadow-3xl flex items-center gap-4"
+                            className="bg-red-500 text-white px-6 py-4 rounded-2xl font-black text-[8px] uppercase tracking-widest shadow-2xl flex items-center gap-3"
                         >
-                            <FiX size={20} />
+                            <FiX size={16} />
                             {error}
                         </motion.div>
                     </div>
@@ -527,31 +512,29 @@ function SelectionArtistCard({
         <motion.div
             layout
             onClick={() => !isDisabled && toggleArtist(artist)}
-            className={`group relative rounded-[2rem] md:rounded-[3rem] border-2 transition-all p-3 md:p-6 cursor-pointer flex flex-col h-full
+            className={`group relative rounded-2xl md:rounded-[2.5rem] border transition-all p-3 md:p-4 cursor-pointer flex flex-col h-full
                 ${isSelected 
-                    ? "bg-oro/[0.05] border-oro shadow-[0_10px_40px_rgba(255,215,0,0.15)] scale-105 z-10" 
-                    : isDisabled ? "bg-gray-900/50 border-white/5 opacity-20 grayscale cursor-not-allowed" : "bg-white/[0.03] border-white/5 hover:border-oro/30"
+                    ? "bg-oro/[0.03] border-oro/50 shadow-lg scale-105 z-10" 
+                    : isDisabled ? "bg-gray-900/50 border-white/5 opacity-10 grayscale cursor-not-allowed" : "bg-white/[0.01] border-white/5 hover:border-oro/20"
                 }
             `}
         >
-            <div className="flex flex-col h-full space-y-3 md:space-y-6">
+            <div className="flex flex-col h-full space-y-3">
                 <div className="flex justify-between items-start">
                     <div className="overflow-hidden">
-                        <h3 className="font-black text-[9px] md:text-lg leading-[0.9] mb-1 truncate">{artist.name}</h3>
-                        <div className="bg-oro/10 px-2 py-1 rounded-md inline-block mt-1">
-                             <span className="text-[7px] md:text-[9px] font-black uppercase text-oro tracking-widest">
-                                {artist.cost}
-                            </span>
-                        </div>
+                        <h3 className="font-black text-[8px] md:text-sm leading-none mb-1 truncate">{artist.name}</h3>
+                        <span className="text-[6px] md:text-[8px] font-black uppercase text-oro/60 tracking-widest">
+                            {artist.cost} Arm.
+                        </span>
                     </div>
-                    {isSelected && <FiCheck className="text-oro" size={18} />}
+                    {isSelected && <FiCheck className="text-oro" size={14} />}
                 </div>
 
-                <div className="aspect-[4/5] w-full rounded-[1.5rem] md:rounded-[2rem] bg-black overflow-hidden border border-white/10 shadow-2xl relative">
+                <div className="aspect-[4/5] w-full rounded-xl md:rounded-2xl bg-black overflow-hidden border border-white/5 shadow-lg relative">
                     {artist.image ? (
                         <img src={artist.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                     ) : (
-                        <div className="w-full h-full flex items-center justify-center text-xl md:text-5xl font-black opacity-[0.03]">{artist.name.charAt(0)}</div>
+                        <div className="w-full h-full flex items-center justify-center text-xl font-black opacity-[0.03]">{artist.name.charAt(0)}</div>
                     )}
                 </div>
             </div>
