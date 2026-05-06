@@ -23,7 +23,7 @@ export default function Footer() {
                         <div className="flex flex-col md:flex-row items-center gap-6">
                             <motion.div whileHover={{ scale: 1.02 }} className="inline-block shrink-0">
                                 <Image
-                                    src="/fanta-logo.png"
+                                    src="/fanta-logo.webp"
                                     alt="FantArte"
                                     width={240}
                                     height={90}
@@ -31,8 +31,8 @@ export default function Footer() {
                                 />
                             </motion.div>
                             <div className="flex items-center gap-4 border-l border-white/10 pl-6 h-10">
-                                <Image src="/morgana.png" alt="Morgana" width={100} height={40} className="h-8 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
-                                <Image src="/orum.png" alt="O.R.U.M." width={100} height={40} className="h-8 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
+                                <Image src="/morgana.webp" alt="Morgana" width={100} height={40} className="h-8 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
+                                <Image src="/orum.webp" alt="O.R.U.M." width={100} height={40} className="h-8 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
                             </div>
                         </div>
                         <p className="text-gray-500 text-lg leading-relaxed font-medium max-w-sm">

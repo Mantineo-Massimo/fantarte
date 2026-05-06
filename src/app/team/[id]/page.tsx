@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
             type: 'website',
             images: [
                 {
-                    url: '/fanta-logo.png',
+                    url: '/fanta-logo.webp',
                     width: 1200,
                     height: 630,
                     alt: 'FantaPiazza',
@@ -68,7 +68,7 @@ export default async function TeamProfilePage({ params }: { params: Promise<{ id
                         {team.image ? (
                             <img src={team.image} alt={team.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                         ) : (
-                            <img src="/fanta-logo.png" alt="Default" className="w-full h-full object-contain p-6 opacity-40 group-hover:opacity-60 transition-opacity" />
+                            <img src="/fanta-logo.webp" alt="Default" className="w-full h-full object-contain p-6 opacity-40 group-hover:opacity-60 transition-opacity" />
                         )}
                     </div>
                     <div className="flex-1">

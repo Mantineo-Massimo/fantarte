@@ -59,7 +59,7 @@ export default function Home() {
             <motion.div variants={fadeIn} className="mb-10 relative">
               <div className="absolute inset-0 bg-oro blur-[100px] opacity-10 scale-150 animate-pulse-soft" />
               <Image
-                src="/fanta-logo.png"
+                src="/fanta-logo.webp"
                 alt="FantArte Logo"
                 width={320}
                 height={120}

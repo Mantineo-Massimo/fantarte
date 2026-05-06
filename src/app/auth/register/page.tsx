@@ -70,7 +70,7 @@ export default function RegisterPage() {
                 <div className="flex justify-center mb-8">
                     <Link href="/">
                         <Image
-                            src="/fanta-logo.png"
+                            src="/fanta-logo.webp"
                             alt="FantArte"
                             width={180}
                             height={70}

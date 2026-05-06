@@ -61,7 +61,7 @@ export default function Navbar() {
                     {/* Logo Section */}
                     <Link href="/" className="relative z-10 hover:opacity-80 transition-opacity">
                         <Image
-                            src="/fanta-logo.png"
+                            src="/fanta-logo.webp"
                             alt="FantArte"
                             width={300}
                             height={120}

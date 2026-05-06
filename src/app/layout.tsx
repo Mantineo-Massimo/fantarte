@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     siteName: "FantArte",
     images: [
       {
-        url: "/og-preview.png",
+        url: "/og-preview.webp",
         width: 1200,
         height: 1200,
         alt: "FantArte Preview",
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "FantArte | Piazza dell'Arte",
     description: "Il Fantagioco dove l'Arte incontra la Piazza",
-    images: ["/og-preview.png"],
+    images: ["/og-preview.webp"],
   },
   icons: {
     icon: [
@@ -73,7 +73,7 @@ export default function RootLayout({
           {/* Center-ish Ocra Glow */}
           <div className="absolute top-[30%] left-[40%] w-[40%] h-[40%] bg-ocra opacity-[0.03] blur-[120px] rounded-full" />
           {/* Texture Overlay (Scalinata) */}
-          <div className="absolute inset-0 bg-[url('/background.png')] bg-cover bg-center opacity-[0.06] mix-blend-overlay" />
+          <div className="absolute inset-0 bg-[url('/background.webp')] bg-cover bg-center opacity-[0.06] mix-blend-overlay" />
         </div>
 
         <NextAuthProvider>

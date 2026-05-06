@@ -93,7 +93,7 @@ const emailWrapper = (content: string) => `
     <div class="container">
         <div class="header">
             <!-- Logo uses dynamic BASE_URL to ensure visibility in all environments -->
-            <img src="${BASE_URL}/fanta-logo.png" alt="FantArte" class="logo">
+            <img src="${BASE_URL}/fanta-logo.webp" alt="FantArte" class="logo">
         </div>
         <div class="content">
             ${content}

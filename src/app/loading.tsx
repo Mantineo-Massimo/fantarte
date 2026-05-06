@@ -25,7 +25,7 @@ export default function Loading() {
           className="mb-12"
         >
           <Image
-            src="/fanta-logo.png"
+            src="/fanta-logo.webp"
             alt="FantArte Loading"
             width={240}
             height={90}
