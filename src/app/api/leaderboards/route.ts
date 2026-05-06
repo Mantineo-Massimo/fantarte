@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-export const revalidate = 30; // Cache for 30 seconds
+export const revalidate = 0; // Disable cache to show real-time updates
 
 export async function GET() {
     try {
