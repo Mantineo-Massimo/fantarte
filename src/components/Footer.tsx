@@ -19,23 +19,23 @@ export default function Footer() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-20 mb-32">
                     
                     {/* Brand / Logo Section */}
-                    <div className="lg:col-span-4 space-y-10">
+                    <div className="lg:col-span-4 space-y-8">
                         <motion.div whileHover={{ scale: 1.02 }} className="inline-block">
                             <Image
                                 src="/fanta-logo.png"
                                 alt="FantArte"
-                                width={260}
-                                height={100}
-                                className="h-16 w-auto object-contain drop-shadow-[0_0_20px_rgba(255,215,0,0.3)]"
+                                width={240}
+                                height={90}
+                                className="h-14 w-auto object-contain drop-shadow-[0_0_20px_rgba(255,215,0,0.3)]"
                             />
                         </motion.div>
-                        <p className="text-gray-500 text-lg leading-relaxed font-medium">
+                        <p className="text-gray-500 text-lg leading-relaxed font-medium max-w-sm">
                             Il fantagioco dove l&apos;arte prende vita. 
                             Creato per celebrare il talento e la strategia 
                             nella <span className="text-white">Piazza dell&apos;Arte</span> di Messina.
                         </p>
                         
-                        <div className="flex gap-4">
+                        <div className="flex gap-3">
                             <SocialIcon icon={FiInstagram} href="#" />
                             <SocialIcon icon={FiFacebook} href="#" />
                             <SocialIcon icon={FiMail} href="mailto:associazione.morgana@gmail.com" />
@@ -43,10 +43,10 @@ export default function Footer() {
                     </div>
 
                     {/* Navigation Columns */}
-                    <div className="lg:col-span-5 grid grid-cols-2 gap-12">
+                    <div className="lg:col-span-5 grid grid-cols-2 gap-10">
                         <div className="space-y-8">
-                            <h4 className="text-white text-[10px] font-black uppercase tracking-[0.4em] opacity-40">Esplora</h4>
-                            <nav className="flex flex-col gap-6">
+                            <h4 className="font-display text-white text-xs font-bold uppercase tracking-[0.4em] opacity-40">Esplora</h4>
+                            <nav className="flex flex-col gap-5">
                                 <FooterLink href="/" label="Home" />
                                 <FooterLink href="/artisti" label="Artisti" />
                                 <FooterLink href="/leaderboards" label="Classifiche" />
@@ -55,8 +55,8 @@ export default function Footer() {
                             </nav>
                         </div>
                         <div className="space-y-8">
-                            <h4 className="text-white text-[10px] font-black uppercase tracking-[0.4em] opacity-40">Legale</h4>
-                            <nav className="flex flex-col gap-6">
+                            <h4 className="font-display text-white text-xs font-bold uppercase tracking-[0.4em] opacity-40">Legale</h4>
+                            <nav className="flex flex-col gap-5">
                                 <FooterLink href="/privacy" label="Privacy Policy" />
                                 <FooterLink href="/accordo" label="Collaborazione" />
                                 <FooterLink href="/regole" label="Regolamento" />
@@ -66,15 +66,16 @@ export default function Footer() {
 
                     {/* Contact Card */}
                     <div className="lg:col-span-3">
-                        <div className="glass p-10 rounded-[2.5rem] border border-white/5 space-y-6">
-                             <h4 className="text-oro text-[10px] font-black uppercase tracking-widest">Ti serve Aiuto?</h4>
-                             <div className="space-y-2">
-                                <a href="mailto:associazione.morgana@gmail.com" className="block text-white font-black hover:text-oro transition-colors text-sm truncate">associazione.morgana@gmail.com</a>
-                                <a href="mailto:orum.unime@gmail.com" className="block text-white font-black hover:text-oro transition-colors text-sm truncate">orum.unime@gmail.com</a>
+                        <div className="glass p-8 rounded-[2rem] border border-white/10 space-y-6 relative overflow-hidden group">
+                             <div className="absolute top-0 right-0 w-32 h-32 bg-oro/5 blur-2xl -translate-y-1/2 translate-x-1/2" />
+                             <h4 className="font-display text-oro text-xs font-bold uppercase tracking-widest relative z-10">Ti serve Aiuto?</h4>
+                             <div className="space-y-3 relative z-10">
+                                <a href="mailto:associazione.morgana@gmail.com" className="block text-gray-300 font-medium hover:text-white transition-colors text-sm truncate underline decoration-white/10 underline-offset-4">associazione.morgana@gmail.com</a>
+                                <a href="mailto:orum.unime@gmail.com" className="block text-gray-300 font-medium hover:text-white transition-colors text-sm truncate underline decoration-white/10 underline-offset-4">orum.unime@gmail.com</a>
                              </div>
-                             <div className="pt-4 flex items-center gap-3 opacity-30">
+                             <div className="pt-4 flex items-center gap-3 opacity-30 relative z-10">
                                 <FiGlobe />
-                                <span className="text-[10px] font-black uppercase tracking-widest">Messina, Italia</span>
+                                <span className="text-[10px] font-bold uppercase tracking-widest">Messina, Italia</span>
                              </div>
                         </div>
                     </div>
@@ -109,9 +110,9 @@ function SocialIcon({ icon: Icon, href }: { icon: any, href: string }) {
     return (
         <a 
             href={href} 
-            className="w-14 h-14 rounded-2xl glass border border-white/5 flex items-center justify-center text-gray-400 hover:text-oro hover:border-oro/30 hover:scale-110 transition-all"
+            className="w-12 h-12 rounded-xl glass border border-white/10 flex items-center justify-center text-gray-400 hover:text-oro hover:border-oro/30 hover:scale-110 transition-all"
         >
-            <Icon size={24} />
+            <Icon size={20} />
         </a>
     );
 }
@@ -120,7 +121,7 @@ function FooterLink({ href, label }: { href: string, label: string }) {
     return (
         <Link 
             href={href} 
-            className="group flex items-center gap-2 text-gray-500 hover:text-white transition-all font-black text-[11px] uppercase tracking-widest"
+            className="group flex items-center gap-2 text-gray-500 hover:text-white transition-all font-medium text-sm"
         >
             <FiChevronRight className="opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all text-oro" />
             {label}
