@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import CountdownTimer from "@/components/CountdownTimer";
-import { FiUsers, FiStar, FiTrendingUp, FiHelpCircle, FiSearch, FiCheck, FiX, FiShield, FiPlus, FiArrowRight } from "react-icons/fi";
+import { FiUsers, FiStar, FiTrendingUp, FiHelpCircle, FiSearch, FiCheck, FiX, FiShield, FiPlus, FiArrowRight, FiArrowLeft, FiCamera, FiLayout, FiAward } from "react-icons/fi";
 import Link from "next/link";
 
 type ArtistType = "ARTISTA" | "PRESENTATORE" | "OSPITE";
@@ -30,6 +30,7 @@ export default function CreateTeamPage() {
     const router = useRouter();
     const { status } = useSession();
 
+    const [step, setStep] = useState(0);
     const [artists, setArtists] = useState<Artist[]>([]);
     const [selectedArtists, setSelectedArtists] = useState<Artist[]>([]);
     const [teamName, setTeamName] = useState("");
@@ -41,12 +42,8 @@ export default function CreateTeamPage() {
     const [teamId, setTeamId] = useState<string | null>(null);
     const [captainId, setCaptainId] = useState<string | null>(null);
     const [initialFetchDone, setInitialFetchDone] = useState(false);
-    const [teamScore, setTeamScore] = useState<number>(0);
-
     const [deadline, setDeadline] = useState<string | null>(null);
     const [isExpired, setIsExpired] = useState(false);
-
-    // Filter/Search
     const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
@@ -71,8 +68,6 @@ export default function CreateTeamPage() {
                     setTeamName(data.name);
                     setTeamImage(data.image || null);
                     setSelectedArtists(data.artists || []);
-                    const generale = data.leagues?.find((l: any) => l.league.name === "Generale");
-                    if (generale) setTeamScore(generale.score);
                 }
                 setInitialFetchDone(true);
             })
@@ -93,16 +88,6 @@ export default function CreateTeamPage() {
             })
             .catch(err => console.error("Failed to load settings", err));
     }, []);
-
-    useEffect(() => {
-        if (!deadline) return;
-        const interval = setInterval(() => {
-            if (new Date() > new Date(deadline)) {
-                setIsExpired(true);
-            }
-        }, 1000);
-        return () => clearInterval(interval);
-    }, [deadline]);
 
     const spentBudget = selectedArtists.reduce((acc, curr) => acc + curr.cost, 0);
     const remainingBudget = 100 - spentBudget;
@@ -145,21 +130,74 @@ export default function CreateTeamPage() {
         }
     };
 
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setIsUploading(true);
+        setError("");
+
+        try {
+            const formData = new FormData();
+            formData.append("file", file);
+
+            const res = await fetch("/api/upload", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (!res.ok) throw new Error("Upload failed");
+            const data = await res.json();
+            setTeamImage(data.url);
+        } catch (err) {
+            setError("Errore nel caricamento immagine.");
+        } finally {
+            setIsUploading(false);
+        }
+    };
+
+    const nextStep = () => {
+        setError("");
+        if (step === 0) {
+            if (!teamName.trim()) {
+                setError("Inserisci un nome per la tua squadra.");
+                return;
+            }
+            setStep(1);
+        } else if (step === 1) {
+            if (counts.PRESENTATORE !== 1) {
+                setError("Scegli un Presentatore per proseguire.");
+                return;
+            }
+            setStep(2);
+        } else if (step === 2) {
+            if (counts.OSPITE !== 1) {
+                setError("Scegli un Ospite per proseguire.");
+                return;
+            }
+            setStep(3);
+        } else if (step === 3) {
+            if (counts.ARTISTA !== 3) {
+                setError(`Scegli ancora ${3 - counts.ARTISTA} artisti.`);
+                return;
+            }
+            setStep(4);
+        } else if (step === 4) {
+            if (!captainId) {
+                setError("Nomina un Capitano per guidare la squadra.");
+                return;
+            }
+            setStep(5);
+        }
+    };
+
+    const prevStep = () => {
+        setError("");
+        setStep(prev => Math.max(0, prev - 1));
+    };
+
     const saveTeam = async () => {
         if (isExpired) return;
-        if (counts.ARTISTA !== 3 || counts.PRESENTATORE !== 1 || counts.OSPITE !== 1) {
-            setError("Composizione non valida (1-1-3).");
-            return;
-        }
-        if (!teamName.trim()) {
-            setError("Inserisci il nome del team.");
-            return;
-        }
-        if (!captainId) {
-            setError("Scegli un Capitano!");
-            return;
-        }
-
         setLoading(true);
         setError("");
 
@@ -189,281 +227,277 @@ export default function CreateTeamPage() {
     };
 
     const filteredArtists = useMemo(() => {
+        let typeToFilter: ArtistType | null = null;
+        if (step === 1) typeToFilter = "PRESENTATORE";
+        if (step === 2) typeToFilter = "OSPITE";
+        if (step === 3) typeToFilter = "ARTISTA";
+
         return artists.filter(a => {
             const matchesSearch = a.name.toLowerCase().includes(searchTerm.toLowerCase());
-            return matchesSearch;
+            const matchesType = typeToFilter ? a.type === typeToFilter : true;
+            return matchesSearch && matchesType;
         });
-    }, [artists, searchTerm]);
+    }, [artists, searchTerm, step]);
 
-    if (status === "loading" || !initialFetchDone) return <div className="min-h-screen bg-blunotte flex items-center justify-center text-white">Caricamento...</div>;
+    if (status === "loading" || !initialFetchDone) return <div className="min-h-screen bg-blunotte flex items-center justify-center text-white font-black tracking-[0.2em] uppercase text-xs">Sincronizzazione in corso...</div>;
+
+    const steps = [
+        { title: "Identità", icon: FiShield },
+        { title: "Presentatore", icon: FiUsers },
+        { title: "Ospite", icon: FiStar },
+        { title: "Artisti", icon: FiTrendingUp },
+        { title: "Capitano", icon: FiAward },
+        { title: "Riepilogo", icon: FiCheck },
+    ];
 
     return (
-        <main className="min-h-screen text-white flex flex-col items-center pt-56 md:pt-44 pb-32 overflow-x-hidden">
-            
+        <main className="min-h-screen bg-blunotte text-white pt-44 pb-32 relative overflow-hidden">
+            {/* Background Effects */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-screen bg-[radial-gradient(circle_at_50%_0%,rgba(255,215,0,0.05),transparent_70%)] pointer-events-none" />
 
-            <div className="relative z-10 w-full max-w-7xl px-4 md:px-6">
+            <div className="max-w-6xl mx-auto px-6 relative z-10">
                 
-                {/* Mobile Sticky Status Bar */}
-                <div className="lg:hidden fixed bottom-0 left-0 right-0 z-[100] p-4 pointer-events-none">
-                    <motion.div 
-                        initial={{ y: 100 }}
-                        animate={{ y: 0 }}
-                        className="glass-oro border border-oro/30 rounded-[2rem] p-4 shadow-2xl flex items-center justify-between pointer-events-auto backdrop-blur-2xl"
-                    >
-                        <div className="flex gap-4">
-                            <div className="flex flex-col">
-                                <span className="text-[8px] font-black uppercase text-gray-500">Armoni</span>
-                                <span className={`text-xl font-black ${remainingBudget < 0 ? 'text-red-500' : 'text-white'}`}>
-                                    {remainingBudget}<span className="text-[10px] opacity-30">/100</span>
-                                </span>
+                {/* Stepper Header */}
+                <div className="flex justify-between items-center mb-16 overflow-x-auto pb-4 gap-4 no-scrollbar">
+                    {steps.map((s, i) => (
+                        <div key={i} className={`flex flex-col items-center min-w-fit transition-all duration-500 ${i === step ? "scale-110" : i < step ? "opacity-50" : "opacity-20"}`}>
+                            <div className={`w-10 h-10 md:w-12 md:h-12 rounded-2xl flex items-center justify-center border-2 mb-3 transition-all ${i === step ? "bg-oro border-oro text-blunotte shadow-[0_0_20px_rgba(255,215,0,0.4)]" : "border-white/10"}`}>
+                                <s.icon size={i === step ? 20 : 16} />
                             </div>
-                            <div className="w-[1px] h-8 bg-white/10" />
-                            <div className="flex flex-col">
-                                <span className="text-[8px] font-black uppercase text-gray-500">Quintetto</span>
-                                <span className="text-xl font-black text-white">
-                                    {selectedArtists.length}<span className="text-[10px] opacity-30">/5</span>
-                                </span>
-                            </div>
+                            <span className="text-[8px] md:text-[9px] font-black uppercase tracking-widest">{s.title}</span>
                         </div>
-                        <button 
-                            onClick={() => {
-                                const el = document.getElementById('summary-sidebar');
-                                if (el) el.scrollIntoView({ behavior: 'smooth' });
-                            }}
-                            className="bg-oro text-blunotte px-6 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-xl"
-                        >
-                            Riepilogo
-                        </button>
-                    </motion.div>
+                    ))}
                 </div>
-                
-                {/* Hero Section Revolution */}
-                <motion.header 
-                    initial="initial"
-                    animate="animate"
-                    variants={fadeIn}
-                    className="text-center mb-24 space-y-8"
-                >
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass border border-oro/20 text-oro text-[10px] font-black uppercase tracking-[0.4em] mb-4">
-                        <span className="w-2 h-2 rounded-full bg-oro animate-pulse" />
-                        Area Gestione Squadra
-                    </div>
-                    
-                    <h1 className="text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter leading-[0.85] px-4">
-                        {isEditing ? (
-                            <>Il tuo <span className="text-oro drop-shadow-[0_0_20px_rgba(255,215,0,0.4)]">Impero.</span></>
-                        ) : (
-                            <>Crea il tuo <span className="text-oro drop-shadow-[0_0_20px_rgba(255,215,0,0.4)]">Destino.</span></>
-                        )}
-                    </h1>
 
-                    <div className="max-w-2xl mx-auto space-y-6">
-                        <input
-                            type="text"
-                            value={teamName}
-                            onChange={e => setTeamName(e.target.value)}
-                            placeholder="Nome della tua Squadra..."
-                            disabled={isExpired}
-                            className="w-full glass border border-white/5 rounded-[2.5rem] px-10 py-6 text-center text-2xl font-black focus:border-oro transition-all outline-none shadow-3xl placeholder:opacity-30"
-                        />
-                    </div>
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={step}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -20 }}
+                        transition={{ duration: 0.4 }}
+                        className="min-h-[500px]"
+                    >
+                        {/* STEP 0: IDENTITY */}
+                        {step === 0 && (
+                            <div className="max-w-2xl mx-auto text-center space-y-12">
+                                <header>
+                                    <h1 className="text-6xl md:text-8xl font-black tracking-tighter mb-4 uppercase">Fonda il tuo <span className="text-oro">Impero</span></h1>
+                                    <p className="text-gray-500 font-medium italic">Scegli un nome epico e un&apos;immagine 1:1 per la tua squadra.</p>
+                                </header>
 
-                    {deadline && (
-                        <div className="flex justify-center pt-8">
-                            <div className="glass-oro p-10 rounded-[3rem] border border-oro/10 shadow-3xl">
-                                <p className="text-gray-500 font-bold uppercase tracking-[0.3em] text-[10px] mb-6">Chiusura Mercato</p>
-                                <CountdownTimer targetDate={deadline} />
-                            </div>
-                        </div>
-                    )}
-                </motion.header>
-
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-
-                    {/* Left: Artist Market (Neo-Grid) */}
-                    <div className="lg:col-span-8 space-y-16">
-                        <div className="bg-white/5 p-8 rounded-[3rem] border border-white/5 backdrop-blur-md">
-                            <div className="relative w-full">
-                                <FiSearch className="absolute left-8 top-1/2 -translate-y-1/2 text-oro" />
-                                <input 
-                                    type="text" 
-                                    placeholder="Cerca il talento perfetto per la tua squadra..."
-                                    value={searchTerm}
-                                    onChange={e => setSearchTerm(e.target.value)}
-                                    className="w-full bg-white/5 border border-white/10 rounded-[2rem] pl-20 pr-8 py-6 text-xl font-black focus:border-oro outline-none transition-all placeholder:text-gray-600"
-                                />
-                            </div>
-                        </div>
-
-                        {loading ? (
-                            <div className="flex items-center justify-center py-20">
-                                <div className="w-10 h-10 border-4 border-oro/20 border-t-oro rounded-full animate-spin" />
-                            </div>
-                        ) : (
-                            <div className="space-y-24">
-                                {/* SEZIONE PRESENTATORI */}
-                                {filteredArtists.some(a => a.type === "PRESENTATORE") && (
-                                    <section className="space-y-8">
-                                        <div className="flex items-center gap-4 px-2">
-                                            <div className="w-2 h-8 bg-oro rounded-full" />
-                                            <h2 className="text-3xl font-black uppercase tracking-tighter">Scegli il <span className="text-oro">Presentatore</span></h2>
-                                            <span className="text-gray-700 font-mono text-sm ml-auto">01 RICHIESTO</span>
-                                        </div>
-                                        <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 gap-3 md:gap-8">
-                                            {filteredArtists.filter(a => a.type === "PRESENTATORE").map(artist => (
-                                                <SelectionArtistCard 
-                                                    key={artist.id} 
-                                                    artist={artist} 
-                                                    isSelected={selectedArtists.some(a => a.id === artist.id)}
-                                                    captainId={captainId}
-                                                    setCaptainId={setCaptainId}
-                                                    isDisabled={isExpired || (remainingBudget < artist.cost && !selectedArtists.some(a => a.id === artist.id))}
-                                                    toggleArtist={toggleArtist}
-                                                />
-                                            ))}
-                                        </div>
-                                    </section>
-                                )}
-
-                                {/* SEZIONE OSPITI */}
-                                {filteredArtists.some(a => a.type === "OSPITE") && (
-                                    <section className="space-y-8">
-                                        <div className="flex items-center gap-4 px-2">
-                                            <div className="w-2 h-8 bg-viola rounded-full" />
-                                            <h2 className="text-3xl font-black uppercase tracking-tighter">Scegli l&apos;<span className="text-viola">Ospite</span></h2>
-                                            <span className="text-gray-700 font-mono text-sm ml-auto">01 RICHIESTO</span>
-                                        </div>
-                                        <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 gap-3 md:gap-8">
-                                            {filteredArtists.filter(a => a.type === "OSPITE").map(artist => (
-                                                <SelectionArtistCard 
-                                                    key={artist.id} 
-                                                    artist={artist} 
-                                                    isSelected={selectedArtists.some(a => a.id === artist.id)}
-                                                    captainId={captainId}
-                                                    setCaptainId={setCaptainId}
-                                                    isDisabled={isExpired || (remainingBudget < artist.cost && !selectedArtists.some(a => a.id === artist.id))}
-                                                    toggleArtist={toggleArtist}
-                                                />
-                                            ))}
-                                        </div>
-                                    </section>
-                                )}
-
-                                {/* SEZIONE ARTISTI */}
-                                {filteredArtists.some(a => a.type === "ARTISTA") && (
-                                    <section className="space-y-8">
-                                        <div className="flex items-center gap-4 px-2">
-                                            <div className="w-2 h-8 bg-ocra rounded-full" />
-                                            <h2 className="text-3xl font-black uppercase tracking-tighter">I tuoi 3 <span className="text-ocra">Artisti</span></h2>
-                                            <span className="text-gray-700 font-mono text-sm ml-auto">03 RICHIESTI</span>
-                                        </div>
-                                        <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 gap-3 md:gap-8">
-                                            {filteredArtists.filter(a => a.type === "ARTISTA").map(artist => (
-                                                <SelectionArtistCard 
-                                                    key={artist.id} 
-                                                    artist={artist} 
-                                                    isSelected={selectedArtists.some(a => a.id === artist.id)}
-                                                    captainId={captainId}
-                                                    setCaptainId={setCaptainId}
-                                                    isDisabled={isExpired || (remainingBudget < artist.cost && !selectedArtists.some(a => a.id === artist.id))}
-                                                    toggleArtist={toggleArtist}
-                                                />
-                                            ))}
-                                        </div>
-                                    </section>
-                                )}
-
-                                {filteredArtists.length === 0 && (
-                                    <div className="text-center py-20 bg-white/5 rounded-[3rem] border border-dashed border-white/10">
-                                        <p className="text-gray-500 font-black uppercase tracking-widest italic">Nessun talento trovato con questo nome.</p>
-                                    </div>
-                                )}
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Right: Summary Sidebar Revolution */}
-                    <div className="lg:col-span-4" id="summary-sidebar">
-                        <div className="sticky top-32 space-y-8 pb-20 lg:pb-0">
-                            <div className="glass p-12 rounded-[4rem] border border-white/5 shadow-3xl overflow-hidden relative">
-                                <div className="absolute top-0 right-0 w-48 h-48 bg-oro opacity-[0.02] blur-3xl -translate-y-1/2 translate-x-1/2" />
-                                
-                                <h2 className="text-4xl font-black tracking-tighter mb-10">
-                                    Il tuo <span className="text-oro">Roster.</span>
-                                </h2>
-
-                                <div className="space-y-6 mb-12">
-                                    <div className="flex justify-between items-end">
-                                        <p className="text-gray-500 text-[10px] font-black uppercase tracking-widest">Risorse Rimaste</p>
-                                        <p className={`text-5xl font-black tracking-tighter ${remainingBudget < 0 ? "text-red-500" : "text-green-400"}`}>
-                                            {remainingBudget}<span className="text-lg opacity-20 ml-1">/ 100</span>
-                                        </p>
-                                    </div>
-                                    <div className="w-full h-3 bg-white/5 rounded-full overflow-hidden border border-white/5">
-                                        <motion.div 
-                                            initial={{ width: 0 }}
-                                            animate={{ width: `${Math.max(0, Math.min(100, (spentBudget / 100) * 100))}%` }}
-                                            transition={{ duration: 1, ease: "circOut" }}
-                                            className={`h-full ${remainingBudget < 0 ? "bg-red-500" : "bg-gradient-to-r from-oro to-ocra"} shadow-[0_0_20px_rgba(255,215,0,0.3)]`}
+                                <div className="space-y-8">
+                                    <div className="relative group">
+                                        <div className="absolute -inset-1 bg-gradient-to-r from-oro to-ocra rounded-[2.5rem] blur opacity-10 group-focus-within:opacity-30 transition duration-500" />
+                                        <input
+                                            type="text"
+                                            value={teamName}
+                                            onChange={e => setTeamName(e.target.value)}
+                                            placeholder="Nome della tua Squadra..."
+                                            className="relative w-full glass border border-white/10 rounded-[2.5rem] px-10 py-8 text-2xl md:text-4xl font-black text-center focus:border-oro outline-none transition-all placeholder:opacity-20"
                                         />
                                     </div>
-                                </div>
 
-                                <div className="space-y-4 min-h-[350px]">
-                                    {selectedArtists.length === 0 ? (
-                                        <div className="flex flex-col items-center justify-center h-64 glass border-2 border-dashed border-white/5 rounded-[3rem] opacity-30">
-                                            <FiPlus size={48} className="mb-4 text-oro" />
-                                            <p className="text-[10px] font-black uppercase tracking-[0.3em]">Componi il Quintetto</p>
+                                    <div className="flex flex-col items-center">
+                                        <div className="relative w-64 h-64 rounded-[3.5rem] overflow-hidden glass border-2 border-dashed border-white/10 group hover:border-oro/50 transition-all flex items-center justify-center cursor-pointer mb-6 shadow-2xl">
+                                            {teamImage ? (
+                                                <img src={teamImage} alt="Preview" className="w-full h-full object-cover" />
+                                            ) : (
+                                                <div className="flex flex-col items-center text-gray-500 group-hover:text-oro transition-colors">
+                                                    <FiCamera size={48} className="mb-4" />
+                                                    <span className="text-[10px] font-black uppercase tracking-widest text-center px-8">Carica Foto <br/> (1:1 consigliata)</span>
+                                                </div>
+                                            )}
+                                            <input 
+                                                type="file" 
+                                                accept="image/*" 
+                                                onChange={handleImageUpload}
+                                                className="absolute inset-0 opacity-0 cursor-pointer"
+                                            />
+                                            {isUploading && (
+                                                <div className="absolute inset-0 bg-blunotte/80 flex items-center justify-center">
+                                                    <div className="w-8 h-8 border-4 border-oro/20 border-t-oro rounded-full animate-spin" />
+                                                </div>
+                                            )}
                                         </div>
-                                    ) : (
-                                        selectedArtists.map((a, i) => (
-                                            <motion.div 
-                                                key={a.id} 
-                                                initial={{ opacity: 0, x: 20 }}
-                                                animate={{ opacity: 1, x: 0 }}
-                                                transition={{ delay: i * 0.1 }}
-                                                className="flex justify-between items-center glass p-5 rounded-3xl border border-white/5 group"
-                                            >
-                                                <div className="flex items-center gap-5">
-                                                    <div className="w-14 h-14 rounded-2xl bg-black overflow-hidden border border-white/10 group-hover:border-oro/40 transition-colors">
-                                                        {a.image && <img src={a.image} className="w-full h-full object-cover" />}
-                                                    </div>
-                                                    <div>
-                                                        <p className="font-black text-lg leading-none mb-1 group-hover:text-oro transition-colors">{a.name}</p>
-                                                        <span className="text-[8px] font-black text-gray-500 uppercase tracking-widest">{a.type}</span>
-                                                    </div>
-                                                </div>
-                                                <div className="flex items-center gap-4">
-                                                    {captainId === a.id && <FiStar className="text-oro animate-pulse" size={20} />}
-                                                    <span className="font-black text-2xl tracking-tighter">{a.cost}</span>
-                                                </div>
-                                            </motion.div>
-                                        ))
-                                    )}
+                                    </div>
                                 </div>
-
-                                {error && <p className="mt-8 text-red-500 text-center font-black text-xs uppercase tracking-widest bg-red-500/10 p-6 rounded-3xl border border-red-500/20 animate-pulse">{error}</p>}
-
-                                <button
-                                    onClick={saveTeam}
-                                    disabled={loading || isExpired || selectedArtists.length !== 5 || !teamName.trim() || !captainId || remainingBudget < 0}
-                                    className="w-full mt-12 py-8 bg-gradient-to-r from-oro to-ocra text-blunotte font-black rounded-[2.5rem] shadow-[0_20px_50px_rgba(255,215,0,0.25)] transform hover:scale-[1.03] active:scale-[0.97] transition-all disabled:opacity-10 disabled:grayscale uppercase tracking-[0.3em] text-sm"
-                                >
-                                    {loading ? "Sincronizzando..." : isEditing ? "Aggiorna Impero" : "Fonda Impero"}
-                                </button>
                             </div>
+                        )}
 
-                            <Link href="/supporto" className="flex items-center justify-between glass hover:bg-white/5 p-8 rounded-[2.5rem] border border-white/5 transition-all group">
-                                <div className="flex items-center gap-4">
-                                   <FiHelpCircle className="text-oro text-2xl" />
-                                   <span className="text-sm font-black uppercase tracking-widest text-gray-400 group-hover:text-white">Dubbi sulla Strategia?</span>
+                        {/* STEPS 1, 2, 3: ARTIST SELECTION */}
+                        {(step === 1 || step === 2 || step === 3) && (
+                            <div className="space-y-12">
+                                <div className="text-center">
+                                    <h2 className="text-5xl md:text-7xl font-black tracking-tighter uppercase mb-2">
+                                        {step === 1 && <>Scegli il <span className="text-oro text-glow">Presentatore</span></>}
+                                        {step === 2 && <>Scegli l&apos;<span className="text-viola text-glow">Ospite</span></>}
+                                        {step === 3 && <>Scegli i tuoi <span className="text-ocra text-glow">3 Artisti</span></>}
+                                    </h2>
+                                    <p className="text-gray-500 font-medium italic">
+                                        {step === 1 && "La voce che guiderà la tua Piazza."}
+                                        {step === 2 && "Il tocco di classe della tua formazione."}
+                                        {step === 3 && "Il cuore pulsante del tuo quintetto."}
+                                    </p>
                                 </div>
-                                <FiArrowRight className="group-hover:translate-x-2 transition-transform text-oro" />
-                            </Link>
+
+                                <div className="relative max-w-xl mx-auto mb-16 group">
+                                    <FiSearch className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-600 group-focus-within:text-oro transition-colors" />
+                                    <input 
+                                        type="text" 
+                                        placeholder="Cerca un artista..."
+                                        value={searchTerm}
+                                        onChange={e => setSearchTerm(e.target.value)}
+                                        className="w-full glass border border-white/5 rounded-full py-5 pl-14 pr-8 focus:border-oro/40 outline-none transition-all shadow-xl"
+                                    />
+                                </div>
+
+                                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
+                                    {filteredArtists.map(artist => (
+                                        <SelectionArtistCard 
+                                            key={artist.id} 
+                                            artist={artist} 
+                                            isSelected={selectedArtists.some(a => a.id === artist.id)}
+                                            isDisabled={isExpired || (remainingBudget < artist.cost && !selectedArtists.some(a => a.id === artist.id))}
+                                            toggleArtist={toggleArtist}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* STEP 4: CAPTAIN */}
+                        {step === 4 && (
+                            <div className="max-w-4xl mx-auto space-y-12 text-center">
+                                <header>
+                                    <h2 className="text-6xl md:text-8xl font-black tracking-tighter uppercase mb-4">Nomina il <span className="text-oro">Capitano</span></h2>
+                                    <p className="text-gray-500 font-medium italic">Il capitano raddoppia i suoi punti! Scegli la tua punta di diamante.</p>
+                                </header>
+
+                                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 pt-10">
+                                    {selectedArtists.map(artist => (
+                                        <div 
+                                            key={artist.id}
+                                            onClick={() => setCaptainId(artist.id)}
+                                            className={`relative cursor-pointer rounded-[3rem] p-4 transition-all duration-500 group border-2 ${captainId === artist.id ? "glass-oro border-oro shadow-[0_0_50px_rgba(255,215,0,0.2)] scale-110 z-10" : "glass border-white/5 hover:border-white/20"}`}
+                                        >
+                                            <div className="aspect-square rounded-[2rem] overflow-hidden mb-4 border border-white/10 shadow-lg">
+                                                {artist.image ? (
+                                                    <img src={artist.image} alt={artist.name} className="w-full h-full object-cover" />
+                                                ) : (
+                                                    <div className="w-full h-full bg-black flex items-center justify-center text-4xl font-black opacity-10">{artist.name.charAt(0)}</div>
+                                                )}
+                                            </div>
+                                            <h3 className="font-black text-sm leading-tight mb-2 truncate px-2">{artist.name}</h3>
+                                            {captainId === artist.id && (
+                                                <div className="flex justify-center">
+                                                    <div className="bg-oro text-blunotte text-[7px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest shadow-xl">Capitano ★</div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* STEP 5: REVIEW */}
+                        {step === 5 && (
+                            <div className="max-w-4xl mx-auto space-y-12 pb-20">
+                                <header className="text-center">
+                                    <h2 className="text-6xl md:text-8xl font-black tracking-tighter uppercase mb-4">Ultimo <span className="text-oro">Riepilogo</span></h2>
+                                    <p className="text-gray-500 font-medium italic">Tutto pronto per dominare la Piazza?</p>
+                                </header>
+
+                                <div className="glass p-10 md:p-14 rounded-[4rem] border border-white/10 shadow-3xl space-y-12 relative overflow-hidden">
+                                    <div className="absolute top-0 right-0 w-64 h-64 bg-oro opacity-5 blur-[100px] -translate-y-1/2 translate-x-1/2" />
+                                    
+                                    <div className="flex flex-col md:flex-row items-center gap-10">
+                                        <div className="w-32 h-32 md:w-40 md:h-40 rounded-[3rem] overflow-hidden border-2 border-oro shadow-2xl shrink-0 group">
+                                            {teamImage ? <img src={teamImage} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" /> : <div className="w-full h-full bg-black flex items-center justify-center text-5xl font-black text-oro opacity-20">F</div>}
+                                        </div>
+                                        <div className="flex-1 text-center md:text-left">
+                                            <h3 className="text-4xl md:text-6xl font-black mb-2 tracking-tighter uppercase">{teamName}</h3>
+                                            <p className="text-oro font-black text-[10px] uppercase tracking-[0.4em]">Il tuo Impero è pronto per la Gara.</p>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="text-[10px] font-black text-gray-500 uppercase mb-2 tracking-widest">Budget Rimasto</p>
+                                            <p className="text-5xl font-black text-oro">{remainingBudget}<span className="text-sm opacity-20 ml-1">/100</span></p>
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                                        {selectedArtists.map(a => (
+                                            <div key={a.id} className="glass p-5 rounded-[2.5rem] border border-white/5 flex flex-col items-center text-center relative overflow-hidden">
+                                                <div className="w-16 h-16 rounded-2xl overflow-hidden mb-3 border border-white/10 shadow-md">
+                                                    {a.image && <img src={a.image} className="w-full h-full object-cover" />}
+                                                </div>
+                                                <p className="font-black text-[10px] truncate w-full mb-1">{a.name}</p>
+                                                <span className="text-[7px] font-black uppercase text-gray-600 tracking-widest">{a.type}</span>
+                                                {captainId === a.id && <FiStar className="absolute top-3 right-3 text-oro animate-pulse" size={14} />}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </motion.div>
+                </AnimatePresence>
+
+                {/* Footer Controls */}
+                <div className="fixed bottom-0 left-0 right-0 p-6 md:p-10 pointer-events-none z-[100]">
+                    <div className="max-w-6xl mx-auto flex justify-between items-center pointer-events-auto bg-blunotte/80 backdrop-blur-3xl p-4 md:p-6 rounded-[3rem] border border-white/10 shadow-2xl">
+                        <button
+                            onClick={prevStep}
+                            disabled={step === 0 || loading}
+                            className={`flex items-center gap-3 px-8 py-5 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all ${step === 0 ? "opacity-0 invisible" : "hover:bg-white/5 text-gray-500 hover:text-white"}`}
+                        >
+                            <FiArrowLeft /> Indietro
+                        </button>
+
+                        <div className="hidden md:flex gap-8 items-center glass-oro px-10 py-5 rounded-[2rem] border border-oro/10 shadow-xl">
+                             <div className="flex flex-col items-center">
+                                <span className="text-[7px] font-black text-gray-500 uppercase tracking-[0.3em] mb-1">Armoni Disponibili</span>
+                                <span className={`text-xl font-black ${remainingBudget < 0 ? "text-red-500" : "text-white"}`}>{remainingBudget}</span>
+                             </div>
+                             <div className="w-[1px] h-6 bg-white/10" />
+                             <div className="flex flex-col items-center">
+                                <span className="text-[7px] font-black text-gray-500 uppercase tracking-[0.3em] mb-1">Status Team</span>
+                                <span className="text-xl font-black text-white">{selectedArtists.length}<span className="text-xs opacity-30">/5</span></span>
+                             </div>
                         </div>
+
+                        {step === 5 ? (
+                            <button
+                                onClick={saveTeam}
+                                disabled={loading || isExpired}
+                                className="flex items-center gap-3 px-12 py-5 bg-gradient-to-r from-oro to-ocra text-blunotte rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-[0_20px_50px_rgba(255,215,0,0.3)] hover:scale-105 active:scale-95 transition-all"
+                            >
+                                {loading ? "Sincronizzazione..." : "Conferma Impero"} <FiCheck />
+                            </button>
+                        ) : (
+                            <button
+                                onClick={nextStep}
+                                disabled={loading}
+                                className="flex items-center gap-3 px-12 py-5 bg-oro text-blunotte rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-[0_20px_50px_rgba(255,215,0,0.3)] hover:scale-105 active:scale-95 transition-all"
+                            >
+                                Prosegui <FiArrowRight />
+                            </button>
+                        )}
                     </div>
                 </div>
 
+                {error && (
+                    <div className="fixed top-32 left-1/2 -translate-x-1/2 z-[200]">
+                        <motion.div 
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="bg-red-500 text-white px-8 py-5 rounded-[2rem] font-black text-[10px] uppercase tracking-widest shadow-3xl flex items-center gap-4"
+                        >
+                            <FiX size={20} />
+                            {error}
+                        </motion.div>
+                    </div>
+                )}
             </div>
         </main>
     );
@@ -473,77 +507,44 @@ function SelectionArtistCard({
     artist, 
     isSelected, 
     isDisabled, 
-    toggleArtist, 
-    captainId, 
-    setCaptainId 
+    toggleArtist 
 }: { 
     artist: Artist; 
     isSelected: boolean; 
     isDisabled: boolean; 
     toggleArtist: (a: Artist) => void; 
-    captainId: string | null;
-    setCaptainId: (id: string | null) => void;
 }) {
     return (
         <motion.div
             layout
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            whileHover={{ scale: isDisabled ? 1 : 1.03 }}
             onClick={() => !isDisabled && toggleArtist(artist)}
-            className={`group relative rounded-[2rem] md:rounded-[3rem] border-2 transition-all p-3 md:p-6 overflow-hidden cursor-pointer flex flex-col h-full
+            className={`group relative rounded-[2.5rem] md:rounded-[3.5rem] border-2 transition-all p-4 md:p-6 cursor-pointer flex flex-col h-full
                 ${isSelected 
-                    ? "glass-oro border-oro shadow-[0_10px_30px_rgba(255,215,0,0.15)]" 
+                    ? "glass-oro border-oro shadow-[0_10px_40px_rgba(255,215,0,0.15)] scale-105 z-10" 
                     : isDisabled ? "bg-gray-900/50 border-white/5 opacity-20 grayscale cursor-not-allowed" : "glass border-white/10 hover:border-oro/30"
                 }
             `}
         >
-            <div className="flex flex-col h-full space-y-3 md:space-y-6">
+            <div className="flex flex-col h-full space-y-4 md:space-y-6">
                 <div className="flex justify-between items-start">
                     <div className="overflow-hidden">
-                        <h3 className="font-black text-sm md:text-2xl leading-[0.9] mb-1 truncate">{artist.name}</h3>
-                        <span className={`text-[7px] md:text-[9px] font-black uppercase tracking-[0.2em] 
-                            ${artist.type === 'PRESENTATORE' ? 'text-oro' : artist.type === 'OSPITE' ? 'text-viola' : 'text-ocra'}
-                        `}>
-                            {artist.type}
-                        </span>
-                    </div>
-                    <div className="text-right shrink-0">
-                        <div className="bg-oro px-3 py-1.5 md:px-4 md:py-2 rounded-xl md:rounded-2xl shadow-xl flex flex-col items-end">
-                            <p className="text-xs md:text-xl font-black tracking-tighter leading-none text-blunotte">{artist.cost}</p>
-                            <p className="text-[6px] md:text-[8px] font-black text-blunotte/70 uppercase tracking-widest">Armoni</p>
+                        <h3 className="font-black text-[10px] md:text-xl leading-[0.9] mb-1 truncate">{artist.name}</h3>
+                        <div className="bg-oro/10 px-2 py-1 rounded-md inline-block">
+                             <span className="text-[7px] md:text-[9px] font-black uppercase text-oro tracking-widest">
+                                {artist.cost} Armoni
+                            </span>
                         </div>
                     </div>
+                    {isSelected && <FiCheck className="text-oro" size={24} />}
                 </div>
 
-                <div className="aspect-[4/5] w-full rounded-2xl md:rounded-[2rem] bg-black overflow-hidden border border-white/10 shadow-2xl relative">
+                <div className="aspect-[4/5] w-full rounded-[2rem] bg-black overflow-hidden border border-white/10 shadow-2xl relative">
                     {artist.image ? (
                         <img src={artist.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                     ) : (
                         <div className="w-full h-full flex items-center justify-center text-2xl md:text-5xl font-black opacity-[0.03]">{artist.name.charAt(0)}</div>
                     )}
-                    {isSelected && (
-                        <div className="absolute inset-0 bg-oro/10 backdrop-blur-[1px] flex items-center justify-center">
-                            <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="bg-oro text-blunotte p-2 md:p-4 rounded-xl md:rounded-2xl shadow-2xl">
-                                <FiCheck size={16} />
-                            </motion.div>
-                        </div>
-                    )}
                 </div>
-
-                {isSelected && (
-                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex justify-between items-center pt-1 md:pt-2">
-                        <button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                setCaptainId(artist.id);
-                            }}
-                            className={`flex-1 py-2 md:py-4 rounded-xl md:rounded-2xl text-[8px] md:text-[10px] font-black uppercase tracking-widest transition-all ${captainId === artist.id ? "bg-oro text-blunotte shadow-xl" : "bg-white/10 text-white hover:bg-white/20 border border-white/10"}`}
-                        >
-                            {captainId === artist.id ? "★ Capitano" : "Capitano"}
-                        </button>
-                    </motion.div>
-                )}
             </div>
         </motion.div>
     );
