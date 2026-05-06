@@ -55,7 +55,11 @@ h1, h2, h3, .font-display {
 }
 
 .bento-card {
-  @apply glass rounded-[2.5rem] p-10 relative overflow-hidden transition-all duration-500 hover:border-white/20 hover:bg-white/[0.04] group;
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  @apply rounded-[2.5rem] p-10 relative overflow-hidden transition-all duration-500 hover:border-white/20 hover:bg-white/[0.04] group;
 }
 
 .text-glow {
