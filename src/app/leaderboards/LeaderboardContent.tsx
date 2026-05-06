@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiUsers, FiStar, FiTrendingUp, FiAward, FiX, FiCheck, FiShare2, FiZap } from "react-icons/fi";
 import SocialShare from "@/components/SocialShare";
@@ -199,23 +200,27 @@ export default function LeaderboardsPage({ initialLeagues, initialArtists }: { i
                 </motion.div>
 
                 {/* Modals are revolutionized too (via glassmorphism) */}
-                <AnimatePresence>
+                <AnimatePresence mode="wait">
                     {selectedTeam && (
-                        <TeamModal 
-                            teamResult={selectedTeam} 
-                            onClose={() => setSelectedTeam(null)} 
-                            onArtistClick={handleArtistClick}
-                        />
+                        <ModalPortal>
+                            <TeamModal 
+                                teamResult={selectedTeam} 
+                                onClose={() => setSelectedTeam(null)} 
+                                onArtistClick={handleArtistClick}
+                            />
+                        </ModalPortal>
                     )}
                 </AnimatePresence>
 
-                <AnimatePresence>
+                <AnimatePresence mode="wait">
                     {selectedArtist && (
-                        <ArtistModal 
-                            artist={selectedArtist} 
-                            onClose={() => setSelectedArtist(null)} 
-                            loading={detailLoading}
-                        />
+                        <ModalPortal>
+                            <ArtistModal 
+                                artist={selectedArtist} 
+                                onClose={() => setSelectedArtist(null)} 
+                                loading={detailLoading}
+                            />
+                        </ModalPortal>
                     )}
                 </AnimatePresence>
 
@@ -530,4 +535,17 @@ function ArtistModal({ artist, onClose, loading }: { artist: Artist, onClose: ()
             </motion.div>
         </div>
     );
+}
+
+function ModalPortal({ children }: { children: React.ReactNode }) {
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+        return () => setMounted(false);
+    }, []);
+
+    if (!mounted) return null;
+
+    return createPortal(children, document.body);
 }
