@@ -1,11 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #0a0f1c;
+  --background: #050811;
   --foreground: #f8fafc;
   --oro: #FFD700;
   --ocra: #CC7722;
-  --blunotte: #0a0f1c;
+  --blunotte: #050811;
   --viola: #581c87;
   --accent-glow: rgba(255, 215, 0, 0.15);
 }
@@ -13,7 +14,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: 'Inter', var(--font-geist-sans);
+  --font-display: 'Outfit', sans-serif;
   --font-mono: var(--font-geist-mono);
 
   --color-oro: var(--oro);
@@ -25,39 +27,48 @@
 body {
   background-color: var(--background);
   background-image: 
-    radial-gradient(circle at 0% 0%, rgba(88, 28, 135, 0.1) 0%, transparent 40%),
-    radial-gradient(circle at 100% 100%, rgba(204, 119, 34, 0.05) 0%, transparent 40%);
+    radial-gradient(circle at 50% -20%, rgba(88, 28, 135, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 0% 100%, rgba(204, 119, 34, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 100% 0%, rgba(255, 215, 0, 0.03) 0%, transparent 30%);
   background-attachment: fixed;
   color: var(--foreground);
   font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Glassmorphism Utilities */
+h1, h2, h3, .font-display {
+  font-family: 'Outfit', sans-serif;
+}
+
+/* Glassmorphism Evolution */
 .glass {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
 }
 
 .glass-oro {
-  background: rgba(255, 215, 0, 0.05);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 215, 0, 0.2);
+  background: radial-gradient(circle at top left, rgba(255, 215, 0, 0.08), rgba(255, 215, 0, 0.01));
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 215, 0, 0.15);
 }
 
-/* Typography Revolution */
-h1, h2, h3 {
-  letter-spacing: -0.04em;
+.bento-card {
+  @apply glass rounded-[2.5rem] p-10 relative overflow-hidden transition-all duration-500 hover:border-white/20 hover:bg-white/[0.04] group;
 }
 
 .text-glow {
   text-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
 }
 
+.text-glow-purple {
+  text-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+}
+
 /* Scrollbar Revolution */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
@@ -67,34 +78,29 @@ h1, h2, h3 {
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: rgba(255, 215, 0, 0.1);
   border-radius: 10px;
-  border: 2px solid transparent;
-  background-clip: content-box;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 215, 0, 0.3);
-  border: 2px solid transparent;
-  background-clip: content-box;
-}
-
-/* Hide scrollbar */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
 }
 
 /* Animations */
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-15px) rotate(1deg); }
 }
 
 .animate-float {
-  animation: float 4s ease-in-out infinite;
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.05); }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 4s ease-in-out infinite;
 }
 
 @keyframes marquee {
@@ -103,5 +109,5 @@ h1, h2, h3 {
 }
 
 .animate-marquee {
-  animation: marquee 30s linear infinite;
+  animation: marquee 40s linear infinite;
 }

@@ -55,17 +55,23 @@ export default function CountdownTimer({ targetDate }: { targetDate: string | nu
 
     return (
         <div className="flex flex-col items-center">
-            <p className="text-sm text-gray-400 font-medium mb-2 uppercase tracking-widest">Scadenza Iscrizioni</p>
-            <div className="flex gap-4">
+            <div className="flex gap-3 md:gap-6">
                 {[
                     { label: "Giorni", value: timeLeft.days },
                     { label: "Ore", value: timeLeft.hours },
-                    { label: "Min.", value: timeLeft.minutes },
-                    { label: "Sec.", value: timeLeft.seconds }
+                    { label: "Minuti", value: timeLeft.minutes },
+                    { label: "Secondi", value: timeLeft.seconds }
                 ].map((item, idx) => (
-                    <div key={idx} className="flex flex-col items-center bg-[#0a0f1c]/80 backdrop-blur-md border border-gray-700 p-3 w-20 rounded-xl shadow-lg">
-                        <span className="text-2xl font-mono font-bold text-oro">{item.value.toString().padStart(2, "0")}</span>
-                        <span className="text-xs text-gray-500 uppercase">{item.label}</span>
+                    <div key={idx} className="flex flex-col items-center group">
+                        <div className="bg-white/5 backdrop-blur-xl border border-white/10 w-20 h-20 md:w-28 md:h-28 rounded-2xl md:rounded-3xl flex items-center justify-center shadow-2xl relative overflow-hidden transition-all group-hover:border-oro/30 group-hover:bg-white/[0.08]">
+                            <div className="absolute inset-0 bg-gradient-to-br from-oro/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <span className="font-display text-3xl md:text-5xl font-black text-oro text-glow relative z-10">
+                                {item.value.toString().padStart(2, "0")}
+                            </span>
+                        </div>
+                        <span className="text-[10px] md:text-xs text-gray-500 font-bold uppercase tracking-[0.2em] mt-4 opacity-80 group-hover:text-oro group-hover:opacity-100 transition-all">
+                            {item.label}
+                        </span>
                     </div>
                 ))}
             </div>
