@@ -249,15 +249,15 @@ export default function CreateTeamPage() {
 
             <div className="max-w-6xl mx-auto px-4 md:px-6 relative z-10">
                 
-                {/* Main Selection Container */}
-                <div className="glass rounded-[3rem] md:rounded-[4rem] border border-white/10 shadow-3xl overflow-hidden flex flex-col bg-white/[0.02] backdrop-blur-3xl">
+                {/* Main Selection Container - REMOVED overflow-hidden to allow glows to breathe */}
+                <div className="glass rounded-[3rem] md:rounded-[4rem] border border-white/10 shadow-3xl flex flex-col bg-white/[0.02] backdrop-blur-3xl relative">
                     
                     {/* Stepper Header (Inside Container) */}
                     <div className="p-8 md:p-12 border-b border-white/5 bg-white/[0.02]">
-                        <div className="flex justify-between items-center overflow-x-auto pb-2 gap-4 no-scrollbar">
+                        <div className="flex justify-between items-center overflow-x-auto py-6 gap-4 no-scrollbar">
                             {steps.map((s, i) => (
                                 <div key={i} className={`flex flex-col items-center min-w-fit transition-all duration-500 ${i === step ? "scale-110" : i < step ? "opacity-50" : "opacity-20"}`}>
-                                    <div className={`w-10 h-10 md:w-12 md:h-12 rounded-2xl flex items-center justify-center border-2 mb-3 transition-all ${i === step ? "bg-oro border-oro text-blunotte shadow-[0_0_25px_rgba(255,215,0,0.4)]" : "border-white/10"}`}>
+                                    <div className={`w-10 h-10 md:w-12 md:h-12 rounded-2xl flex items-center justify-center border-2 mb-3 transition-all ${i === step ? "bg-oro border-oro text-blunotte shadow-[0_0_30px_rgba(255,215,0,0.6)]" : "border-white/10"}`}>
                                         <s.icon size={i === step ? 20 : 16} />
                                     </div>
                                     <span className="text-[8px] md:text-[9px] font-black uppercase tracking-widest">{s.title}</span>
@@ -280,7 +280,7 @@ export default function CreateTeamPage() {
                                 {step === 0 && (
                                     <div className="max-w-3xl mx-auto text-center space-y-12">
                                         <header>
-                                            <h1 className="text-5xl md:text-8xl font-black tracking-tighter mb-4 uppercase">Fonda il tuo <span className="text-oro">Impero</span></h1>
+                                            <h1 className="text-5xl md:text-8xl font-black tracking-tighter mb-4 uppercase">Fonda il tuo <span className="text-oro text-glow">Impero</span></h1>
                                             <p className="text-gray-500 font-medium italic">Scegli un nome epico e un&apos;immagine 1:1 per la tua squadra.</p>
                                         </header>
 
@@ -292,7 +292,7 @@ export default function CreateTeamPage() {
                                                     value={teamName}
                                                     onChange={e => setTeamName(e.target.value)}
                                                     placeholder="Nome della tua Squadra..."
-                                                    className="relative w-full bg-white/[0.03] border border-white/10 rounded-[2.5rem] px-8 py-8 md:px-12 md:py-10 text-2xl md:text-4xl font-black text-center focus:border-oro outline-none transition-all placeholder:opacity-20"
+                                                    className="relative w-full bg-white/[0.03] border border-white/10 rounded-[2.5rem] px-8 py-8 md:px-12 md:py-10 text-2xl md:text-4xl font-black text-center focus:border-oro outline-none transition-all placeholder:opacity-20 shadow-2xl"
                                                 />
                                             </div>
 
@@ -328,9 +328,9 @@ export default function CreateTeamPage() {
                                     <div className="space-y-12">
                                         <div className="text-center">
                                             <h2 className="text-5xl md:text-7xl font-black tracking-tighter uppercase mb-2">
-                                                {step === 1 && <>Scegli il <span className="text-oro">Presentatore</span></>}
-                                                {step === 2 && <>Scegli l&apos;<span className="text-viola">Ospite</span></>}
-                                                {step === 3 && <>Scegli i tuoi <span className="text-ocra">3 Artisti</span></>}
+                                                {step === 1 && <>Scegli il <span className="text-oro text-glow">Presentatore</span></>}
+                                                {step === 2 && <>Scegli l&apos;<span className="text-viola text-glow">Ospite</span></>}
+                                                {step === 3 && <>Scegli i tuoi <span className="text-ocra text-glow">3 Artisti</span></>}
                                             </h2>
                                             <p className="text-gray-500 font-medium italic">
                                                 {step === 1 && "La voce che guiderà la tua Piazza."}
@@ -368,7 +368,7 @@ export default function CreateTeamPage() {
                                 {step === 4 && (
                                     <div className="max-w-4xl mx-auto space-y-12 text-center">
                                         <header>
-                                            <h2 className="text-6xl md:text-8xl font-black tracking-tighter uppercase mb-4">Nomina il <span className="text-oro">Capitano</span></h2>
+                                            <h2 className="text-6xl md:text-8xl font-black tracking-tighter uppercase mb-4">Nomina il <span className="text-oro text-glow">Capitano</span></h2>
                                             <p className="text-gray-500 font-medium italic">Il capitano raddoppia i suoi punti! Scegli la tua punta di diamante.</p>
                                         </header>
 
@@ -377,7 +377,7 @@ export default function CreateTeamPage() {
                                                 <div 
                                                     key={artist.id}
                                                     onClick={() => setCaptainId(artist.id)}
-                                                    className={`relative cursor-pointer rounded-[3rem] p-4 transition-all duration-500 group border-2 ${captainId === artist.id ? "bg-oro/[0.05] border-oro shadow-[0_0_50px_rgba(255,215,0,0.2)] scale-110 z-10" : "bg-white/[0.03] border-white/5 hover:border-white/20"}`}
+                                                    className={`relative cursor-pointer rounded-[3rem] p-4 transition-all duration-500 group border-2 ${captainId === artist.id ? "bg-oro/[0.05] border-oro shadow-[0_0_50px_rgba(255,215,0,0.3)] scale-110 z-10" : "bg-white/[0.03] border-white/5 hover:border-white/20"}`}
                                                 >
                                                     <div className="aspect-square rounded-[2rem] overflow-hidden mb-4 border border-white/10 shadow-lg">
                                                         {artist.image ? (
@@ -402,7 +402,7 @@ export default function CreateTeamPage() {
                                 {step === 5 && (
                                     <div className="max-w-4xl mx-auto space-y-12">
                                         <header className="text-center">
-                                            <h2 className="text-6xl md:text-8xl font-black tracking-tighter uppercase mb-4">Ultimo <span className="text-oro">Riepilogo</span></h2>
+                                            <h2 className="text-6xl md:text-8xl font-black tracking-tighter uppercase mb-4">Ultimo <span className="text-oro text-glow">Riepilogo</span></h2>
                                             <p className="text-gray-500 font-medium italic">Tutto pronto per dominare la Piazza?</p>
                                         </header>
 
@@ -431,7 +431,7 @@ export default function CreateTeamPage() {
                                                         </div>
                                                         <p className="font-black text-[10px] truncate w-full mb-1">{a.name}</p>
                                                         <span className="text-[7px] font-black uppercase text-gray-600 tracking-widest">{a.type}</span>
-                                                        {captainId === a.id && <FiStar className="absolute top-3 right-3 text-oro" size={14} />}
+                                                        {captainId === a.id && <FiStar className="absolute top-3 right-3 text-oro animate-pulse" size={14} />}
                                                     </div>
                                                 ))}
                                             </div>
