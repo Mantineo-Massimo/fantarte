@@ -62,16 +62,16 @@ export async function POST(req: Request) {
 
         // ROLE VALIDATION: 1 Presentatore, 1 Ospite, 3 Artisti
         const counts = {
-            PRESENTATORE: artists.filter(a => a.type === "PRESENTATORE").length,
-            OSPITE: artists.filter(a => a.type === "OSPITE").length,
-            ARTISTA: artists.filter(a => a.type === "ARTISTA").length,
+            PRESENTATORE: artists.filter((a: any) => a.type === "PRESENTATORE").length,
+            OSPITE: artists.filter((a: any) => a.type === "OSPITE").length,
+            ARTISTA: artists.filter((a: any) => a.type === "ARTISTA").length,
         };
 
         if (counts.PRESENTATORE !== 1 || counts.OSPITE !== 1 || counts.ARTISTA !== 3) {
             return new NextResponse("Composizione squadra non valida: servono 1 presentatore, 1 ospite e 3 artisti.", { status: 400 });
         }
 
-        const totalCost = artists.reduce((sum, artist) => sum + artist.cost, 0);
+        const totalCost = artists.reduce((sum: number, artist: any) => sum + artist.cost, 0);
         if (totalCost > 100) {
             return new NextResponse("Budget superato (max 100 Armoni).", { status: 400 });
         }
@@ -109,12 +109,12 @@ export async function POST(req: Request) {
                     userId: user.id,
                     captainId: captainId || null,
                     artists: {
-                        connect: artists.map(a => ({ id: a.id }))
+                        connect: artists.map((a: any) => ({ id: a.id }))
                     }
                 }
             });
 
-            const teamLeaguesData = leagues.map(league => ({
+            const teamLeaguesData = leagues.map((league: any) => ({
                 teamId: newTeam.id,
                 leagueId: league.id,
                 score: initialScore
@@ -203,16 +203,16 @@ export async function PUT(req: Request) {
 
         // ROLE VALIDATION
         const counts = {
-            PRESENTATORE: artists.filter(a => a.type === "PRESENTATORE").length,
-            OSPITE: artists.filter(a => a.type === "OSPITE").length,
-            ARTISTA: artists.filter(a => a.type === "ARTISTA").length,
+            PRESENTATORE: artists.filter((a: any) => a.type === "PRESENTATORE").length,
+            OSPITE: artists.filter((a: any) => a.type === "OSPITE").length,
+            ARTISTA: artists.filter((a: any) => a.type === "ARTISTA").length,
         };
 
         if (counts.PRESENTATORE !== 1 || counts.OSPITE !== 1 || counts.ARTISTA !== 3) {
             return new NextResponse("Composizione squadra non valida.", { status: 400 });
         }
 
-        const totalCost = artists.reduce((sum, artist) => sum + artist.cost, 0);
+        const totalCost = artists.reduce((sum: number, artist: any) => sum + artist.cost, 0);
         if (totalCost > 100) {
             return new NextResponse("Budget superato.", { status: 400 });
         }
