@@ -30,48 +30,38 @@ export default function CookieConsent() {
         <AnimatePresence>
             {isVisible && (
                 <motion.div
-                    initial={{ opacity: 0, y: 100, scale: 0.9 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 100, scale: 0.9 }}
-                    className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[9999] w-[95%] max-w-2xl"
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 50 }}
+                    className="fixed bottom-6 right-6 z-[10000] w-[calc(100%-3rem)] max-w-lg"
                 >
-                    <div className="glass p-8 md:p-10 rounded-[2.5rem] border border-white/10 shadow-[0_50px_100px_rgba(0,0,0,0.5)] flex flex-col md:flex-row items-center gap-8 relative overflow-hidden">
-                        {/* Decorative Background */}
-                        <div className="absolute top-0 left-0 w-32 h-32 bg-oro/10 blur-3xl -translate-x-1/2 -translate-y-1/2" />
-                        
-                        <div className="w-16 h-16 rounded-2xl bg-oro/10 flex items-center justify-center shrink-0 border border-oro/20 text-oro">
-                            <FiShield size={32} />
+                    <div className="bg-[#131d36]/95 backdrop-blur-2xl p-6 rounded-[2rem] border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col sm:flex-row items-start sm:items-center gap-6 relative overflow-hidden">
+                        <div className="w-12 h-12 rounded-xl bg-oro/10 flex items-center justify-center shrink-0 border border-oro/20 text-oro">
+                            <FiShield size={24} />
                         </div>
 
-                        <div className="flex-1 space-y-2 text-center md:text-left">
-                            <h3 className="text-xl font-black tracking-tighter text-white uppercase">Esperienza Personalizzata</h3>
-                            <p className="text-gray-400 text-sm leading-relaxed">
-                                Utilizziamo i cookie per migliorare la tua esperienza nella Piazza dell&apos;Arte. 
-                                Continuando a navigare, accetti la nostra <Link href="/privacy" className="text-oro hover:underline font-bold">Privacy Policy</Link> e l&apos;uso dei cookie.
+                        <div className="flex-1 space-y-1">
+                            <h3 className="text-sm font-black tracking-widest text-white uppercase">Cookie</h3>
+                            <p className="text-gray-400 text-xs leading-relaxed">
+                                Utilizziamo i cookie per migliorare la tua esperienza. 
+                                <Link href="/privacy" className="text-oro hover:underline font-bold ml-1">Privacy Policy</Link>
                             </p>
                         </div>
 
-                        <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-                            <button
-                                onClick={declineCookies}
-                                className="px-8 py-4 rounded-2xl border border-white/10 text-gray-400 font-bold text-xs uppercase tracking-widest hover:bg-white/5 transition-all"
-                            >
-                                Rifiuta
-                            </button>
+                        <div className="flex gap-2 w-full sm:w-auto">
                             <button
                                 onClick={acceptCookies}
-                                className="px-8 py-4 rounded-2xl bg-oro text-blunotte font-black text-xs uppercase tracking-widest hover:bg-white transition-all shadow-[0_10px_30px_rgba(255,215,0,0.2)] flex items-center justify-center gap-2"
+                                className="flex-1 sm:flex-none px-6 py-3 rounded-xl bg-oro text-blunotte font-black text-[10px] uppercase tracking-widest hover:bg-white transition-all shadow-lg"
                             >
-                                <FiCheck size={16} />
-                                Accetta Tutto
+                                Accetta
                             </button>
                         </div>
 
                         <button 
                             onClick={() => setIsVisible(false)}
-                            className="absolute top-4 right-4 text-gray-600 hover:text-white transition-colors"
+                            className="absolute top-3 right-3 text-gray-500 hover:text-white transition-colors"
                         >
-                            <FiX size={18} />
+                            <FiX size={16} />
                         </button>
                     </div>
                 </motion.div>
