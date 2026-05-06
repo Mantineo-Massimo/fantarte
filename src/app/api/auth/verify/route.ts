@@ -18,6 +18,10 @@ export async function GET(req: Request) {
             return new NextResponse("Token non valido o scaduto", { status: 400 });
         }
 
+        if (user.emailVerified) {
+            return NextResponse.json({ message: "Email già verificata" }, { status: 200 });
+        }
+
         await prisma.user.update({
             where: { id: user.id },
             data: {
@@ -26,8 +30,7 @@ export async function GET(req: Request) {
             }
         });
 
-        // Redirect to login with success message
-        return NextResponse.redirect(new URL("/auth/login?verified=true", req.url));
+        return NextResponse.json({ success: true });
 
     } catch (error) {
         console.error("VERIFY_ERROR", error);
