@@ -241,8 +241,10 @@ function PodiumCard({ rank, data, type, featured, onClick }: { rank: number, dat
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: rank * 0.1 }}
             onClick={onClick}
-            className={`relative glass p-10 rounded-[3.5rem] border border-white/10 flex flex-col items-center text-center cursor-pointer group hover:bg-white/5 transition-all
-                ${featured ? "md:scale-110 md:-translate-y-12 z-20 shadow-[0_30px_100px_rgba(0,0,0,0.5)]" : "z-10"}
+            className={`relative p-10 rounded-[3.5rem] border flex flex-col items-center text-center cursor-pointer group transition-all duration-500
+                ${featured 
+                    ? "bg-blunotte/98 md:scale-110 md:-translate-y-12 z-20 shadow-[0_30px_100px_rgba(0,0,0,0.8)] border-oro/30 backdrop-blur-3xl" 
+                    : "bg-blunotte/90 z-10 border-white/10 backdrop-blur-2xl hover:bg-blunotte/95"}
             `}
         >
             <div className={`absolute -top-6 w-12 h-12 rounded-full flex items-center justify-center font-black shadow-2xl border-2
