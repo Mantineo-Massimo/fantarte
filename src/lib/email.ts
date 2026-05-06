@@ -1,41 +1,33 @@
-import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
+import { Resend } from "resend";
 
-const SES_CONFIG = {
-    region: process.env.AWS_REGION || "eu-west-1",
-    credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
-    },
-};
+let resend: Resend | null = null;
 
-const sesClient = new SESClient(SES_CONFIG);
+function getResendClient() {
+    if (!resend) {
+        resend = new Resend(process.env.RESEND_API_KEY);
+    }
+    return resend;
+}
 
 export async function sendEmail({ to, subject, body }: { to: string; subject: string; body: string }) {
-    const params = {
-        Destination: {
-            ToAddresses: [to],
-        },
-        Message: {
-            Body: {
-                Html: {
-                    Charset: "UTF-8",
-                    Data: body,
-                },
-            },
-            Subject: {
-                Charset: "UTF-8",
-                Data: subject,
-            },
-        },
-        Source: process.env.EMAIL_FROM || "no-reply@fantarte.it",
-    };
-
     try {
-        const command = new SendEmailCommand(params);
-        const result = await sesClient.send(command);
-        return { success: true, result };
+        const client = getResendClient();
+        const { data, error } = await client.emails.send({
+            from: process.env.EMAIL_FROM || "onboarding@resend.dev",
+            to: [to],
+            subject: subject,
+            html: body,
+        });
+
+        if (error) {
+            console.error("EMAIL_SEND_ERROR", error);
+            return { success: false, error };
+        }
+
+        return { success: true, result: data };
     } catch (error) {
         console.error("EMAIL_SEND_ERROR", error);
         return { success: false, error };
     }
 }
+
