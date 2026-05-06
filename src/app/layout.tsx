@@ -17,20 +17,20 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "FantArte | Morgana e Orum",
-  description: "Costruisci la tua squadra, scommetti sui tuoi Armoni e conquista la Classifica Generale delle associazioni Morgana e Orum.",
-  metadataBase: new URL(process.env.NEXTAUTH_URL || "https://fantarte.it"),
+  title: "FantArte | Piazza dell'Arte 2026",
+  description: "Crea la tua squadra, scegli i tuoi partecipanti e scala la classifica della Piazza dell'Arte di Messina.",
+  metadataBase: new URL("https://fantarte.it"),
   openGraph: {
-    title: "FantArte | Il gioco d'arte delle associazioni Morgana e Orum",
-    description: "Crea la tua squadra, scegli i tuoi Armoni e scala la classifica della Piazza!",
-    url: "/",
+    title: "FantArte | Il Gioco Ufficiale della Piazza dell'Arte",
+    description: "Fonda il tuo quintetto, gestisci i tuoi Armoni e sfida gli altri partecipanti. Il fantagioco dove l'arte prende vita.",
+    url: "https://fantarte.it",
     siteName: "FantArte",
     images: [
       {
-        url: "/fanta-logo.png",
+        url: "/og-preview.png",
         width: 1200,
-        height: 630,
-        alt: "FantArte Logo",
+        height: 1200,
+        alt: "FantArte Preview",
       },
     ],
     locale: "it_IT",
@@ -38,9 +38,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "FantArte | Morgana e Orum",
+    title: "FantArte | Piazza dell'Arte",
     description: "Il Fantagioco dove l'Arte incontra la Piazza",
-    images: ["/fanta-logo.png"],
+    images: ["/og-preview.png"],
   },
   icons: {
     icon: [
