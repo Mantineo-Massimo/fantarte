@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { FiUsers, FiStar, FiTrendingUp, FiAward, FiArrowRight, FiInfo, FiMessageCircle } from "react-icons/fi";
+import { FiUsers, FiStar, FiTrendingUp, FiAward, FiArrowRight, FiInfo, FiMessageCircle, FiInstagram, FiFacebook } from "react-icons/fi";
 import CountdownTimer from "@/components/CountdownTimer";
 
 const fadeIn = {
