@@ -65,7 +65,7 @@ export default function Navbar() {
                             alt="FantArte"
                             width={300}
                             height={120}
-                            className={`w-auto transition-all duration-300 ${scrolled ? "h-12" : "h-24"}`}
+                            className={`w-auto transition-all duration-300 ${scrolled ? "h-9" : "h-14"}`}
                         />
                     </Link>
 
