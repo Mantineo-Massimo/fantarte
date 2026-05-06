@@ -12,7 +12,12 @@ export async function GET() {
         if (!user || user.role !== "ADMIN") return new NextResponse("Forbidden", { status: 403 });
 
         const users = await prisma.user.findMany({
-            include: {
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                role: true,
+                createdAt: true,
                 team: {
                     include: {
                         artists: true
@@ -60,7 +65,11 @@ export async function PUT(req: Request) {
         const updatedUser = await prisma.user.update({
             where: { id },
             data: updateData,
-            include: {
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                role: true,
                 team: true
             }
         });
