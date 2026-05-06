@@ -125,9 +125,29 @@ export default function Home() {
               <FiMessageCircle className="text-ocra text-5xl mb-10 group-hover:scale-110 transition-transform duration-500" />
               <h2 className="text-3xl md:text-5xl font-black tracking-tighter mb-6 uppercase">Unisciti alla <span className="text-ocra">Piazza</span></h2>
               <p className="text-gray-400 leading-relaxed mb-10">Segui le associazioni per aggiornamenti in tempo reale sui punteggi.</p>
-              <div className="flex gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-oro hover:text-blunotte hover:border-oro cursor-pointer transition-all duration-300">IG</div>
-                <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-oro hover:text-blunotte hover:border-oro cursor-pointer transition-all duration-300">FB</div>
+              <div className="space-y-6">
+                <div className="flex items-center gap-4">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-gray-500 w-16">Morgana</span>
+                  <div className="flex gap-3">
+                    <a href="https://www.instagram.com/associazione.morgana" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-oro hover:text-blunotte hover:border-oro transition-all duration-300">
+                      <FiInstagram size={20} />
+                    </a>
+                    <a href="https://www.facebook.com/Morgana.Associazione/" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-oro hover:text-blunotte hover:border-oro transition-all duration-300">
+                      <FiFacebook size={20} />
+                    </a>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-gray-500 w-16">O.R.U.M.</span>
+                  <div className="flex gap-3">
+                    <a href="https://www.instagram.com/orum_unime" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-oro hover:text-blunotte hover:border-oro transition-all duration-300">
+                      <FiInstagram size={20} />
+                    </a>
+                    <a href="https://www.facebook.com/AssociazioneOrum/" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-oro hover:text-blunotte hover:border-oro transition-all duration-300">
+                      <FiFacebook size={20} />
+                    </a>
+                  </div>
+                </div>
               </div>
             </motion.div>
 

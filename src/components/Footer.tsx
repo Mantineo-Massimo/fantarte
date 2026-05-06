@@ -41,10 +41,21 @@ export default function Footer() {
                             nella <span className="text-white">Piazza dell&apos;Arte</span> di Messina.
                         </p>
                         
-                        <div className="flex gap-3">
-                            <SocialIcon icon={FiInstagram} href="#" />
-                            <SocialIcon icon={FiFacebook} href="#" />
-                            <SocialIcon icon={FiMail} href="mailto:associazione.morgana@gmail.com" />
+                        <div className="space-y-4">
+                            <div className="flex items-center gap-4">
+                                <span className="text-[10px] font-black uppercase tracking-widest text-gray-600">Morgana:</span>
+                                <div className="flex gap-2">
+                                    <SocialIcon icon={FiInstagram} href="https://www.instagram.com/associazione.morgana" />
+                                    <SocialIcon icon={FiFacebook} href="https://www.facebook.com/Morgana.Associazione/" />
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-4">
+                                <span className="text-[10px] font-black uppercase tracking-widest text-gray-600">O.R.U.M:</span>
+                                <div className="flex gap-2">
+                                    <SocialIcon icon={FiInstagram} href="https://www.instagram.com/orum_unime" />
+                                    <SocialIcon icon={FiFacebook} href="https://www.facebook.com/AssociazioneOrum/" />
+                                </div>
+                            </div>
                         </div>
                     </div>
 
