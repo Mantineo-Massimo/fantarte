@@ -56,21 +56,21 @@ export default function ArtistsPage() {
                 {/* Header Section */}
                 <header className="max-w-7xl mx-auto mb-20">
                     <motion.div initial="initial" animate="animate" variants={stagger} className="flex flex-col items-center text-center">
-                        <motion.div variants={fadeIn} className="mb-6">
+                        <div className="mb-6">
                             <Link href="/" className="inline-flex items-center gap-2 text-oro hover:text-white transition-colors font-black uppercase tracking-[0.3em] text-[10px]">
                                 <FiArrowLeft /> Torna alla Home
                             </Link>
-                        </motion.div>
-                        <motion.h1 variants={fadeIn} className="text-5xl sm:text-7xl md:text-8xl font-black tracking-tighter leading-none mb-6">
+                        </div>
+                        <h1 className="text-5xl sm:text-7xl md:text-8xl font-black tracking-tighter leading-none mb-6">
                             Il Cast <br />
                             <span className="text-oro drop-shadow-[0_0_30px_rgba(255,215,0,0.3)]">Rivoluzionario</span>
-                        </motion.h1>
-                        <motion.p variants={fadeIn} className="text-gray-400 text-lg max-w-2xl font-medium mb-12">
+                        </h1>
+                        <p className="text-gray-400 text-lg max-w-2xl font-medium mb-12">
                             Scopri i protagonisti della Piazza dell&apos;Arte. Scegli saggiamente il tuo quintetto per dominare la classifica.
-                        </motion.p>
+                        </p>
 
                         {/* Search Bar */}
-                        <motion.div variants={fadeIn} className="w-full max-w-xl relative group">
+                        <div className="w-full max-w-xl relative group">
                             <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none text-gray-500 group-focus-within:text-oro transition-colors">
                                 <FiSearch size={20} />
                             </div>
@@ -81,7 +81,7 @@ export default function ArtistsPage() {
                                 onChange={(e) => setSearch(e.target.value)}
                                 className="w-full bg-white/5 border border-white/10 rounded-full py-5 pl-16 pr-8 text-white focus:outline-none focus:border-oro/50 transition-all backdrop-blur-xl shadow-2xl group-hover:bg-white/10"
                             />
-                        </motion.div>
+                        </div>
                     </motion.div>
                 </header>
 
@@ -163,13 +163,7 @@ export default function ArtistsPage() {
 
 function ArtistCard({ artist, index }: { artist: Artist; index: number }) {
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.05 }}
-            className="group relative"
-        >
+        <div className="group relative">
             <div className="glass rounded-3xl md:rounded-[2.5rem] border border-white/5 overflow-hidden transition-all duration-500 hover:border-oro/30 hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)] h-full flex flex-col">
                 {/* Image Section */}
                 <div className="relative aspect-square overflow-hidden">
@@ -222,6 +216,6 @@ function ArtistCard({ artist, index }: { artist: Artist; index: number }) {
                     </Link>
                 </div>
             </div>
-        </motion.div>
+        </div>
     );
 }
