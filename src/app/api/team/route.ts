@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { isProfane } from "@/lib/blacklist";
 
 // Helper to calculate score based on captain bonus (double SPECIALE only)
 async function calculateTeamScore(artistIds: string[], captainId: string | null) {
@@ -39,6 +40,10 @@ export async function POST(req: Request) {
         // Base Validation
         if (!teamName || !artistIds || artistIds.length !== 5 || !captainId) {
             return new NextResponse("Dati non validi. Nome squadra, 5 membri e un Capitano sono obbligatori.", { status: 400 });
+        }
+
+        if (isProfane(teamName)) {
+            return new NextResponse("Il nome della squadra contiene parole non consentite.", { status: 400 });
         }
 
         // --- Deadline Check ---
@@ -177,6 +182,10 @@ export async function PUT(req: Request) {
 
         if (!teamName || !artistIds || artistIds.length !== 5 || !captainId) {
             return new NextResponse("Dati non validi.", { status: 400 });
+        }
+
+        if (isProfane(teamName)) {
+            return new NextResponse("Il nome della squadra contiene parole non consentite.", { status: 400 });
         }
 
         const settings = await prisma.systemSettings.findFirst();

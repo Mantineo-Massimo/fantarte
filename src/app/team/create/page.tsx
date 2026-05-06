@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { FiUsers, FiStar, FiTrendingUp, FiSearch, FiCheck, FiX, FiShield, FiArrowRight, FiArrowLeft, FiCamera, FiAward } from "react-icons/fi";
 import Link from "next/link";
+import { isProfane } from "@/lib/blacklist";
 
 type ArtistType = "ARTISTA" | "PRESENTATORE" | "OSPITE";
 
@@ -152,6 +153,10 @@ export default function CreateTeamPage() {
         if (step === 0) {
             if (!teamName.trim()) {
                 setError("Inserisci un nome per la tua squadra.");
+                return;
+            }
+            if (isProfane(teamName)) {
+                setError("Il nome contiene parole non consentite.");
                 return;
             }
             setStep(1);
