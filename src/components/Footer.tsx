@@ -75,6 +75,7 @@ export default function Footer() {
                             <h4 className="font-display text-white text-xs font-bold uppercase tracking-[0.4em] opacity-40">Legale</h4>
                             <nav className="flex flex-col gap-5">
                                 <FooterLink href="/privacy" label="Privacy Policy" />
+                                <FooterLink href="/termini" label="Termini e Condizioni" />
                                 <FooterLink href="/accordo" label="Collaborazione" />
                                 <FooterLink href="/regole" label="Regolamento" />
                             </nav>

@@ -267,10 +267,13 @@ export default function PrivacyPage() {
                         {/* Sezione 9 - Cookie */}
                         <Section num={9} title="Cookie e Tecnologie di Tracciamento">
                             <p className="text-gray-300 leading-relaxed text-sm mb-3">
-                                FantArte utilizza esclusivamente <strong className="text-white">cookie tecnici e di sessione</strong>, strettamente necessari al funzionamento dell&apos;autenticazione e alla navigazione della piattaforma. Non vengono utilizzati cookie di profilazione, cookie pubblicitari o strumenti di tracciamento di terze parti.
+                                FantArte utilizza esclusivamente <strong className="text-white">cookie tecnici e di sessione</strong>, strettamente necessari al funzionamento dell&apos;autenticazione (NextAuth) e alla memorizzazione delle tue preferenze di consenso. 
+                            </p>
+                            <p className="text-gray-300 leading-relaxed text-sm mb-4">
+                                Utilizziamo inoltre strumenti di analisi anonimizzati forniti da <strong className="text-white">Vercel (Analytics & Speed Insights)</strong> per monitorare le performance della piattaforma senza raccogliere dati personali identificativi degli utenti.
                             </p>
                             <div className="bg-white/[0.03] rounded-2xl p-4 border border-gray-800 text-xs text-gray-400">
-                                I cookie tecnici non richiedono il consenso dell&apos;utente ai sensi della normativa vigente (art. 122 D.Lgs. 196/2003 e Linee Guida del Garante).
+                                I cookie tecnici non richiedono il consenso preventivo dell&apos;utente, tuttavia mettiamo a disposizione un banner informativo per garantirti la massima trasparenza sulla gestione della tua sessione.
                             </div>
                         </Section>
 
