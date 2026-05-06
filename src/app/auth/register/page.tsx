@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { FiArrowLeft } from "react-icons/fi";
 
 export default function RegisterPage() {
     const router = useRouter();
@@ -51,9 +52,16 @@ export default function RegisterPage() {
 
     return (
         <main className="min-h-screen bg-blunotte text-white flex flex-col items-center justify-center p-6 relative overflow-hidden">
-            {/* Background Orbs */}
             <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(88,28,135,0.1),transparent_50%)] pointer-events-none" />
             
+            <Link 
+                href="/" 
+                className="absolute top-8 left-8 flex items-center gap-2 text-gray-500 hover:text-white transition-all font-bold text-xs uppercase tracking-widest z-20 group"
+            >
+                <FiArrowLeft className="group-hover:-translate-x-1 transition-transform" />
+                Torna alla Home
+            </Link>
+
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -100,7 +108,6 @@ export default function RegisterPage() {
                         />
                     </div>
 
-                    {/* Legal Checkboxes */}
                     <div className="space-y-4 pt-2">
                         <label className="flex items-start gap-3 group cursor-pointer">
                             <div className="relative flex items-center justify-center shrink-0 mt-1">
@@ -166,4 +173,5 @@ export default function RegisterPage() {
         </main>
     );
 }
+
 
