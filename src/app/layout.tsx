@@ -24,16 +24,15 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://fantarte.it"),
   openGraph: {
     title: "FantArte | Il Gioco Ufficiale della Piazza dell'Arte",
-    description: "Fonda il tuo quintetto, gestisci i tuoi Armoni e sfida gli altri partecipanti. Il fantagioco dove l'arte prende vita.",
+    description: "Crea la tua squadra, scegli i tuoi Armoni e scala la classifica della Piazza dell'Arte 2026!",
     url: "https://fantarte.it",
     siteName: "FantArte",
     images: [
       {
-        url: "https://fantarte.it/og-preview.webp",
+        url: "https://fantarte.it/og-preview.webp?v=3",
         width: 1200,
         height: 1200,
         alt: "FantArte Preview",
-        type: "image/webp",
       },
     ],
     locale: "it_IT",
@@ -42,8 +41,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "FantArte | Piazza dell'Arte",
-    description: "Il Fantagioco dove l'Arte incontra la Piazza",
-    images: ["https://fantarte.it/og-preview.webp"],
+    description: "Crea la tua squadra, scegli i tuoi Armoni e scala la classifica della Piazza dell'Arte 2026!",
+    images: ["https://fantarte.it/og-preview.webp?v=3"],
   },
   icons: {
     icon: [
