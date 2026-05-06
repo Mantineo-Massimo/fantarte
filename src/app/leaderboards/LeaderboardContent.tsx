@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiUsers, FiStar, FiTrendingUp, FiAward, FiX, FiCheck, FiShare2, FiZap } from "react-icons/fi";
 import SocialShare from "@/components/SocialShare";
@@ -62,6 +62,21 @@ export default function LeaderboardsPage({ initialLeagues, initialArtists }: { i
     const [selectedTeam, setSelectedTeam] = useState<TeamResult | null>(null);
     const [selectedArtist, setSelectedArtist] = useState<Artist | null>(null);
     const [detailLoading, setDetailLoading] = useState(false);
+    const [isAnyModalOpen, setIsAnyModalOpen] = useState(false);
+
+    // Block scroll when modal is open
+    useEffect(() => {
+        if (selectedTeam || selectedArtist) {
+            document.body.style.overflow = "hidden";
+            setIsAnyModalOpen(true);
+        } else {
+            document.body.style.overflow = "unset";
+            setIsAnyModalOpen(false);
+        }
+        return () => {
+            document.body.style.overflow = "unset";
+        };
+    }, [selectedTeam, selectedArtist]);
 
     const handleArtistClick = async (artist: Artist) => {
         setDetailLoading(true);
