@@ -252,17 +252,17 @@ function PodiumCard({ rank, data, type, featured, onClick }: { rank: number, dat
             `}>
                 {rank}
             </div>
-            <div className={`w-32 h-32 rounded-[30px] bg-black mb-6 overflow-hidden border-2 transition-transform duration-500 group-hover:scale-105
+            <div className={`w-32 h-32 rounded-[30px] bg-black mb-6 overflow-hidden border-2 transition-transform duration-500 group-hover:scale-105 shrink-0 relative aspect-square
                 ${rank === 1 ? "border-oro shadow-[0_0_30px_rgba(255,215,0,0.3)]" : "border-white/10"}
             `}>
                 {image ? (
-                    <img src={image} className="w-full h-full object-cover" />
+                    <img src={image} className="w-full h-full object-cover" alt={name} />
                 ) : (
                     <div className="w-full h-full flex items-center justify-center text-4xl font-black text-gray-800">{name.charAt(0)}</div>
                 )}
             </div>
-            <h3 className={`text-xl md:text-2xl font-black mb-2 whitespace-normal leading-tight ${rank === 1 ? "text-oro" : "text-white"}`}>{name}</h3>
-            <div className="flex items-center gap-2 px-6 py-2 rounded-2xl bg-white/5 border border-white/10">
+            <h3 className={`text-xl md:text-2xl font-black mb-2 whitespace-normal leading-tight h-14 flex items-center justify-center ${rank === 1 ? "text-oro" : "text-white"}`}>{name}</h3>
+            <div className="flex items-center gap-2 px-6 py-2 rounded-2xl bg-white/5 border border-white/10 shrink-0">
                 <span className="text-2xl font-black tracking-tighter">{score}</span>
                 <span className="text-[10px] font-black uppercase tracking-widest text-gray-500">Punti</span>
             </div>
@@ -280,22 +280,22 @@ function RankRow({ index, data, type, onClick }: { index: number, data: any, typ
         <motion.div 
             variants={fadeIn}
             onClick={onClick}
-            className="flex items-center justify-between px-10 py-6 hover:bg-white/5 transition-all cursor-pointer group"
+            className="flex items-center justify-between px-4 md:px-10 py-5 md:py-6 hover:bg-white/5 transition-all cursor-pointer group gap-4"
         >
-            <div className="flex items-center gap-8">
-                <span className="font-black text-gray-700 w-6">{index}</span>
-                <div className="w-12 h-12 rounded-2xl bg-black overflow-hidden border border-white/10 group-hover:border-oro/40 transition-colors">
+            <div className="flex items-center gap-3 md:gap-8 min-w-0 flex-1">
+                <span className="font-black text-gray-700 w-8 md:w-10 shrink-0 text-sm md:text-base">{index}</span>
+                <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-black overflow-hidden border border-white/10 group-hover:border-oro/40 transition-colors shrink-0 relative aspect-square">
                     {image ? (
-                        <img src={image} className="w-full h-full object-cover" />
+                        <img src={image} className="w-full h-full object-cover" alt={name} />
                     ) : (
-                        <div className="w-full h-full flex items-center justify-center font-black text-gray-800">{name.charAt(0)}</div>
+                        <div className="w-full h-full flex items-center justify-center font-black text-gray-800 text-lg">{name.charAt(0)}</div>
                     )}
                 </div>
-                <h4 className="font-black text-xl group-hover:text-oro transition-colors whitespace-normal leading-tight">{name}</h4>
+                <h4 className="font-black text-base md:text-xl group-hover:text-oro transition-colors whitespace-normal leading-tight truncate md:whitespace-normal">{name}</h4>
             </div>
-            <div className="text-right">
-                <p className="font-black text-2xl tracking-tighter">{score}</p>
-                <p className="text-[8px] font-black uppercase tracking-widest text-gray-500">Punteggio Totale</p>
+            <div className="text-right shrink-0 flex flex-col items-end">
+                <p className="font-black text-xl md:text-3xl tracking-tighter leading-none">{score}</p>
+                <p className="text-[7px] md:text-[8px] font-black uppercase tracking-widest text-gray-500 mt-1">Punti</p>
             </div>
         </motion.div>
     );
