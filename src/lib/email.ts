@@ -41,6 +41,12 @@ export async function sendBatch(emails: { to: string; subject: string; body: str
         // We split the input array into chunks of 100.
         for (let i = 0; i < emails.length; i += 100) {
             const chunk = emails.slice(i, i + 100);
+            
+            // If it's not the first chunk, add a small delay to avoid hitting rate limits (e.g. 200ms)
+            if (i > 0) {
+                await new Promise(resolve => setTimeout(resolve, 200));
+            }
+
             const { data, error } = await client.batch.send(
                 chunk.map(email => ({
                     from: process.env.EMAIL_FROM || "onboarding@resend.dev",
