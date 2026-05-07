@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { NextAuthProvider } from "@/components/NextAuthProvider";
@@ -17,6 +17,14 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
+};
 
 export const metadata: Metadata = {
   title: "FantArte | Piazza dell'Arte 2026",
@@ -64,7 +72,7 @@ export default function RootLayout({
   return (
     <html lang="it">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased text-white min-h-screen relative overflow-x-hidden`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased text-white min-h-[100dvh] relative overflow-x-hidden`}
       >
         {/* Cinematic Fixed Background (Static & Cross-page) */}
         <div className="fixed inset-0 z-0 pointer-events-none">
@@ -79,7 +87,7 @@ export default function RootLayout({
         </div>
 
         <NextAuthProvider>
-          <div className="relative font-sans flex flex-col min-h-screen">
+          <div className="relative font-sans flex flex-col min-h-[100dvh]">
             <Navbar />
             <div className="flex-grow">
               {children}

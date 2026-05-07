@@ -26,13 +26,13 @@ export default function Home({ initialSponsors, initialDeadline }: { initialSpon
   const [deadline] = useState<string | null>(initialDeadline);
 
   return (
-    <main className="min-h-screen text-white overflow-hidden">
+    <main className="min-h-[100dvh] text-white overflow-hidden">
 
 
       <div className="relative z-10">
 
         {/* Hero Section */}
-        <section className="min-h-screen flex flex-col items-center justify-center pt-32 px-6 pb-20 relative overflow-hidden">
+        <section className="min-h-[100dvh] flex flex-col items-center justify-center pt-32 px-6 pb-20 relative overflow-hidden">
           {/* Background Decorations */}
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 bg-oro/5 blur-[120px] rounded-full pointer-events-none" />
           
@@ -183,7 +183,12 @@ export default function Home({ initialSponsors, initialDeadline }: { initialSpon
                         >
                           <div className="w-20 h-20 relative flex items-center justify-center shrink-0 group-hover/sponsor:scale-110 transition-transform">
                             {p.logoUrl ? (
-                              <img src={p.logoUrl} alt={p.name} className="max-w-full max-h-full object-contain" />
+                              <Image 
+                                src={p.logoUrl} 
+                                alt={p.name} 
+                                fill
+                                className="object-contain" 
+                              />
                             ) : (
                               <div className="w-full h-full rounded-xl bg-white/5 flex items-center justify-center border border-white/10">
                                 <span className="text-xl font-black text-gray-500">{p.name.charAt(0)}</span>
@@ -229,8 +234,8 @@ export default function Home({ initialSponsors, initialDeadline }: { initialSpon
             <div className="flex flex-wrap justify-center gap-6 md:gap-10">
               <a href="https://www.instagram.com/associazione.morgana" target="_blank" rel="noopener noreferrer" className="group">
                 <div className="bg-white/[0.02] p-8 md:p-10 rounded-[2.5rem] border border-white/5 hover:border-oro/30 transition-all duration-500 flex flex-col items-center text-center w-40 md:w-56 shadow-2xl">
-                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-white/5 p-4 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                    <img src="/morgana.webp" alt="Morgana Logo" className="w-full h-full object-contain" />
+                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-white/5 p-4 relative flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <Image src="/morgana.webp" alt="Morgana Logo" fill className="p-4 object-contain" />
                   </div>
                   <span className="font-black uppercase tracking-[0.2em] text-xs md:text-sm">Morgana</span>
                 </div>
@@ -238,8 +243,8 @@ export default function Home({ initialSponsors, initialDeadline }: { initialSpon
               
               <a href="https://www.instagram.com/orum_unime" target="_blank" rel="noopener noreferrer" className="group">
                 <div className="bg-white/[0.02] p-8 md:p-10 rounded-[2.5rem] border border-white/5 hover:border-oro/30 transition-all duration-500 flex flex-col items-center text-center w-40 md:w-56 shadow-2xl">
-                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-white/5 p-4 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                    <img src="/orum.webp" alt="O.R.U.M. Logo" className="w-full h-full object-contain" />
+                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-white/5 p-4 relative flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <Image src="/orum.webp" alt="O.R.U.M. Logo" fill className="p-4 object-contain" />
                   </div>
                   <span className="font-black uppercase tracking-[0.2em] text-xs md:text-sm">O.R.U.M.</span>
                 </div>
