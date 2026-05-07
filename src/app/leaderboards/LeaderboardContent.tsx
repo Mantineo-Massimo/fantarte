@@ -249,12 +249,12 @@ function PodiumCard({ rank, data, type, featured, onClick }: { rank: number, dat
             onClick={onClick}
             className={`relative p-10 rounded-[3.5rem] border flex flex-col items-center text-center cursor-pointer group transition-all duration-500
                 ${featured 
-                    ? "bg-[#050811] md:scale-110 md:-translate-y-12 z-20 shadow-[0_30px_100px_rgba(0,0,0,0.8)] border-oro/30" 
-                    : "bg-[#050811] z-10 border-white/10 hover:bg-[#050811]/95"}
+                    ? "bg-blunotte/98 md:scale-110 md:-translate-y-12 z-20 shadow-[0_30px_100px_rgba(0,0,0,0.8)] border-oro/30 backdrop-blur-3xl" 
+                    : "bg-blunotte/90 z-10 border-white/10 backdrop-blur-2xl hover:bg-blunotte/95"}
             `}
         >
             <div className={`absolute -top-6 w-12 h-12 rounded-full flex items-center justify-center font-black shadow-2xl border-2
-                ${rank === 1 ? "bg-oro text-blunotte border-oro scale-125" : "bg-white/5 text-gray-400 border-white/10"}
+                ${rank === 1 ? "bg-oro text-blunotte border-oro scale-125" : "bg-blunotte text-gray-400 border-white/20"}
             `}>
                 {rank}
             </div>
