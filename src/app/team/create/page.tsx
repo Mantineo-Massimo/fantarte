@@ -132,10 +132,18 @@ export default function CreateTeamPage() {
         const file = e.target.files?.[0];
         if (!file) return;
 
+        // Limit file size to 10MB to avoid browser crashes
+        if (file.size > 10 * 1024 * 1024) {
+            setError("L'immagine è troppo grande (max 10MB).");
+            return;
+        }
+
         setIsUploading(true);
         setError("");
 
         try {
+            // OPTIONAL: Client-side compression could be added here
+            // For now, let's ensure the request is robust.
             const formData = new FormData();
             formData.append("file", file);
 
@@ -144,11 +152,15 @@ export default function CreateTeamPage() {
                 body: formData,
             });
 
-            if (!res.ok) throw new Error("Upload failed");
+            if (!res.ok) {
+                const text = await res.text();
+                throw new Error(text || "Upload failed");
+            }
             const data = await res.json();
             setTeamImage(data.url);
-        } catch (err) {
-            setError("Errore nel caricamento immagine.");
+        } catch (err: any) {
+            console.error("UPLOAD_ERROR", err);
+            setError("Errore nel caricamento: " + (err.message || "riprova con un'altra foto."));
         } finally {
             setIsUploading(false);
         }
@@ -315,12 +327,21 @@ export default function CreateTeamPage() {
                                             </div>
 
                                             <div className="flex flex-col items-center">
-                                                <div className="relative w-40 h-40 md:w-56 md:h-56 rounded-[2.5rem] overflow-hidden bg-white/[0.02] border border-dashed border-white/10 group hover:border-oro/30 transition-all flex items-center justify-center cursor-pointer shadow-2xl">
-                                                    {teamImage ? (
+                                                <label 
+                                                    htmlFor="team-image-upload"
+                                                    className="relative w-40 h-40 md:w-56 md:h-56 rounded-[2.5rem] overflow-hidden bg-white/[0.02] border border-dashed border-white/10 group hover:border-oro/30 transition-all flex items-center justify-center cursor-pointer shadow-2xl"
+                                                >
+                                                    {isUploading ? (
+                                                        <div className="flex flex-col items-center animate-pulse">
+                                                            <div className="w-8 h-8 border-2 border-oro border-t-transparent rounded-full animate-spin mb-3" />
+                                                            <span className="text-[8px] font-black uppercase tracking-widest">Caricamento...</span>
+                                                        </div>
+                                                    ) : teamImage ? (
                                                         <>
                                                             <img src={teamImage} alt="Preview" className="w-full h-full object-cover" />
                                                             <button 
-                                                                onClick={(e) => { e.stopPropagation(); setTeamImage(null); }}
+                                                                type="button"
+                                                                onClick={(e) => { e.preventDefault(); e.stopPropagation(); setTeamImage(null); }}
                                                                 className="absolute top-3 right-3 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors z-20 shadow-lg"
                                                                 title="Rimuovi immagine"
                                                             >
@@ -334,12 +355,13 @@ export default function CreateTeamPage() {
                                                         </div>
                                                     )}
                                                     <input 
+                                                        id="team-image-upload"
                                                         type="file" 
-                                                        accept="image/*" 
+                                                        accept="image/png, image/jpeg, image/webp" 
                                                         onChange={handleImageUpload}
-                                                        className="absolute inset-0 opacity-0 cursor-pointer"
+                                                        className="hidden"
                                                     />
-                                                </div>
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
