@@ -58,9 +58,19 @@ export async function POST(req: Request) {
                 }));
 
             if (batchEmails.length > 0) {
-                // Resend batch limit is 100, if more we might need to split, 
-                // but for now this is much better than before.
-                await sendBatch(batchEmails.slice(0, 100)); 
+                const sendEmails = async () => {
+                    try {
+                        await sendBatch(batchEmails);
+                    } catch (e) {
+                        console.error("BACKGROUND_RULE_EMAIL_ERROR", e);
+                    }
+                };
+
+                if (typeof (global as any).waitUntil === 'function') {
+                    (global as any).waitUntil(sendEmails());
+                } else {
+                    sendEmails();
+                }
             }
         } catch (err) {
             console.error("NOTIFY_USERS_ERROR", err);

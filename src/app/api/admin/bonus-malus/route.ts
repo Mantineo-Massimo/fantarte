@@ -122,7 +122,24 @@ export async function POST(req: Request) {
             }));
 
             if (batchEmails.length > 0) {
-                await sendBatch(batchEmails.slice(0, 100));
+                // We don't await here to respond faster to the admin.
+                // Using a try-catch inside the background promise is good practice.
+                const sendEmails = async () => {
+                    try {
+                        await sendBatch(batchEmails);
+                    } catch (e) {
+                        console.error("BACKGROUND_EMAIL_SEND_ERROR", e);
+                    }
+                };
+                
+                // On Vercel, this ensures the function doesn't terminate until the promise resolves
+                // Note: waitUntil is available in Next.js 15+
+                if (typeof (global as any).waitUntil === 'function') {
+                    (global as any).waitUntil(sendEmails());
+                } else {
+                    // Fallback for environments without waitUntil - though it might get cut off
+                    sendEmails();
+                }
             }
         } catch (err) {
             console.error("NOTIFY_USERS_POINTS_ERROR", err);

@@ -35,24 +35,32 @@ export async function sendEmail({ to, subject, body, text }: { to: string; subje
 export async function sendBatch(emails: { to: string; subject: string; body: string }[]) {
     try {
         const client = getResendClient();
-        // Resend batch limit is 100 emails per call
-        const { data, error } = await client.batch.send(
-            emails.map(email => ({
-                from: process.env.EMAIL_FROM || "onboarding@resend.dev",
-                to: [email.to],
-                subject: email.subject,
-                html: email.body,
-            }))
-        );
+        const results = [];
+        
+        // Resend batch limit is 100 emails per call.
+        // We split the input array into chunks of 100.
+        for (let i = 0; i < emails.length; i += 100) {
+            const chunk = emails.slice(i, i + 100);
+            const { data, error } = await client.batch.send(
+                chunk.map(email => ({
+                    from: process.env.EMAIL_FROM || "onboarding@resend.dev",
+                    to: [email.to],
+                    subject: email.subject,
+                    html: email.body,
+                }))
+            );
 
-        if (error) {
-            console.error("EMAIL_BATCH_ERROR", error);
-            return { success: false, error };
+            if (error) {
+                console.error(`EMAIL_BATCH_ERROR_CHUNK_${i/100}`, error);
+                // We continue with other chunks even if one fails
+            } else {
+                results.push(data);
+            }
         }
 
-        return { success: true, result: data };
+        return { success: true, results };
     } catch (error) {
-        console.error("EMAIL_BATCH_ERROR", error);
+        console.error("EMAIL_BATCH_CRITICAL_ERROR", error);
         return { success: false, error };
     }
 }

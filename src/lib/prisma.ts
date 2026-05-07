@@ -13,7 +13,7 @@ const globalForPrisma = global as unknown as {
 if (!globalForPrisma.pool) {
     globalForPrisma.pool = new Pool({
         connectionString,
-        max: 5, // Lowered per-instance max to allow more horizontal scaling without hitting DB limits
+        max: process.env.NODE_ENV === 'production' ? 10 : 5, // Slightly higher for Pro, but still safe for serverless
         idleTimeoutMillis: 30000,
         connectionTimeoutMillis: 10000,
     })
@@ -25,7 +25,7 @@ export const prisma =
     globalForPrisma.prisma ||
     new PrismaClient({ 
         adapter,
-        log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error']
+        log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error']
     })
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
