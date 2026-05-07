@@ -173,10 +173,8 @@ export default function LeaderboardsPage({ initialLeagues, initialArtists }: { i
 
                 {/* Neo-Table Section */}
                 <motion.div 
-                    initial="initial"
-                    whileInView="animate"
-                    viewport={{ once: true }}
-                    variants={stagger}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
                     className="glass rounded-[3rem] border border-white/5 overflow-hidden"
                 >
                     <div className="px-10 py-8 bg-white/5 border-b border-white/5 flex justify-between items-center">
@@ -187,15 +185,23 @@ export default function LeaderboardsPage({ initialLeagues, initialArtists }: { i
                         </div>
                     </div>
                     <div className="divide-y divide-white/[0.03]">
-                        {rest.map((item, index) => (
-                            <RankRow 
-                                key={index}
-                                index={index + 4}
-                                data={item}
-                                type={viewMode}
-                                onClick={() => viewMode === "teams" ? setSelectedTeam(item as TeamResult) : handleArtistClick(item as Artist)}
-                            />
-                        ))}
+                        {rest.map((item, index) => {
+                            if (!item) return null;
+                            return (
+                                <RankRow 
+                                    key={index}
+                                    index={index + 4}
+                                    data={item}
+                                    type={viewMode}
+                                    onClick={() => viewMode === "teams" ? setSelectedTeam(item as TeamResult) : handleArtistClick(item as Artist)}
+                                />
+                            );
+                        })}
+                        {rest.length === 0 && (
+                            <div className="p-20 text-center text-gray-600 font-black uppercase tracking-widest text-[10px]">
+                                Nessun dato disponibile
+                            </div>
+                        )}
                     </div>
                 </motion.div>
 
@@ -272,13 +278,14 @@ function PodiumCard({ rank, data, type, featured, onClick }: { rank: number, dat
 
 function RankRow({ index, data, type, onClick }: { index: number, data: any, type: string, onClick: () => void }) {
     const isTeam = type === "teams";
-    const name = isTeam ? data.team.name : data.name;
-    const score = isTeam ? data.score : data.totalScore;
-    const image = isTeam ? data.team.image : data.image;
+    const name = (isTeam ? data?.team?.name : data?.name) || "Senza Nome";
+    const score = (isTeam ? data?.score : data?.totalScore) || 0;
+    const image = isTeam ? data?.team?.image : data?.image;
 
     return (
         <motion.div 
-            variants={fadeIn}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             onClick={onClick}
             className="flex items-center justify-between px-4 md:px-10 py-5 md:py-6 hover:bg-white/5 transition-all cursor-pointer group gap-4"
         >
