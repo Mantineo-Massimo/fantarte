@@ -407,9 +407,17 @@ function TeamModal({ teamResult, onClose, onArtistClick }: { teamResult: TeamRes
                                                 </div>
                                                 
                                                 <div className="min-w-0">
-                                                    <h4 className={`text-base font-black transition-colors truncate ${isTop ? "text-oro" : "text-white group-hover/art:text-oro"}`}>
-                                                        {artist.name}
-                                                    </h4>
+                                                    <div className="flex items-center gap-2">
+                                                        <h4 className={`text-base font-black transition-colors truncate ${isTop ? "text-oro" : "text-white group-hover/art:text-oro"}`}>
+                                                            {artist.name}
+                                                        </h4>
+                                                        {isCaptain && (
+                                                            <span className="px-2 py-0.5 rounded-md bg-oro text-blunotte text-[8px] font-black uppercase tracking-widest flex items-center gap-1">
+                                                                <FiAward size={8} />
+                                                                Capitano
+                                                            </span>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
 

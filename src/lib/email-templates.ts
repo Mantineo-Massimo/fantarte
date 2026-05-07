@@ -137,7 +137,7 @@ const emailWrapper = (content: string) => `
         <div class="container">
             <div class="header">
                 <img 
-                    src="${BASE_URL}/fanta-logo.webp?v=1" 
+                    src="${BASE_URL}/fanta-logo.png?v=1" 
                     alt="FantArte" 
                     width="220" 
                     style="display: block; margin: 0 auto; border: 0; width: 220px; height: auto;"
