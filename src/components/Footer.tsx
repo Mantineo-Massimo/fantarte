@@ -88,8 +88,8 @@ export default function Footer() {
                              <div className="absolute top-0 right-0 w-32 h-32 bg-oro/5 blur-2xl -translate-y-1/2 translate-x-1/2" />
                              <h4 className="font-display text-oro text-xs font-bold uppercase tracking-widest relative z-10">Ti serve Aiuto?</h4>
                              <div className="space-y-4 relative z-10">
-                                <a href="mailto:associazione.morgana@gmail.com" className="block text-gray-300 font-medium hover:text-white transition-colors text-sm truncate underline decoration-white/10 underline-offset-4">associazione.morgana@gmail.com</a>
-                                <a href="mailto:orum.unime@gmail.com" className="block text-gray-300 font-medium hover:text-white transition-colors text-sm truncate underline decoration-white/10 underline-offset-4">orum.unime@gmail.com</a>
+                                <a href="mailto:associazione.morgana@gmail.com" className="block text-gray-300 font-medium hover:text-white transition-colors text-sm break-all underline decoration-white/10 underline-offset-4">associazione.morgana@gmail.com</a>
+                                <a href="mailto:orum.unime@gmail.com" className="block text-gray-300 font-medium hover:text-white transition-colors text-sm break-all underline decoration-white/10 underline-offset-4">orum.unime@gmail.com</a>
                              </div>
                              <div className="pt-4 flex items-center gap-3 opacity-30 relative z-10">
                                 <FiGlobe />
