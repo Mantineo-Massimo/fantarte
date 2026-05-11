@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { sendEmail } from "@/lib/email";
+import { sendEmail, sendBatch } from "@/lib/email";
 import { newArtistEmail } from "@/lib/email-templates";
 
 export async function POST(req: Request) {
@@ -30,16 +30,30 @@ export async function POST(req: Request) {
             }
         });
 
-        // Notify Users
+        // Notify Users (Batch & Async)
         try {
             const users = await prisma.user.findMany({ select: { email: true } });
-            for (const u of users) {
-                if (u.email) {
-                    await sendEmail({
-                        to: u.email,
-                        subject: `Nuovo Artista su FantArte: ${name}`,
-                        body: newArtistEmail(name, parseInt(cost.toString()))
-                    });
+            const batchEmails = users
+                .filter(u => !!u.email)
+                .map(u => ({
+                    to: u.email!,
+                    subject: `Nuovo Artista su FantArte: ${name}`,
+                    body: newArtistEmail(name, parseInt(cost.toString()))
+                }));
+
+            if (batchEmails.length > 0) {
+                const sendEmails = async () => {
+                    try {
+                        await sendBatch(batchEmails);
+                    } catch (e) {
+                        console.error("BACKGROUND_NEW_ARTIST_EMAIL_ERROR", e);
+                    }
+                };
+
+                if (typeof (global as any).waitUntil === 'function') {
+                    (global as any).waitUntil(sendEmails());
+                } else {
+                    sendEmails();
                 }
             }
         } catch (err) {

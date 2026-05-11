@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import { sendEmail } from "@/lib/email";
 import { verificationEmail } from "@/lib/email-templates";
 import crypto from "crypto";
+import { isProfane } from "@/lib/blacklist";
 
 export async function POST(req: Request) {
     try {
@@ -12,6 +13,10 @@ export async function POST(req: Request) {
 
         if (!email || !password || !name || !phone) {
             return new NextResponse("Email, password, name and phone are required", { status: 400 });
+        }
+
+        if (isProfane(name)) {
+            return new NextResponse("Il nome contiene parole non consentite.", { status: 400 });
         }
 
         const existingUser = await prisma.user.findUnique({
