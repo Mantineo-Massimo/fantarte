@@ -1,54 +1,51 @@
-import { withAuth } from "next-auth/middleware";
+import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-export default withAuth(
-  function middleware(req) {
-    const token = req.nextauth.token;
-    const pathname = req.nextUrl.pathname;
-    const isAdmin = token?.role === "ADMIN";
+export async function middleware(req: NextRequest) {
+  const pathname = req.nextUrl.pathname;
+  
+  // 1. Definiamo le rotte che richiedono protezione
+  const isAdminPath = pathname.startsWith("/admin") || pathname.startsWith("/api/admin");
+  const isUserPath = pathname.startsWith("/team") || pathname.startsWith("/account");
 
-    // 1. Protezione Rigida Area Admin
-    if (pathname.startsWith("/admin") || pathname.startsWith("/api/admin")) {
-        if (!isAdmin) {
-            // Se è un'API admin, errore 403 (Forbidden)
-            if (pathname.startsWith("/api/")) {
-                return new NextResponse("Forbidden", { status: 403 });
-            }
-            // Se è una pagina admin, redirect in Home
-            return NextResponse.redirect(new URL("/", req.url));
-        }
-    }
-
-    // Per le altre rotte in matcher (/team, /account), withAuth 
-    // gestisce già il redirect al login se il token manca.
+  // Se non è una rotta protetta, lasciamo passare subito senza nemmeno controllare il token
+  if (!isAdminPath && !isUserPath) {
     return NextResponse.next();
-  },
-  {
-    callbacks: {
-      // authorized decide se chiamare la funzione middleware sopra.
-      // Se ritorna false, Next-Auth reindirizza alla pagina di login.
-      authorized: ({ token, req }) => {
-        const pathname = req.nextUrl.pathname;
-        
-        // Se è l'area admin, richiediamo sempre il token qui, 
-        // la logica del ruolo la gestiamo nel middleware sopra.
-        if (pathname.startsWith("/admin") || pathname.startsWith("/api/admin")) {
-            return !!token;
-        }
-
-        // Per team e account, servirebbe il login, ma se vogliamo che 
-        // la home sia sempre libera, non dobbiamo bloccarla qui.
-        // Visto che il matcher è specifico, questo callback gira solo per quelle rotte.
-        return !!token;
-      },
-    },
-    secret: process.env.NEXTAUTH_SECRET,
   }
-);
 
+  // 2. Recuperiamo il token (sessione)
+  const token = await getToken({ 
+    req, 
+    secret: process.env.NEXTAUTH_SECRET 
+  });
+
+  // 3. Logica di protezione
+  if (!token) {
+    // Se è un'API, 401 Unauthorized
+    if (pathname.startsWith("/api/")) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+    // Se è una pagina, redirect al login
+    const loginUrl = new URL("/auth/login", req.url);
+    loginUrl.searchParams.set("callbackUrl", pathname);
+    return NextResponse.redirect(loginUrl);
+  }
+
+  // 4. Protezione specifica Admin
+  if (isAdminPath && token.role !== "ADMIN") {
+    if (pathname.startsWith("/api/")) {
+      return new NextResponse("Forbidden", { status: 403 });
+    }
+    return NextResponse.redirect(new URL("/", req.url));
+  }
+
+  return NextResponse.next();
+}
+
+// Configurazione matcher per ottimizzare le performance
 export const config = {
   matcher: [
-    // Proteggiamo solo le rotte che richiedono autenticazione
     "/admin/:path*",
     "/api/admin/:path*",
     "/team/:path*",
