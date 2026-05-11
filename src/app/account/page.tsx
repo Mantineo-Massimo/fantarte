@@ -14,7 +14,8 @@ export default function AccountPage() {
 
     const [profile, setProfile] = useState({
         name: "",
-        email: ""
+        email: "",
+        phone: ""
     });
 
     const [passwords, setPasswords] = useState({
@@ -29,7 +30,8 @@ export default function AccountPage() {
             .then(data => {
                 setProfile({
                     name: data.name || "",
-                    email: data.email
+                    email: data.email,
+                    phone: data.phone || ""
                 });
                 setLoading(false);
             })
@@ -51,7 +53,8 @@ export default function AccountPage() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     name: profile.name,
-                    email: profile.email
+                    email: profile.email,
+                    phone: profile.phone
                 })
             });
 
@@ -169,6 +172,20 @@ export default function AccountPage() {
                                         type="email"
                                         value={profile.email}
                                         onChange={e => setProfile({ ...profile, email: e.target.value })}
+                                        className="w-full bg-[#0a0f1c] border border-gray-800 rounded-xl pl-12 pr-4 py-3 text-white focus:outline-none focus:border-oro transition-colors"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Telefono</label>
+                                <div className="relative">
+                                    <FiActivity className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" />
+                                    <input
+                                        type="tel"
+                                        value={profile.phone}
+                                        onChange={e => setProfile({ ...profile, phone: e.target.value })}
+                                        placeholder="+39 333 1234567"
                                         className="w-full bg-[#0a0f1c] border border-gray-800 rounded-xl pl-12 pr-4 py-3 text-white focus:outline-none focus:border-oro transition-colors"
                                     />
                                 </div>

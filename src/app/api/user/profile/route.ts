@@ -17,6 +17,7 @@ export async function GET() {
                 id: true,
                 name: true,
                 email: true,
+                phone: true,
                 role: true,
                 createdAt: true
             }
@@ -41,7 +42,7 @@ export async function PUT(req: Request) {
         }
 
         const body = await req.json();
-        const { name, email, currentPassword, newPassword } = body;
+        const { name, email, phone, currentPassword, newPassword } = body;
 
         const user = await prisma.user.findUnique({
             where: { email: session.user.email }
@@ -61,6 +62,7 @@ export async function PUT(req: Request) {
             }
             updateData.email = email;
         }
+        if (phone !== undefined) updateData.phone = phone;
 
         if (newPassword) {
             if (!currentPassword) {
