@@ -23,7 +23,7 @@ const faqs = [
     },
     {
         q: "Chi gestisce il gioco?",
-        a: "FantArte è un progetto nato dalla collaborazione tra l'Associazione Morgana e l'Associazione Orume per animare la Piazza dell'Arte."
+        a: "FantArte è un progetto nato dalla collaborazione tra l'Associazione Morgana e l'Associazione Orum per animare la Piazza dell'Arte."
     }
 ];
 
@@ -33,9 +33,9 @@ export default function SupportPage() {
     return (
         <main className="min-h-screen text-white p-6 md:p-12 pt-56 md:pt-44 pb-32">
             <div className="max-w-4xl mx-auto">
-                
+
                 <header className="text-center mb-20">
-                    <motion.h1 
+                    <motion.h1
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                         className="text-4xl md:text-6xl font-black tracking-tighter mb-4"
@@ -46,19 +46,19 @@ export default function SupportPage() {
                 </header>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-                    
+
                     {/* FAQ Section */}
                     <section className="md:col-span-2 space-y-4">
                         <h2 className="text-2xl font-bold mb-8 flex items-center gap-3">
                             <FiInfo className="text-oro" /> Domande Frequenti
                         </h2>
-                        
+
                         {faqs.map((faq, index) => (
-                            <div 
-                                key={index} 
+                            <div
+                                key={index}
                                 className="bg-[#131d36] border border-gray-800 rounded-2xl overflow-hidden transition-all"
                             >
-                                <button 
+                                <button
                                     onClick={() => setOpenIndex(openIndex === index ? null : index)}
                                     className="w-full p-6 text-left flex justify-between items-center hover:bg-white/5 transition-colors"
                                 >
@@ -80,7 +80,7 @@ export default function SupportPage() {
                             <h2 className="text-xl font-bold mb-6 flex items-center gap-3">
                                 <FiMessageCircle className="text-oro" /> Contattaci
                             </h2>
-                            
+
                             <div className="space-y-6">
                                 <div className="space-y-2">
                                     <p className="text-[10px] text-gray-500 font-black uppercase tracking-widest">Associazione Morgana</p>
@@ -88,9 +88,9 @@ export default function SupportPage() {
                                         <FiMail size={14} /> associazione.morgana@gmail.com
                                     </a>
                                 </div>
-                                
+
                                 <div className="space-y-2 border-t border-gray-800 pt-6">
-                                    <p className="text-[10px] text-gray-500 font-black uppercase tracking-widest">Associazione Orume</p>
+                                    <p className="text-[10px] text-gray-500 font-black uppercase tracking-widest">Associazione Orum</p>
                                     <a href="mailto:orum.unime@gmail.com" className="flex items-center gap-2 text-oro hover:underline truncate">
                                         <FiMail size={14} /> orum.unime@gmail.com
                                     </a>
@@ -109,7 +109,7 @@ export default function SupportPage() {
                                     </div>
                                 </div>
                                 <div className="space-y-3">
-                                    <p className="text-[10px] text-gray-500 font-bold uppercase">Orume</p>
+                                    <p className="text-[10px] text-gray-500 font-bold uppercase"></p>
                                     <div className="flex gap-4">
                                         <a href="#" className="p-2 bg-white/5 rounded-lg hover:text-oro transition-colors"><FiInstagram size={20} /></a>
                                         <a href="#" className="p-2 bg-white/5 rounded-lg hover:text-oro transition-colors"><FiFacebook size={20} /></a>

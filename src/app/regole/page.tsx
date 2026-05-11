@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { 
-    FiInfo, FiCheckCircle, FiAlertTriangle, FiFilter, 
+import {
+    FiInfo, FiCheckCircle, FiAlertTriangle, FiFilter,
     FiArrowLeft, FiStar, FiZap, FiTarget, FiHelpCircle, FiUsers
 } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
@@ -60,7 +60,7 @@ export default function RegolePage() {
 
             <div className="relative z-10 pt-32 md:pt-44 px-6 pb-32">
                 <div className="max-w-6xl mx-auto">
-                    
+
                     {/* Header Section */}
                     <div className="text-center mb-24">
                         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
@@ -68,7 +68,7 @@ export default function RegolePage() {
                                 <FiArrowLeft /> Torna alla Home
                             </Link>
                         </motion.div>
-                        <motion.h1 
+                        <motion.h1
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
                             className="text-6xl md:text-8xl font-black tracking-tighter mb-8 leading-none"
@@ -83,24 +83,24 @@ export default function RegolePage() {
 
                     {/* Step by Step Guide */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-32">
-                        <StepCard 
-                            icon={FiUsers} 
-                            step="01" 
-                            title="Iscrizione" 
+                        <StepCard
+                            icon={FiUsers}
+                            step="01"
+                            title="Iscrizione"
                             text="Crea il tuo account e ricevi subito 100 Armoni, la valuta ufficiale della Piazza dell'Arte."
                             color="oro"
                         />
-                        <StepCard 
-                            icon={FiZap} 
-                            step="02" 
-                            title="Formazione" 
+                        <StepCard
+                            icon={FiZap}
+                            step="02"
+                            title="Formazione"
                             text="Scegli i tuoi 5 partecipanti preferiti. Ogni partecipante ha un costo: gestisci il tuo budget con saggezza."
                             color="viola"
                         />
-                        <StepCard 
-                            icon={FiTarget} 
-                            step="03" 
-                            title="Competizione" 
+                        <StepCard
+                            icon={FiTarget}
+                            step="03"
+                            title="Competizione"
                             text="Guarda le serate live! I tuoi partecipanti accumuleranno punti in base a ciò che faranno sul palco."
                             color="ocra"
                         />
@@ -112,18 +112,17 @@ export default function RegolePage() {
                             <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-4">Bonus & <span className="text-oro">Malus</span></h2>
                             <p className="text-gray-500 font-medium max-w-md">Consulta la legenda ufficiale dei punteggi assegnati durante le performance.</p>
                         </div>
-                        
+
                         {/* Filter Bar */}
                         <div className="flex flex-wrap gap-2">
                             {categories.map((cat) => (
                                 <button
                                     key={cat}
                                     onClick={() => setActiveFilter(cat)}
-                                    className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
-                                        activeFilter === cat 
-                                        ? "bg-oro text-blunotte shadow-[0_0_20px_rgba(255,215,0,0.3)]" 
-                                        : "bg-white/5 text-gray-500 hover:bg-white/10 hover:text-white"
-                                    }`}
+                                    className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${activeFilter === cat
+                                            ? "bg-oro text-blunotte shadow-[0_0_20px_rgba(255,215,0,0.3)]"
+                                            : "bg-white/5 text-gray-500 hover:bg-white/10 hover:text-white"
+                                        }`}
                                 >
                                     {cat === "SPECIALE" ? "Speciali" : cat === "BONUS" ? "Bonus" : cat === "MALUS" ? "Malus" : cat}
                                 </button>
@@ -198,9 +197,9 @@ export default function RegolePage() {
 
 function StepCard({ icon: Icon, step, title, text, color }: { icon: any, step: string, title: string, text: string, color: string }) {
     const colorClass = color === "oro" ? "text-oro border-oro/20 bg-oro/5" : color === "viola" ? "text-viola border-viola/20 bg-viola/5" : "text-ocra border-ocra/20 bg-ocra/5";
-    
+
     return (
-        <motion.div 
+        <motion.div
             variants={fadeIn}
             initial="initial"
             whileInView="animate"
