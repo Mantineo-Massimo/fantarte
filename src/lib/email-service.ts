@@ -1,7 +1,7 @@
 import { prisma } from "./prisma";
 import { sendEmail } from "./email";
 
-type EmailType = "WELCOME" | "TEAM_CREATION" | "POINTS_ASSIGNED";
+type EmailType = "VERIFICATION" | "WELCOME" | "TEAM_CREATION" | "POINTS_ASSIGNED";
 
 export async function getEmailSetting(type: EmailType) {
     return await prisma.emailSetting.findUnique({

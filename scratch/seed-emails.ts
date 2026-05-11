@@ -11,9 +11,14 @@ async function main() {
 
     const templates = [
         {
+            type: 'VERIFICATION',
+            subject: 'FantArte! 🎨 Verifica la tua email',
+            content: '<h2>Ciao {nome}!</h2><p>Grazie per esserti registrato su <b>FantArte</b>.</p><p>Per poter creare la tua squadra, devi prima verificare il tuo account cliccando sul pulsante qui sotto:</p><p>{link}</p><p>Se il pulsante non funziona, copia questo link nel tuo browser.</p>'
+        },
+        {
             type: 'WELCOME',
-            subject: 'Benvenuto su FantArte! 🎨 Verifica la tua email',
-            content: '<h2>Ciao {nome}!</h2><p>Grazie per esserti registrato su <b>FantArte</b>, il fantagioco ufficiale della Piazza dell\'Arte.</p><p>Per iniziare la tua avventura e creare la tua squadra, devi prima verificare il tuo account cliccando sul pulsante qui sotto:</p><p>{link}</p><p>Se il pulsante non funziona, copia questo link nel tuo browser.</p>'
+            subject: 'Benvenuto in Piazza dell\'Arte! 🎠',
+            content: '<h2>Congratulazioni {nome}!</h2><p>La tua email è stata verificata con successo.</p><p>Ora sei un membro ufficiale di FantArte. Accedi alla piattaforma e componi la tua squadra prima della scadenza!</p>'
         },
         {
             type: 'TEAM_CREATION',

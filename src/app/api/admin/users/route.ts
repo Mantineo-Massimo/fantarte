@@ -64,7 +64,7 @@ export async function PUT(req: Request) {
             const { triggerEmail } = await import("@/lib/email-service");
             const verificationUrl = `${process.env.NEXTAUTH_URL || 'https://fantarte.it'}/auth/verify?token=${verificationToken}`;
             
-            await triggerEmail("WELCOME", user.email, {
+            await triggerEmail("VERIFICATION", user.email, {
                 nome: user.name || 'Utente',
                 link: `<a href="${verificationUrl}" style="color: #FFD700; font-weight: bold;">Verifica Account</a>`
             });

@@ -1478,7 +1478,8 @@ export default function AdminDashboard() {
 
                                 <div className="grid grid-cols-1 gap-8">
                                     {[
-                                        { type: "WELCOME", label: "Benvenuto (Registrazione)", desc: "Inviata quando un utente conferma l'email." },
+                                        { type: "VERIFICATION", label: "Email di Verifica", desc: "Inviata alla registrazione con il link." },
+                                        { type: "WELCOME", label: "Vero Benvenuto", desc: "Inviata DOPO che l'utente clicca sul link di verifica." },
                                         { type: "TEAM_CREATION", label: "Creazione Squadra", desc: "Inviata dopo aver salvato con successo il team." },
                                         { type: "POINTS_ASSIGNED", label: "Assegnazione Punti", desc: "Inviata quando assegni Bonus/Malus a un artista in squadra." }
                                     ].map((cat) => {

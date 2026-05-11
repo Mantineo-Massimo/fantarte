@@ -34,10 +34,9 @@ export async function GET(req: Request) {
 
         // Send Welcome Email
         try {
-            await sendEmail({
-                to: user.email!,
-                subject: "Benvenuto in Piazza dell'Arte! 🎠",
-                body: welcomeEmail(user.name || "Partecipante")
+            const { triggerEmail } = await import("@/lib/email-service");
+            await triggerEmail("WELCOME", user.email!, {
+                nome: user.name || "Partecipante"
             });
         } catch (err) {
             console.error("WELCOME_EMAIL_ERROR", err);
