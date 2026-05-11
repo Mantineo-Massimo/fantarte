@@ -53,7 +53,7 @@ export default function AccordoPage() {
                                     Via Del Vespro n°57, 98123 Messina<br />
                                     C.F. 97103490831<br />
                                     Presidente: <strong className="text-gray-300">Giuseppe Di Giorgio</strong><br />
-                                    Tel: <strong className="text-gray-400">+39 090 1234567</strong>
+
                                 </p>
                             </div>
                             <div className="bg-white/5 rounded-2xl p-5 border border-gray-700">
@@ -63,7 +63,7 @@ export default function AccordoPage() {
                                     Contrada Petraro Top Residence Ganzirri, 98165 Messina<br />
                                     C.F. 27068650833<br />
                                     Presidente: <strong className="text-gray-300">Luigi Grillo</strong><br />
-                                    Tel: <strong className="text-gray-400">+39 090 7654321</strong>
+
                                 </p>
                             </div>
                         </div>

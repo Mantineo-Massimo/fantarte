@@ -91,12 +91,12 @@ export default function Footer() {
                                 <div className="space-y-1">
                                     <p className="text-[9px] font-black uppercase tracking-widest text-gray-600">Morgana</p>
                                     <a href="mailto:associazione.morgana@gmail.com" className="block text-gray-300 font-medium hover:text-white transition-colors text-xs break-all underline decoration-white/10 underline-offset-4">associazione.morgana@gmail.com</a>
-                                    <a href="tel:+390901234567" className="block text-gray-400 font-bold hover:text-oro transition-colors text-xs">+39 090 1234567</a>
+
                                 </div>
                                 <div className="space-y-1 pt-2">
                                     <p className="text-[9px] font-black uppercase tracking-widest text-gray-600">O.R.U.M.</p>
                                     <a href="mailto:orum.unime@gmail.com" className="block text-gray-300 font-medium hover:text-white transition-colors text-xs break-all underline decoration-white/10 underline-offset-4">orum.unime@gmail.com</a>
-                                    <a href="tel:+390907654321" className="block text-gray-400 font-bold hover:text-oro transition-colors text-xs">+39 090 7654321</a>
+
                                 </div>
                              </div>
                              <div className="pt-4 flex items-center gap-3 opacity-30 relative z-10">
