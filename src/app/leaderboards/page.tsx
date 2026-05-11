@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import LeaderboardsPage from "./LeaderboardContent";
 
-export const revalidate = 30; // Cache for 30 seconds
+export const revalidate = 120; // Cache for 120 seconds
 
 export default async function Page() {
     const leagues = await prisma.league.findMany({

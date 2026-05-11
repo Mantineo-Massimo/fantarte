@@ -250,8 +250,8 @@ function PodiumCard({ rank, data, type, featured, onClick }: { rank: number, dat
             onClick={onClick}
             className={`relative p-10 rounded-[3.5rem] border flex flex-col items-center text-center cursor-pointer group transition-all duration-500
                 ${featured 
-                    ? "bg-blunotte/98 md:scale-110 md:-translate-y-12 z-20 shadow-[0_30px_100px_rgba(0,0,0,0.8)] border-oro/30 backdrop-blur-3xl" 
-                    : "bg-blunotte/90 z-10 border-white/10 backdrop-blur-2xl hover:bg-blunotte/95"}
+                    ? "bg-blunotte/98 md:scale-110 md:-translate-y-12 z-20 shadow-[0_30px_100px_rgba(0,0,0,0.8)] border-oro/30 backdrop-blur-xl" 
+                    : "bg-blunotte/90 z-10 border-white/10 backdrop-blur-xl hover:bg-blunotte/95"}
             `}
         >
             <div className={`absolute -top-6 w-12 h-12 rounded-full flex items-center justify-center font-black shadow-2xl border-2
@@ -293,7 +293,8 @@ function RankRow({ index, data, type, onClick }: { index: number, data: any, typ
     return (
         <motion.div 
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true, margin: "-50px" }}
             onClick={onClick}
             className="flex items-center justify-between px-4 md:px-10 py-5 md:py-6 hover:bg-white/5 transition-all cursor-pointer group gap-4"
         >
@@ -332,7 +333,7 @@ function TeamModal({ teamResult, onClose, onArtistClick }: { teamResult: TeamRes
                 animate={{ opacity: 1 }} 
                 exit={{ opacity: 0 }}
                 onClick={onClose} 
-                className="absolute inset-0 bg-[#0a0f1c]/98 backdrop-blur-3xl" 
+                className="absolute inset-0 bg-[#0a0f1c]/98 backdrop-blur-xl" 
             />
             
             <motion.div 
@@ -497,7 +498,7 @@ function ArtistModal({ artist, onClose, loading }: { artist: Artist, onClose: ()
                 animate={{ opacity: 1 }} 
                 exit={{ opacity: 0 }}
                 onClick={onClose} 
-                className="absolute inset-0 bg-[#0a0f1c]/98 backdrop-blur-3xl" 
+                className="absolute inset-0 bg-[#0a0f1c]/98 backdrop-blur-xl" 
             />
             
             <motion.div 
