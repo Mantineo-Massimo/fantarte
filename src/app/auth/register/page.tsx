@@ -9,7 +9,7 @@ import { FiArrowLeft } from "react-icons/fi";
 
 export default function RegisterPage() {
     const router = useRouter();
-    const [data, setData] = useState({ name: "", email: "", password: "" });
+    const [data, setData] = useState({ name: "", email: "", phone: "", password: "" });
     const [acceptTerms, setAcceptTerms] = useState(false);
     const [acceptMarketing, setAcceptMarketing] = useState(false);
     const [error, setError] = useState("");
@@ -96,16 +96,29 @@ export default function RegisterPage() {
                             required
                         />
                     </div>
-                    <div>
-                        <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-2 ml-1">Email</label>
-                        <input
-                            type="email"
-                            placeholder="tua@email.it"
-                            value={data.email}
-                            onChange={(e) => setData({ ...data, email: e.target.value })}
-                            className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-gray-700 focus:outline-none focus:border-oro/50 focus:ring-1 focus:ring-oro/20 transition-all font-medium"
-                            required
-                        />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-2 ml-1">Email</label>
+                            <input
+                                type="email"
+                                placeholder="tua@email.it"
+                                value={data.email}
+                                onChange={(e) => setData({ ...data, email: e.target.value })}
+                                className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-gray-700 focus:outline-none focus:border-oro/50 focus:ring-1 focus:ring-oro/20 transition-all font-medium"
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-2 ml-1">Telefono</label>
+                            <input
+                                type="tel"
+                                placeholder="+39 333 1234567"
+                                value={data.phone}
+                                onChange={(e) => setData({ ...data, phone: e.target.value })}
+                                className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-gray-700 focus:outline-none focus:border-oro/50 focus:ring-1 focus:ring-oro/20 transition-all font-medium"
+                                required
+                            />
+                        </div>
                     </div>
                     <div>
                         <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-2 ml-1">Password</label>
