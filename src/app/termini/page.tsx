@@ -57,10 +57,12 @@ export default function TerminiPage() {
                             <div className="p-6 bg-white/5 rounded-2xl border border-white/5">
                                 <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-2">Morgana</p>
                                 <p className="text-white font-bold">associazione.morgana@gmail.com</p>
+                                <p className="text-gray-500 text-sm mt-1">+39 090 1234567</p>
                             </div>
                             <div className="p-6 bg-white/5 rounded-2xl border border-white/5">
                                 <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-2">O.R.U.M.</p>
                                 <p className="text-white font-bold">orum.unime@gmail.com</p>
+                                <p className="text-gray-500 text-sm mt-1">+39 090 7654321</p>
                             </div>
                         </div>
                     </div>

@@ -74,6 +74,7 @@ export default function PrivacyPage() {
                                         Via Del Vespro n°57, 98123 Messina<br />
                                         C.F. 97103490831<br />
                                         Presidente: Giuseppe Di Giorgio<br />
+                                        <a href="tel:+390901234567" className="text-gray-400 hover:text-oro transition-colors">+39 090 1234567</a><br />
                                         <a href="mailto:associazione.morgana@gmail.com" className="text-oro hover:underline">associazione.morgana@gmail.com</a>
                                     </p>
                                 </div>
@@ -83,6 +84,7 @@ export default function PrivacyPage() {
                                         Contrada Petraro Top Residence Ganzirri, 98165 Messina<br />
                                         C.F. 27068650833<br />
                                         Presidente: Luigi Grillo<br />
+                                        <a href="tel:+390907654321" className="text-gray-400 hover:text-oro transition-colors">+39 090 7654321</a><br />
                                         <a href="mailto:orum.unime@gmail.com" className="text-oro hover:underline">orum.unime@gmail.com</a>
                                     </p>
                                 </div>
