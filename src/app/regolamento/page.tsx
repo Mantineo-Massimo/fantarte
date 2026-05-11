@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import RegolamentoContent from "./RegolamentoContent";
+// Force refresh
 
 export const revalidate = 300; // Cache for 5 minutes (it changes rarely)
 
