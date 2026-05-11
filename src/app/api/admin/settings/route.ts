@@ -41,6 +41,9 @@ export async function POST(req: Request) {
             });
         }
 
+        const { revalidatePath } = await import("next/cache");
+        revalidatePath("/api/settings");
+
         return NextResponse.json(settings);
 
     } catch (error) {
