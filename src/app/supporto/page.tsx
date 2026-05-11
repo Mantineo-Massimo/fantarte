@@ -104,15 +104,15 @@ export default function SupportPage() {
                                 <div className="space-y-3">
                                     <p className="text-[10px] text-gray-500 font-bold uppercase">Morgana</p>
                                     <div className="flex gap-4">
-                                        <a href="#" className="p-2 bg-white/5 rounded-lg hover:text-oro transition-colors"><FiInstagram size={20} /></a>
-                                        <a href="#" className="p-2 bg-white/5 rounded-lg hover:text-oro transition-colors"><FiFacebook size={20} /></a>
+                                        <a href="https://www.instagram.com/associazione.morgana" target="_blank" rel="noopener noreferrer" className="p-2 bg-white/5 rounded-lg hover:bg-oro hover:text-blunotte transition-all duration-300"><FiInstagram size={20} /></a>
+                                        <a href="https://www.facebook.com/Morgana.Associazione/" target="_blank" rel="noopener noreferrer" className="p-2 bg-white/5 rounded-lg hover:bg-oro hover:text-blunotte transition-all duration-300"><FiFacebook size={20} /></a>
                                     </div>
                                 </div>
                                 <div className="space-y-3">
-                                    <p className="text-[10px] text-gray-500 font-bold uppercase"></p>
+                                    <p className="text-[10px] text-gray-500 font-bold uppercase">O.R.U.M.</p>
                                     <div className="flex gap-4">
-                                        <a href="#" className="p-2 bg-white/5 rounded-lg hover:text-oro transition-colors"><FiInstagram size={20} /></a>
-                                        <a href="#" className="p-2 bg-white/5 rounded-lg hover:text-oro transition-colors"><FiFacebook size={20} /></a>
+                                        <a href="https://www.instagram.com/orum_unime" target="_blank" rel="noopener noreferrer" className="p-2 bg-white/5 rounded-lg hover:bg-oro hover:text-blunotte transition-all duration-300"><FiInstagram size={20} /></a>
+                                        <a href="https://www.facebook.com/AssociazioneOrum/" target="_blank" rel="noopener noreferrer" className="p-2 bg-white/5 rounded-lg hover:bg-oro hover:text-blunotte transition-all duration-300"><FiFacebook size={20} /></a>
                                     </div>
                                 </div>
                             </div>
