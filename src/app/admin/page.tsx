@@ -1194,6 +1194,7 @@ export default function AdminDashboard() {
                                             <tr>
                                                 <th className="pb-4 px-4">Utente</th>
                                                 <th className="pb-4 px-4">Squadra</th>
+                                                <th className="pb-4 px-4 text-center">Status Email</th>
                                                 <th className="pb-4 px-4 text-center">Punti</th>
                                                 <th className="pb-4 px-4">Artisti</th>
                                                 <th className="pb-4 px-4 text-right">Azioni</th>
@@ -1205,11 +1206,53 @@ export default function AdminDashboard() {
                                                     <td className="py-4 px-4">
                                                         <div className="font-bold text-gray-200">{u.name || "N/A"}</div>
                                                         <div className="text-xs text-gray-500">{u.email}</div>
+                                                        {u.phone && <div className="text-[10px] text-gray-600 mt-1">{u.phone}</div>}
                                                         <div className="mt-1">
                                                             <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider ${u.role === 'ADMIN' ? 'bg-oro/20 text-oro border border-oro/30' : 'bg-gray-800 text-gray-500'}`}>
                                                                 {u.role}
                                                             </span>
                                                         </div>
+                                                    </td>
+                                                    <td className="py-4 px-4 text-center">
+                                                        {u.emailVerified ? (
+                                                            <div className="flex flex-col items-center gap-1">
+                                                                <span className="text-green-500 bg-green-500/10 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest border border-green-500/20">Verificata</span>
+                                                                <span className="text-[8px] text-gray-600 uppercase font-bold">{new Date(u.emailVerified).toLocaleDateString('it-IT')}</span>
+                                                            </div>
+                                                        ) : (
+                                                            <div className="flex flex-col items-center gap-2">
+                                                                <span className="text-red-400 bg-red-400/10 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest border border-red-400/20">Non Verificata</span>
+                                                                <div className="flex gap-1">
+                                                                    <button 
+                                                                        onClick={() => {
+                                                                            if(confirm("Verificare manualmente l'utente?")) {
+                                                                                fetch("/api/admin/users", {
+                                                                                    method: "PUT",
+                                                                                    headers: { "Content-Type": "application/json" },
+                                                                                    body: JSON.stringify({ id: u.id, verifyManually: true })
+                                                                                }).then(() => loadUsers());
+                                                                            }
+                                                                        }}
+                                                                        className="text-[8px] font-black uppercase tracking-widest text-oro hover:underline"
+                                                                    >
+                                                                        Verifica
+                                                                    </button>
+                                                                    <span className="text-gray-800 text-[8px]">|</span>
+                                                                    <button 
+                                                                        onClick={() => {
+                                                                            fetch("/api/admin/users", {
+                                                                                method: "PUT",
+                                                                                headers: { "Content-Type": "application/json" },
+                                                                                body: JSON.stringify({ id: u.id, resendVerification: true })
+                                                                            }).then(() => alert("Email reinviata!"));
+                                                                        }}
+                                                                        className="text-[8px] font-black uppercase tracking-widest text-gray-500 hover:text-white"
+                                                                    >
+                                                                        Reinvia
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        )}
                                                     </td>
                                                     <td className="py-4 px-4">
                                                         {u.team ? (

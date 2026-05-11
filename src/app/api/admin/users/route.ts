@@ -18,6 +18,8 @@ export async function GET() {
                 email: true,
                 phone: true,
                 role: true,
+                emailVerified: true,
+                verificationToken: true,
                 createdAt: true,
                 team: {
                     include: {
@@ -46,13 +48,34 @@ export async function PUT(req: Request) {
         if (!admin || admin.role !== "ADMIN") return new NextResponse("Forbidden", { status: 403 });
 
         const body = await req.json();
-        const { id, name, role, teamName } = body;
+        const { id, name, role, teamName, verifyManually, resendVerification } = body;
 
         if (!id) return new NextResponse("Missing user ID", { status: 400 });
 
+        if (resendVerification) {
+            const user = await prisma.user.findUnique({ where: { id } });
+            if (!user) return new NextResponse("User not found", { status: 404 });
+            
+            const verificationToken = user.verificationToken || Math.random().toString(36).substring(2, 15);
+            if (!user.verificationToken) {
+                await prisma.user.update({ where: { id }, data: { verificationToken } });
+            }
+
+            const { triggerEmail } = await import("@/lib/email-service");
+            const verificationUrl = `${process.env.NEXTAUTH_URL || 'https://fantarte.it'}/auth/verify?token=${verificationToken}`;
+            
+            await triggerEmail("WELCOME", user.email, {
+                nome: user.name || 'Utente',
+                link: `<a href="${verificationUrl}" style="color: #FFD700; font-weight: bold;">Verifica Account</a>`
+            });
+
+            return NextResponse.json({ message: "Verification email resent" });
+        }
+
         const updateData: any = {
             name: name !== undefined ? name : undefined,
-            role: role !== undefined ? role : undefined
+            role: role !== undefined ? role : undefined,
+            emailVerified: verifyManually ? new Date() : undefined
         };
 
         if (teamName !== undefined) {

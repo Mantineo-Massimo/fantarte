@@ -15,9 +15,10 @@ model User {
   verificationToken String?           @unique
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @updatedAt
-  name      String?
-  events    BonusMalusEvent[] @relation("AdminEvents")
-  team      Team?
+  name              String?
+  phone             String?
+  events            BonusMalusEvent[] @relation("AdminEvents")
+  team              Team?
 }
 
 model Artist {
