@@ -6,12 +6,13 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { FiArrowLeft, FiLogOut } from "react-icons/fi";
+import { FiArrowLeft, FiEye, FiEyeOff } from "react-icons/fi";
 
 function LoginForm() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [data, setData] = useState({ email: "", password: "" });
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -130,14 +131,23 @@ function LoginForm() {
                             Dimenticata?
                         </Link>
                     </div>
-                    <input
-                        type="password"
-                        placeholder="••••••••"
-                        value={data.password}
-                        onChange={(e) => setData({ ...data, password: e.target.value })}
-                        className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-gray-700 focus:outline-none focus:border-oro/50 focus:ring-1 focus:ring-oro/20 transition-all font-medium"
-                        required
-                    />
+                    <div className="relative">
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            placeholder="••••••••"
+                            value={data.password}
+                            onChange={(e) => setData({ ...data, password: e.target.value })}
+                            className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-gray-700 focus:outline-none focus:border-oro/50 focus:ring-1 focus:ring-oro/20 transition-all font-medium pr-12"
+                            required
+                        />
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors"
+                        >
+                            {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                        </button>
+                    </div>
                 </div>
 
                 {error && (

@@ -5,11 +5,12 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { FiArrowLeft } from "react-icons/fi";
+import { FiArrowLeft, FiEye, FiEyeOff } from "react-icons/fi";
 
 export default function RegisterPage() {
     const router = useRouter();
     const [data, setData] = useState({ name: "", email: "", phone: "", password: "" });
+    const [showPassword, setShowPassword] = useState(false);
     const [acceptTerms, setAcceptTerms] = useState(false);
     const [acceptMarketing, setAcceptMarketing] = useState(false);
     const [error, setError] = useState("");
@@ -122,14 +123,23 @@ export default function RegisterPage() {
                     </div>
                     <div>
                         <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-2 ml-1">Password</label>
-                        <input
-                            type="password"
-                            placeholder="••••••••"
-                            value={data.password}
-                            onChange={(e) => setData({ ...data, password: e.target.value })}
-                            className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-gray-700 focus:outline-none focus:border-oro/50 focus:ring-1 focus:ring-oro/20 transition-all font-medium"
-                            required
-                        />
+                        <div className="relative">
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                placeholder="••••••••"
+                                value={data.password}
+                                onChange={(e) => setData({ ...data, password: e.target.value })}
+                                className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-gray-700 focus:outline-none focus:border-oro/50 focus:ring-1 focus:ring-oro/20 transition-all font-medium pr-12"
+                                required
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors"
+                            >
+                                {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                            </button>
+                        </div>
                     </div>
 
                     <div className="space-y-4 pt-2">
