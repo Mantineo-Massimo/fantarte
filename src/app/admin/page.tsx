@@ -201,7 +201,10 @@ export default function AdminDashboard() {
                 body: JSON.stringify({
                     id: editingUser.id,
                     name: editingUser.name,
-                    role: editingUser.role
+                    role: editingUser.role,
+                    teamName: editingUser.teamName,
+                    artistIds: editingUser.artistIds,
+                    captainId: editingUser.captainId
                 })
             });
 
@@ -1287,7 +1290,9 @@ export default function AdminDashboard() {
                                                                 onClick={() => {
                                                                     setEditingUser({
                                                                         ...u,
-                                                                        teamName: u.team?.name || ""
+                                                                        teamName: u.team?.name || "",
+                                                                        artistIds: u.team?.artists ? u.team.artists.map((a: any) => a.id) : [],
+                                                                        captainId: u.team?.captainId || ""
                                                                     });
                                                                     setIsUserModalOpen(true);
                                                                 }}
@@ -1599,14 +1604,52 @@ export default function AdminDashboard() {
                                     </select>
                                 </div>
                                 {editingUser.team && (
-                                    <div>
-                                        <label className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1 block">Nome Squadra</label>
-                                        <input
-                                            type="text"
-                                            value={editingUser.teamName || ""}
-                                            onChange={e => setEditingUser({ ...editingUser, teamName: e.target.value })}
-                                            className="w-full bg-[#0a0f1c] border border-gray-800 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-oro"
-                                        />
+                                    <div className="space-y-4">
+                                        <div>
+                                            <label className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1 block">Nome Squadra</label>
+                                            <input
+                                                type="text"
+                                                value={editingUser.teamName || ""}
+                                                onChange={e => setEditingUser({ ...editingUser, teamName: e.target.value })}
+                                                className="w-full bg-[#0a0f1c] border border-gray-800 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-oro"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1 block">Artisti in Squadra</label>
+                                            <div className="space-y-2">
+                                                {[0, 1, 2, 3, 4].map(idx => (
+                                                    <select
+                                                        key={idx}
+                                                        value={editingUser.artistIds?.[idx] || ""}
+                                                        onChange={e => {
+                                                            const newIds = [...(editingUser.artistIds || [])];
+                                                            newIds[idx] = e.target.value;
+                                                            setEditingUser({ ...editingUser, artistIds: newIds });
+                                                        }}
+                                                        className="w-full bg-[#0a0f1c] border border-gray-800 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-oro text-sm"
+                                                    >
+                                                        <option value="">Seleziona artista...</option>
+                                                        {artists.map(a => (
+                                                            <option key={a.id} value={a.id}>{a.name} ({a.type} - {a.cost}pt)</option>
+                                                        ))}
+                                                    </select>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1 block">Capitano (Punti Speciali x2)</label>
+                                            <select
+                                                value={editingUser.captainId || ""}
+                                                onChange={e => setEditingUser({ ...editingUser, captainId: e.target.value })}
+                                                className="w-full bg-[#0a0f1c] border border-gray-800 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-oro"
+                                            >
+                                                <option value="">Seleziona capitano...</option>
+                                                {editingUser.artistIds?.filter((id: string) => id).map((id: string) => {
+                                                    const a = artists.find(art => art.id === id);
+                                                    return a ? <option key={a.id} value={a.id}>{a.name}</option> : null;
+                                                })}
+                                            </select>
+                                        </div>
                                     </div>
                                 )}
 

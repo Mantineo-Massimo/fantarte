@@ -1,7 +1,23 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+
+// Helper to calculate score based on captain bonus (double SPECIALE only)
+async function calculateTeamScore(artistIds: string[], captainId: string | null) {
+    const events = await prisma.bonusMalusEvent.findMany({
+        where: { artistId: { in: artistIds } }
+    });
+    
+    let total = 0;
+    for (const event of events) {
+        const isCaptain = event.artistId === captainId;
+        const multiplier = (isCaptain && event.category === "SPECIALE") ? 2 : 1;
+        total += event.points * multiplier;
+    }
+    return total;
+}
 
 export async function GET() {
     try {
@@ -48,7 +64,7 @@ export async function PUT(req: Request) {
         if (!admin || admin.role !== "ADMIN") return new NextResponse("Forbidden", { status: 403 });
 
         const body = await req.json();
-        const { id, name, role, teamName, verifyManually, resendVerification } = body;
+        const { id, name, role, teamName, artistIds, captainId, verifyManually, resendVerification } = body;
 
         if (!id) return new NextResponse("Missing user ID", { status: 400 });
 
@@ -78,12 +94,27 @@ export async function PUT(req: Request) {
             emailVerified: verifyManually ? new Date() : undefined
         };
 
-        if (teamName !== undefined) {
+        if (teamName !== undefined || artistIds !== undefined || captainId !== undefined) {
+            const teamUpdateData: any = {};
+            
+            if (teamName !== undefined) teamUpdateData.name = teamName;
+            if (captainId !== undefined) teamUpdateData.captainId = captainId;
+            if (artistIds !== undefined) {
+                teamUpdateData.artists = {
+                    set: artistIds.map((aid: string) => ({ id: aid }))
+                };
+            }
+
             updateData.team = {
-                update: {
-                    name: teamName
-                }
+                update: teamUpdateData
             };
+        }
+
+        let oldTeam: any = null;
+        if (artistIds !== undefined) {
+            oldTeam = await prisma.team.findUnique({
+                where: { userId: id }
+            });
         }
 
         const updatedUser = await prisma.user.update({
@@ -94,9 +125,24 @@ export async function PUT(req: Request) {
                 name: true,
                 email: true,
                 role: true,
-                team: true
+                team: {
+                    select: { id: true, name: true }
+                }
             }
         });
+
+        // Recalculate score if artists changed
+        if (artistIds !== undefined && oldTeam) {
+            const newScore = await calculateTeamScore(artistIds, captainId || oldTeam.captainId);
+            await prisma.teamLeague.updateMany({
+                where: { teamId: oldTeam.id },
+                data: { score: newScore }
+            });
+
+            // Flush cache
+            revalidatePath("/");
+            revalidatePath("/leaderboards");
+        }
 
         return NextResponse.json(updatedUser);
     } catch (error) {
