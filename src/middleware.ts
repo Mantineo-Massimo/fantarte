@@ -7,29 +7,40 @@ export default withAuth(
     const pathname = req.nextUrl.pathname;
     const isAdmin = token?.role === "ADMIN";
 
-    // Log di diagnostica in produzione (ereditato da proxy.ts)
-    if (process.env.NODE_ENV === "production" && !pathname.startsWith("/_next")) {
-        console.log(`AUTH_DEBUG: [${pathname}] Token: ${!!token}, Role: ${token?.role || 'N/A'}`);
-    }
-
-    // 1. Protezione per /admin (Pagine e API)
+    // 1. Protezione Rigida Area Admin
     if (pathname.startsWith("/admin") || pathname.startsWith("/api/admin")) {
         if (!isAdmin) {
-            // Se è un'API, diamo errore 403, se è una pagina facciamo redirect
+            // Se è un'API admin, errore 403 (Forbidden)
             if (pathname.startsWith("/api/")) {
                 return new NextResponse("Forbidden", { status: 403 });
             }
+            // Se è una pagina admin, redirect in Home
             return NextResponse.redirect(new URL("/", req.url));
         }
     }
 
-    // 2. Altre protezioni (ereditate da proxy.ts)
-    // Se un utente non loggato prova ad andare in aree protette
-    // (withAuth lo manda già al login, ma qui gestiamo casi specifici se servisse)
+    // Per le altre rotte in matcher (/team, /account), withAuth 
+    // gestisce già il redirect al login se il token manca.
+    return NextResponse.next();
   },
   {
     callbacks: {
-      authorized: ({ token }) => !!token,
+      // authorized decide se chiamare la funzione middleware sopra.
+      // Se ritorna false, Next-Auth reindirizza alla pagina di login.
+      authorized: ({ token, req }) => {
+        const pathname = req.nextUrl.pathname;
+        
+        // Se è l'area admin, richiediamo sempre il token qui, 
+        // la logica del ruolo la gestiamo nel middleware sopra.
+        if (pathname.startsWith("/admin") || pathname.startsWith("/api/admin")) {
+            return !!token;
+        }
+
+        // Per team e account, servirebbe il login, ma se vogliamo che 
+        // la home sia sempre libera, non dobbiamo bloccarla qui.
+        // Visto che il matcher è specifico, questo callback gira solo per quelle rotte.
+        return !!token;
+      },
     },
     secret: process.env.NEXTAUTH_SECRET,
   }
@@ -37,6 +48,7 @@ export default withAuth(
 
 export const config = {
   matcher: [
+    // Proteggiamo solo le rotte che richiedono autenticazione
     "/admin/:path*",
     "/api/admin/:path*",
     "/team/:path*",
