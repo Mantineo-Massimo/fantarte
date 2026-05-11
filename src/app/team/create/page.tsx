@@ -294,7 +294,7 @@ export default function CreateTeamPage() {
                 </div>
 
                 {/* Main Selection Container */}
-                <div className="glass rounded-[2rem] md:rounded-[3rem] border border-white/5 flex flex-col bg-white/[0.01] backdrop-blur-3xl relative">
+                <div className="glass rounded-[2rem] md:rounded-[3rem] border border-white/5 flex flex-col bg-white/[0.01] backdrop-blur-xl relative">
                     
                     {/* Step Content Area */}
                     <div className="p-5 md:p-10 min-h-[400px]">
