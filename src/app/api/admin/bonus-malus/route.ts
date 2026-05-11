@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -144,6 +145,10 @@ export async function POST(req: Request) {
             console.error("NOTIFY_USERS_POINTS_ERROR", err);
         }
 
+        // Flush cache for real-time updates
+        revalidatePath("/");
+        revalidatePath("/leaderboards");
+
         return NextResponse.json(event);
     } catch (error) {
         console.error("ADMIN_EVENT_ERROR", error);
@@ -209,7 +214,9 @@ export async function DELETE(req: Request) {
                     data: { score: { decrement: captainDecrement } }
                 });
             }
-        });
+        // Flush cache for real-time updates
+        revalidatePath("/");
+        revalidatePath("/leaderboards");
 
         return new NextResponse("Deleted and scores reconciled", { status: 200 });
     } catch (error) {
