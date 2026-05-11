@@ -397,7 +397,7 @@ function TeamModal({ teamResult, onClose, onArtistClick }: { teamResult: TeamRes
                         <div>
                             <h3 className="text-[9px] font-black uppercase tracking-[0.4em] text-gray-600 mb-4 ml-1">La Formazione</h3>
                             <div className="grid grid-cols-1 gap-3">
-                                {teamResult.team.artists.map((artist, idx) => {
+                                {[...teamResult.team.artists].sort((a, b) => b.totalScore - a.totalScore).map((artist, idx) => {
                                     const isTop = artist.id === topArtist.id;
                                     const isCaptain = teamResult.team.captainId === artist.id;
 
