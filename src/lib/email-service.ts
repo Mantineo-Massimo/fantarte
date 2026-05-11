@@ -38,7 +38,7 @@ function wrapHtml(content: string) {
 <body>
     <div class="container">
         <div class="header">
-            <img src="https://www.fantarte.it/fanta-logo.webp" alt="FantArte" width="180" style="display: block; margin: 0 auto;" />
+            <img src="https://www.fantarte.it/fanta-logo.png" alt="FantArte" width="180" style="display: block; margin: 0 auto;" />
         </div>
         <div class="content">
             ${content}
