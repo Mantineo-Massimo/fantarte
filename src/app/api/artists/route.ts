@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-export const revalidate = 0;
+export const revalidate = 60; // Cache for 60 seconds
 
 // GET /api/artists
 export async function GET() {

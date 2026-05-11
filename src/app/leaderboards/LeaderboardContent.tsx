@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiUsers, FiStar, FiTrendingUp, FiAward, FiX, FiCheck, FiShare2, FiZap } from "react-icons/fi";
+import Image from "next/image";
 import SocialShare from "@/components/SocialShare";
 import LeaderboardSkeleton from "./Skeleton";
 
@@ -258,11 +259,18 @@ function PodiumCard({ rank, data, type, featured, onClick }: { rank: number, dat
             `}>
                 {rank}
             </div>
-            <div className={`w-32 h-32 rounded-[30px] bg-black mb-6 overflow-hidden border-2 transition-transform duration-500 group-hover:scale-105 shrink-0 relative aspect-square
+            <div className={`w-32 h-32 rounded-[30px] bg-black mb-6 overflow-hidden border-2 transition-transform duration-500 group-hover:scale-105 shrink-0 relative
                 ${rank === 1 ? "border-oro shadow-[0_0_30px_rgba(255,215,0,0.3)]" : "border-white/10"}
             `}>
                 {image ? (
-                    <img src={image} className="w-full h-full object-cover" alt={name} />
+                    <Image 
+                        src={image} 
+                        fill 
+                        className="object-cover" 
+                        alt={name} 
+                        priority={rank === 1}
+                        sizes="128px"
+                    />
                 ) : (
                     <div className="w-full h-full flex items-center justify-center text-4xl font-black text-gray-800">{name.charAt(0)}</div>
                 )}
@@ -291,9 +299,15 @@ function RankRow({ index, data, type, onClick }: { index: number, data: any, typ
         >
             <div className="flex items-center gap-3 md:gap-8 min-w-0 flex-1">
                 <span className="font-black text-gray-700 w-8 md:w-10 shrink-0 text-sm md:text-base">{index}</span>
-                <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-black overflow-hidden border border-white/10 group-hover:border-oro/40 transition-colors shrink-0 relative aspect-square">
+                <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-black overflow-hidden border border-white/10 group-hover:border-oro/40 transition-colors shrink-0 relative">
                     {image ? (
-                        <img src={image} className="w-full h-full object-cover" alt={name} />
+                        <Image 
+                            src={image} 
+                            fill 
+                            className="object-cover" 
+                            alt={name} 
+                            sizes="(max-width: 768px) 48px, 64px"
+                        />
                     ) : (
                         <div className="w-full h-full flex items-center justify-center font-black text-gray-800 text-lg">{name.charAt(0)}</div>
                     )}
@@ -335,7 +349,13 @@ function TeamModal({ teamResult, onClose, onArtistClick }: { teamResult: TeamRes
                     <div className="relative group shrink-0">
                         <div className="w-24 h-24 md:w-32 md:h-32 rounded-[2rem] bg-black border-2 border-oro/30 overflow-hidden relative z-10">
                             {teamResult.team.image ? (
-                                <img src={teamResult.team.image} alt={teamResult.team.name} className="w-full h-full object-cover" />
+                                <Image 
+                                    src={teamResult.team.image} 
+                                    alt={teamResult.team.name} 
+                                    fill 
+                                    className="object-cover"
+                                    sizes="(max-width: 768px) 96px, 128px"
+                                />
                             ) : (
                                 <div className="w-full h-full flex items-center justify-center font-black text-4xl text-gray-800">
                                     {teamResult.team.name.charAt(0)}
@@ -393,11 +413,17 @@ function TeamModal({ teamResult, onClose, onArtistClick }: { teamResult: TeamRes
                                         >
                                             <div className="flex items-center gap-4 relative z-10">
                                                 <div className="relative">
-                                                    <div className={`w-12 h-12 rounded-xl bg-black border overflow-hidden transition-transform group-hover/art:scale-105 duration-500
+                                                    <div className={`w-12 h-12 rounded-xl bg-black border overflow-hidden transition-transform group-hover/art:scale-105 duration-500 relative
                                                         ${isTop ? "border-oro/50" : "border-white/10"}
                                                     `}>
                                                         {artist.image ? (
-                                                            <img src={artist.image} alt={artist.name} className="w-full h-full object-cover" />
+                                                            <Image 
+                                                                src={artist.image} 
+                                                                alt={artist.name} 
+                                                                fill 
+                                                                className="object-cover"
+                                                                sizes="48px"
+                                                            />
                                                         ) : (
                                                             <div className="w-full h-full flex items-center justify-center font-black text-xl text-gray-800">
                                                                 {artist.name.charAt(0)}
@@ -487,7 +513,13 @@ function ArtistModal({ artist, onClose, loading }: { artist: Artist, onClose: ()
                          <div className="relative group">
                              <div className="w-16 h-16 rounded-[1.2rem] bg-black border-2 border-oro/30 overflow-hidden relative z-10">
                                 {artist.image ? (
-                                    <img src={artist.image} alt={artist.name} className="w-full h-full object-cover" />
+                                    <Image 
+                                        src={artist.image} 
+                                        alt={artist.name} 
+                                        fill 
+                                        className="object-cover"
+                                        sizes="64px"
+                                    />
                                 ) : (
                                     <div className="w-full h-full flex items-center justify-center font-black text-2xl text-gray-800">
                                         {artist.name.charAt(0)}
