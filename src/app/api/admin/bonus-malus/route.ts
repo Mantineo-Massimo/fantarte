@@ -214,6 +214,8 @@ export async function DELETE(req: Request) {
                     data: { score: { decrement: captainDecrement } }
                 });
             }
+        });
+
         // Flush cache for real-time updates
         revalidatePath("/");
         revalidatePath("/leaderboards");
