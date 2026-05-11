@@ -13,7 +13,7 @@ export async function sendEmail({ to, subject, body, text }: { to: string; subje
     try {
         const client = getResendClient();
         const { data, error } = await client.emails.send({
-            from: process.env.EMAIL_FROM || "onboarding@resend.dev",
+            from: "FantArte <info@fantarte.it>",
             to: [to],
             subject: subject,
             html: body,
@@ -49,7 +49,7 @@ export async function sendBatch(emails: { to: string; subject: string; body: str
 
             const { data, error } = await client.batch.send(
                 chunk.map(email => ({
-                    from: process.env.EMAIL_FROM || "onboarding@resend.dev",
+                    from: "FantArte <info@fantarte.it>",
                     to: [email.to],
                     subject: email.subject,
                     html: email.body,
