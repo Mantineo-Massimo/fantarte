@@ -94,7 +94,7 @@ export default function Home({ initialSponsors, initialDeadline }: { initialSpon
             <motion.div variants={fadeIn} className="md:col-span-2 bento-card group">
               <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-oro/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <FiTrendingUp className="text-oro text-5xl mb-10 group-hover:scale-110 transition-transform duration-500" />
-              <h2 className="text-3xl md:text-5xl font-black tracking-tighter mb-6 uppercase">Scali la <span className="text-oro">Gloria.</span></h2>
+              <h2 className="text-3xl md:text-5xl font-black tracking-tighter mb-6 uppercase">Scala la <span className="text-oro">Gloria</span></h2>
               <p className="text-gray-400 text-lg max-w-md leading-relaxed">Accumula punti in base alle performance degli artisti sul palco. Bonus speciali per i Capitani e Malus inaspettati rendono ogni serata un&apos;incognita elettrizzante.</p>
               <div className="absolute -bottom-20 -right-20 opacity-[0.03] group-hover:opacity-[0.08] group-hover:rotate-12 transition-all duration-700 pointer-events-none">
                 <FiAward size={400} />
@@ -106,7 +106,7 @@ export default function Home({ initialSponsors, initialDeadline }: { initialSpon
               <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-viola/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <div>
                 <FiUsers className="text-viola text-5xl mb-10 group-hover:scale-110 transition-transform duration-500" />
-                <h2 className="text-3xl md:text-5xl font-black tracking-tighter mb-6 uppercase">Il tuo <br />Quintetto.</h2>
+                <h2 className="text-3xl md:text-5xl font-black tracking-tighter mb-6 uppercase">Il tuo <br />Quintetto</h2>
               </div>
               <Link href="/team/create" className="flex items-center gap-4 text-oro font-bold uppercase tracking-[0.2em] text-xs group/link relative z-10">
                 Fonda il Team <FiArrowRight className="group-hover/link:translate-x-3 transition-transform" />

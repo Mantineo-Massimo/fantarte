@@ -87,7 +87,7 @@ export default function Footer() {
                         <div className="glass p-8 rounded-[2rem] border border-white/10 space-y-6 relative overflow-hidden group">
                              <div className="absolute top-0 right-0 w-32 h-32 bg-oro/5 blur-2xl -translate-y-1/2 translate-x-1/2" />
                              <h4 className="font-display text-oro text-xs font-bold uppercase tracking-widest relative z-10">Ti serve Aiuto?</h4>
-                             <div className="space-y-3 relative z-10">
+                             <div className="space-y-4 relative z-10">
                                 <a href="mailto:associazione.morgana@gmail.com" className="block text-gray-300 font-medium hover:text-white transition-colors text-sm truncate underline decoration-white/10 underline-offset-4">associazione.morgana@gmail.com</a>
                                 <a href="mailto:orum.unime@gmail.com" className="block text-gray-300 font-medium hover:text-white transition-colors text-sm truncate underline decoration-white/10 underline-offset-4">orum.unime@gmail.com</a>
                              </div>

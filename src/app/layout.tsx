@@ -62,6 +62,9 @@ export const metadata: Metadata = {
       { rel: "manifest", url: "/favicon/site.webmanifest" },
     ],
   },
+  verification: {
+    google: "JPeNfVJh1CPsmPKVrXnWH6UWjlJZY7mPQb6",
+  },
 };
 
 export default function RootLayout({
