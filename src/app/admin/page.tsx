@@ -18,7 +18,8 @@ import {
     FiPlus,
     FiCheck,
     FiX,
-    FiFileText
+    FiFileText,
+    FiMail
 } from "react-icons/fi";
 
 type Artist = {
@@ -32,7 +33,7 @@ type Artist = {
 
 type PointCategory = "BONUS" | "MALUS" | "SPECIALE";
 
-type Tab = "dashboard" | "artists" | "points" | "history" | "settings" | "regole" | "participants" | "sponsors";
+type Tab = "dashboard" | "artists" | "points" | "history" | "settings" | "regole" | "participants" | "sponsors" | "emails";
 
 type RuleDefinition = {
     id: string;
@@ -98,6 +99,9 @@ export default function AdminDashboard() {
 
     // User Edit State
     const [editingUser, setEditingUser] = useState<any>(null);
+    // Email Settings State
+    const [emailSettings, setEmailSettings] = useState<any[]>([]);
+    const [emailsLoading, setEmailsLoading] = useState(false);
     const [isUserModalOpen, setIsUserModalOpen] = useState(false);
 
     useEffect(() => {
@@ -288,6 +292,30 @@ export default function AdminDashboard() {
         }
     };
 
+    const loadEmailSettings = () => {
+        setEmailsLoading(true);
+        fetch("/api/admin/email-settings")
+            .then(res => res.json())
+            .then(data => setEmailSettings(data))
+            .catch(err => console.error(err))
+            .finally(() => setEmailsLoading(false));
+    };
+
+    const handleSaveEmailSetting = async (setting: any) => {
+        try {
+            const res = await fetch("/api/admin/email-settings", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(setting)
+            });
+            if (!res.ok) throw new Error("Errore salvataggio email");
+            setSuccess("Email aggiornata!");
+            loadEmailSettings();
+        } catch (err: any) {
+            setError(err.message);
+        }
+    };
+
     const loadSponsors = () => {
         setSponsorsLoading(true);
         fetch("/api/admin/sponsors")
@@ -307,6 +335,7 @@ export default function AdminDashboard() {
             if (activeTab === "regole" || activeTab === "points") loadRules();
             if (activeTab === "participants") loadUsers();
             if (activeTab === "sponsors") loadSponsors();
+            if (activeTab === "emails") loadEmailSettings();
         }
     }, [session]);
 
@@ -315,6 +344,7 @@ export default function AdminDashboard() {
         if (activeTab === "regole" || activeTab === "points") loadRules();
         if (activeTab === "participants") loadUsers();
         if (activeTab === "sponsors") loadSponsors();
+        if (activeTab === "emails") loadEmailSettings();
     }, [activeTab]);
 
     const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -609,6 +639,7 @@ export default function AdminDashboard() {
         { id: "regole", label: "Regole", icon: <FiBookOpen /> },
         { id: "participants", label: "Partecipanti", icon: <FiUsers /> },
         { id: "sponsors", label: "Sponsor", icon: <FiStar /> },
+        { id: "emails", label: "Email", icon: <FiMail /> },
         { id: "points", label: "Punti", icon: <FiStar /> },
         { id: "history", label: "Storico", icon: <FiClock /> },
         { id: "settings", label: "Setup", icon: <FiSettings /> },
@@ -1394,6 +1425,92 @@ export default function AdminDashboard() {
                         </motion.div>
                     )}
 
+                    {/* EMAILS TAB */}
+                    {activeTab === "emails" && (
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8">
+                            <div className="bg-[#131d36] p-8 rounded-3xl border border-gray-800 shadow-xl">
+                                <h2 className="text-2xl font-bold mb-8 flex items-center gap-3">
+                                    <FiMail className="text-oro" /> Gestione Email Automatizzate
+                                </h2>
+
+                                <div className="grid grid-cols-1 gap-8">
+                                    {[
+                                        { type: "WELCOME", label: "Benvenuto (Registrazione)", desc: "Inviata quando un utente conferma l'email." },
+                                        { type: "TEAM_CREATION", label: "Creazione Squadra", desc: "Inviata dopo aver salvato con successo il team." },
+                                        { type: "POINTS_ASSIGNED", label: "Assegnazione Punti", desc: "Inviata quando assegni Bonus/Malus a un artista in squadra." }
+                                    ].map((cat) => {
+                                        const setting = emailSettings.find(s => s.type === cat.type) || {
+                                            type: cat.type,
+                                            enabled: false,
+                                            subject: "",
+                                            content: ""
+                                        };
+
+                                        return (
+                                            <div key={cat.type} className="bg-[#0a0f1c] p-6 rounded-2xl border border-white/5 space-y-6">
+                                                <div className="flex items-center justify-between">
+                                                    <div>
+                                                        <h3 className="text-lg font-bold text-white">{cat.label}</h3>
+                                                        <p className="text-xs text-gray-500">{cat.desc}</p>
+                                                    </div>
+                                                    <button
+                                                        onClick={() => handleSaveEmailSetting({ ...setting, enabled: !setting.enabled })}
+                                                        className={`px-6 py-2 rounded-full font-black text-[10px] uppercase tracking-widest transition-all ${setting.enabled ? "bg-green-500 text-white shadow-[0_0_15px_rgba(34,197,94,0.3)]" : "bg-gray-800 text-gray-500"}`}
+                                                    >
+                                                        {setting.enabled ? "Attiva" : "Disattiva"}
+                                                    </button>
+                                                </div>
+
+                                                <div className="space-y-4">
+                                                    <div>
+                                                        <label className="text-[10px] font-black uppercase text-gray-600 tracking-widest mb-2 block">Oggetto Email</label>
+                                                        <input
+                                                            type="text"
+                                                            value={setting.subject}
+                                                            onChange={(e) => {
+                                                                const newSettings = [...emailSettings];
+                                                                const idx = newSettings.findIndex(s => s.type === cat.type);
+                                                                if (idx > -1) newSettings[idx].subject = e.target.value;
+                                                                else newSettings.push({ ...setting, subject: e.target.value });
+                                                                setEmailSettings(newSettings);
+                                                            }}
+                                                            placeholder="es. Benvenuto su FantArte!"
+                                                            className="w-full bg-blunotte border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-oro/50 transition-all outline-none"
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label className="text-[10px] font-black uppercase text-gray-600 tracking-widest mb-2 block">Corpo Email (HTML consentito)</label>
+                                                        <textarea
+                                                            value={setting.content}
+                                                            onChange={(e) => {
+                                                                const newSettings = [...emailSettings];
+                                                                const idx = newSettings.findIndex(s => s.type === cat.type);
+                                                                if (idx > -1) newSettings[idx].content = e.target.value;
+                                                                else newSettings.push({ ...setting, content: e.target.value });
+                                                                setEmailSettings(newSettings);
+                                                            }}
+                                                            rows={6}
+                                                            placeholder="Usa {nome}, {squadra}, {punti} come segnaposto..."
+                                                            className="w-full bg-blunotte border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-oro/50 transition-all outline-none resize-none"
+                                                        />
+                                                        <p className="text-[9px] text-oro/40 mt-2 italic font-medium">Variabili disponibili: {'{nome}, {squadra}, {punti}'}</p>
+                                                    </div>
+                                                    <div className="flex justify-end">
+                                                        <button
+                                                            onClick={() => handleSaveEmailSetting(setting)}
+                                                            className="px-8 py-3 bg-white text-blunotte font-black rounded-xl text-[10px] uppercase tracking-widest hover:bg-gray-200 transition-all"
+                                                        >
+                                                            Salva Template
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
 
                 </div>
                 {/* User Edit Modal */}

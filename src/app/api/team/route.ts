@@ -127,6 +127,13 @@ export async function POST(req: Request) {
             return newTeam;
         });
 
+        // Trigger Async Email
+        const { triggerEmail } = await import("@/lib/email-service");
+        triggerEmail("TEAM_CREATION", session.user.email, {
+            nome: user.name || "Utente",
+            squadra: teamName
+        });
+
         return NextResponse.json(team);
 
     } catch (error) {

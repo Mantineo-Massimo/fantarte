@@ -114,31 +114,30 @@ export async function POST(req: Request) {
 
         // Async Notify Users (Batch)
         try {
-            const emailBody = artistPointsEmail(artistName, pointVal, description);
-            const batchEmails = usersToNotify.map((email: string) => ({
-                to: email,
-                subject: `Punti per ${artistName}! ⚡ FantArte`,
-                body: emailBody
-            }));
+            const { getEmailSetting, formatTemplate } = await import("@/lib/email-service");
+            const setting = await getEmailSetting("POINTS_ASSIGNED");
 
-            if (batchEmails.length > 0) {
-                // We don't await here to respond faster to the admin.
-                // Using a try-catch inside the background promise is good practice.
-                const sendEmails = async () => {
-                    try {
-                        await sendBatch(batchEmails);
-                    } catch (e) {
-                        console.error("BACKGROUND_EMAIL_SEND_ERROR", e);
+            if (setting && setting.enabled) {
+                const batchEmails = usersToNotify.map((email: string) => ({
+                    to: email,
+                    subject: formatTemplate(setting.subject, { artista: artistName, punti: pointVal.toString(), descrizione: description }),
+                    body: formatTemplate(setting.content, { artista: artistName, punti: pointVal.toString(), descrizione: description })
+                }));
+
+                if (batchEmails.length > 0) {
+                    const sendEmails = async () => {
+                        try {
+                            await sendBatch(batchEmails);
+                        } catch (e) {
+                            console.error("BACKGROUND_EMAIL_SEND_ERROR", e);
+                        }
+                    };
+                    
+                    if (typeof (global as any).waitUntil === 'function') {
+                        (global as any).waitUntil(sendEmails());
+                    } else {
+                        sendEmails();
                     }
-                };
-                
-                // On Vercel, this ensures the function doesn't terminate until the promise resolves
-                // Note: waitUntil is available in Next.js 15+
-                if (typeof (global as any).waitUntil === 'function') {
-                    (global as any).waitUntil(sendEmails());
-                } else {
-                    // Fallback for environments without waitUntil - though it might get cut off
-                    sendEmails();
                 }
             }
         } catch (err) {

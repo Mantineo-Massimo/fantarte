@@ -90,6 +90,15 @@ model SystemSettings {
   updatedAt     DateTime  @updatedAt
 }
 
+model EmailSetting {
+  id        String   @id @default(uuid())
+  type      String   @unique // e.g., "TEAM_CREATION", "POINTS_ASSIGNED"
+  enabled   Boolean  @default(true)
+  subject   String
+  content   String   @db.Text
+  updatedAt DateTime @updatedAt
+}
+
 model RuleDefinition {
   id          String            @id @default(uuid())
   category    PointCategory     @default(BONUS)

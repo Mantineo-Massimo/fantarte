@@ -36,10 +36,12 @@ export async function POST(req: Request) {
 
         // Send Verification Email
         try {
-            await sendEmail({
-                to: email,
-                subject: "Verifica il tuo account FantArte 🎠",
-                body: verificationEmail(verificationToken)
+            const { triggerEmail } = await import("@/lib/email-service");
+            const verificationUrl = `${process.env.NEXTAUTH_URL || 'https://fantarte.it'}/auth/verify?token=${verificationToken}`;
+            
+            await triggerEmail("WELCOME", email, {
+                nome: name,
+                link: `<a href="${verificationUrl}" style="color: #FFD700; font-weight: bold;">Verifica Account</a>`
             });
         } catch (err) {
             console.error("VERIFICATION_EMAIL_ERROR", err);
