@@ -30,6 +30,7 @@ export default function RegolePage() {
     const [rulesData, setRulesData] = useState<Rule[]>([]);
     const [loading, setLoading] = useState(true);
     const [activeFilter, setActiveFilter] = useState<RuleCategory>("Tutte");
+    const [viewMode, setViewMode] = useState<"regolamento" | "bonus_malus">("regolamento");
 
     useEffect(() => {
         fetch("/api/rules")
@@ -106,6 +107,34 @@ export default function RegolePage() {
                         />
                     </div>
 
+                    {/* Switcher Revolution - Leaderboard Style */}
+                    <div className="flex justify-center mb-24">
+                        <div className="glass p-2 rounded-3xl border border-white/5 flex gap-2">
+                            <button
+                                onClick={() => setViewMode("regolamento")}
+                                className={`px-10 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${viewMode === "regolamento" ? "bg-oro text-blunotte shadow-2xl" : "text-gray-500 hover:text-white"}`}
+                            >
+                                Regolamento
+                            </button>
+                            <button
+                                onClick={() => setViewMode("bonus_malus")}
+                                className={`px-10 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${viewMode === "bonus_malus" ? "bg-oro text-blunotte shadow-2xl" : "text-gray-500 hover:text-white"}`}
+                            >
+                                Bonus & Malus
+                            </button>
+                        </div>
+                    </div>
+
+                    <AnimatePresence mode="wait">
+                        {viewMode === "regolamento" ? (
+                            <motion.div
+                                key="regolamento"
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -20 }}
+                                transition={{ duration: 0.4 }}
+                            >
+
                     {/* Official Rules Section */}
                     <div className="mb-32">
                         <div className="mb-12 text-center md:text-left">
@@ -158,7 +187,16 @@ export default function RegolePage() {
                                 <p className="text-gray-400 leading-relaxed font-medium relative z-10 text-lg">I punteggi vengono attribuiti durante le serate dal vivo. Fa fede esclusivamente l'elenco dei <strong className="text-white">Bonus & Malus</strong>. Il giudizio dello staff di FantArte sui punteggi è inappellabile.</p>
                             </div>
                         </div>
-                    </div>
+                                </div>
+                            </motion.div>
+                        ) : (
+                            <motion.div
+                                key="bonus_malus"
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -20 }}
+                                transition={{ duration: 0.4 }}
+                            >
 
                     {/* Rules Grid Section */}
                     <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8">
@@ -219,8 +257,11 @@ export default function RegolePage() {
                                     </motion.div>
                                 ))}
                             </AnimatePresence>
-                        </div>
-                    )}
+                                    </div>
+                                )}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
 
                     {/* FAQ Quick Link */}
                     <div className="mt-32">
