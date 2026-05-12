@@ -22,6 +22,10 @@ const faqs = [
         a: "No, una volta scaduta la deadline (il conto alla rovescia in home page), le formazioni sono congelate per tutta la durata dell'evento."
     },
     {
+        q: "Cosa succede in caso di parità?",
+        a: "In caso di parità di punteggio tra due o più squadre, i criteri di spareggio sono: 1) Vince la squadra il cui Capitano ha totalizzato più punti; 2) In caso di ulteriore parità, vince la squadra il cui membro con il punteggio più basso è più alto rispetto a quello dell'avversario."
+    },
+    {
         q: "Cosa sono gli Armoni?",
         a: "Gli Armoni sono la valuta virtuale di FantArte. Ogni partecipante ha un costo in Armoni. Non puoi spendere più di 100 Armoni in totale per formare la tua squadra."
     }

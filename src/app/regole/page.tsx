@@ -184,7 +184,7 @@ export default function RegolePage() {
                                                 </div>
                                                 <h3 className="text-2xl font-black tracking-tight">Assegnazione Punteggi</h3>
                                             </div>
-                                            <p className="text-gray-400 leading-relaxed font-medium relative z-10 text-lg">I punteggi vengono attribuiti durante le serate dal vivo. Fa fede esclusivamente l'elenco dei <strong className="text-white">Bonus & Malus</strong>. Il giudizio dello staff di FantArte sui punteggi è inappellabile.</p>
+                                            <p className="text-gray-400 leading-relaxed font-medium relative z-10 text-lg">I punteggi vengono attribuiti durante le serate dal vivo. Bonus/Malus non sono cumulativi (max 1 volta a serata). In caso di <strong className="text-white">parità</strong>, vince chi ha il <strong className="text-oro">Capitano</strong> con più punti; in caso di ulteriore parità, vince la squadra il cui membro con il punteggio più basso è più alto rispetto a quello dell'avversario.</p>
                                         </div>
                                     </div>
                                 </div>
