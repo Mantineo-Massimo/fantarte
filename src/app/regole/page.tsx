@@ -95,7 +95,7 @@ export default function RegolePage() {
                             icon={FiZap}
                             step="02"
                             title="Formazione"
-                            text="Scegli i tuoi 5 partecipanti preferiti. Ogni partecipante ha un costo: gestisci il tuo budget con saggezza."
+                            text="Scegli 5 partecipanti (1 Presentatore, 1 Ospite e 3 Artisti). Gestisci con saggezza il tuo budget di 100 Armoni."
                             color="viola"
                         />
                         <StepCard
@@ -135,58 +135,58 @@ export default function RegolePage() {
                                 transition={{ duration: 0.4 }}
                             >
 
-                    {/* Official Rules Section */}
-                    <div className="mb-32">
-                        <div className="mb-12 text-center md:text-left">
-                            <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-4">Regolamento <span className="text-oro">Ufficiale</span></h2>
-                            <p className="text-gray-500 font-medium max-w-2xl text-lg">Le direttive complete per partecipare, formare la squadra e trionfare nella Piazza dell'Arte.</p>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="glass p-8 rounded-[2.5rem] border border-white/5 hover:border-oro/30 transition-all group relative overflow-hidden">
-                                <div className="absolute top-0 right-0 w-48 h-48 bg-oro/5 rounded-full blur-3xl group-hover:bg-oro/10 transition-colors" />
-                                <div className="flex items-center gap-5 mb-6 relative z-10">
-                                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-oro/20 to-oro/5 border border-oro/20 flex items-center justify-center text-oro shrink-0">
-                                        <FiUsers size={24} />
+                                {/* Official Rules Section */}
+                                <div className="mb-32">
+                                    <div className="mb-12 text-center md:text-left">
+                                        <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-4">Regolamento <span className="text-oro">Ufficiale</span></h2>
+                                        <p className="text-gray-500 font-medium max-w-2xl text-lg">Le direttive complete per partecipare, formare la squadra e trionfare nella Piazza dell'Arte.</p>
                                     </div>
-                                    <h3 className="text-2xl font-black tracking-tight">Composizione Squadra</h3>
-                                </div>
-                                <p className="text-gray-400 leading-relaxed font-medium relative z-10 text-lg">Ogni partecipante deve formare la propria squadra selezionando esattamente <strong className="text-white">5 artisti</strong>. È obbligatorio schierare tutti e 5 i componenti per essere idonei a partecipare e ricevere punti.</p>
-                            </div>
 
-                            <div className="glass p-8 rounded-[2.5rem] border border-white/5 hover:border-oro/30 transition-all group relative overflow-hidden">
-                                <div className="absolute top-0 right-0 w-48 h-48 bg-oro/5 rounded-full blur-3xl group-hover:bg-oro/10 transition-colors" />
-                                <div className="flex items-center gap-5 mb-6 relative z-10">
-                                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-oro/20 to-oro/5 border border-oro/20 flex items-center justify-center text-oro shrink-0">
-                                        <FiZap size={24} />
-                                    </div>
-                                    <h3 className="text-2xl font-black tracking-tight">Budget e Armoni</h3>
-                                </div>
-                                <p className="text-gray-400 leading-relaxed font-medium relative z-10 text-lg">Riceverai un budget iniziale di <strong className="text-white">100 Armoni</strong> (la valuta ufficiale). Il costo complessivo dei 5 artisti scelti non potrà in alcun modo superare i 100 Armoni disponibili.</p>
-                            </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div className="glass p-8 rounded-[2.5rem] border border-white/5 hover:border-oro/30 transition-all group relative overflow-hidden">
+                                            <div className="absolute top-0 right-0 w-48 h-48 bg-oro/5 rounded-full blur-3xl group-hover:bg-oro/10 transition-colors" />
+                                            <div className="flex items-center gap-5 mb-6 relative z-10">
+                                                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-oro/20 to-oro/5 border border-oro/20 flex items-center justify-center text-oro shrink-0">
+                                                    <FiUsers size={24} />
+                                                </div>
+                                                <h3 className="text-2xl font-black tracking-tight">Composizione Squadra</h3>
+                                            </div>
+                                            <p className="text-gray-400 leading-relaxed font-medium relative z-10 text-lg">Ogni partecipante deve formare la propria squadra selezionando esattamente <strong className="text-white">5 artisti</strong>. È obbligatorio schierare tutti e 5 i componenti per essere idonei a partecipare e ricevere punti.</p>
+                                        </div>
 
-                            <div className="glass p-8 rounded-[2.5rem] border border-white/5 hover:border-oro/30 transition-all group relative overflow-hidden">
-                                <div className="absolute top-0 right-0 w-48 h-48 bg-oro/5 rounded-full blur-3xl group-hover:bg-oro/10 transition-colors" />
-                                <div className="flex items-center gap-5 mb-6 relative z-10">
-                                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-oro/20 to-oro/5 border border-oro/20 flex items-center justify-center text-oro shrink-0">
-                                        <FiStar size={24} />
-                                    </div>
-                                    <h3 className="text-2xl font-black tracking-tight">Il Capitano</h3>
-                                </div>
-                                <p className="text-gray-400 leading-relaxed font-medium relative z-10 text-lg">Tra i tuoi 5 artisti, uno dovrà essere nominato <strong className="text-oro">Capitano</strong>. Sceglilo con cura: tutti i punti totalizzati dal Capitano, inclusi i malus, verranno <strong className="text-white">raddoppiati</strong>.</p>
-                            </div>
+                                        <div className="glass p-8 rounded-[2.5rem] border border-white/5 hover:border-oro/30 transition-all group relative overflow-hidden">
+                                            <div className="absolute top-0 right-0 w-48 h-48 bg-oro/5 rounded-full blur-3xl group-hover:bg-oro/10 transition-colors" />
+                                            <div className="flex items-center gap-5 mb-6 relative z-10">
+                                                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-oro/20 to-oro/5 border border-oro/20 flex items-center justify-center text-oro shrink-0">
+                                                    <FiZap size={24} />
+                                                </div>
+                                                <h3 className="text-2xl font-black tracking-tight">Budget e Armoni</h3>
+                                            </div>
+                                            <p className="text-gray-400 leading-relaxed font-medium relative z-10 text-lg">Riceverai un budget iniziale di <strong className="text-white">100 Armoni</strong> (la valuta ufficiale). Il costo complessivo dei 5 artisti scelti non potrà in alcun modo superare i 100 Armoni disponibili.</p>
+                                        </div>
 
-                            <div className="glass p-8 rounded-[2.5rem] border border-white/5 hover:border-oro/30 transition-all group relative overflow-hidden">
-                                <div className="absolute top-0 right-0 w-48 h-48 bg-oro/5 rounded-full blur-3xl group-hover:bg-oro/10 transition-colors" />
-                                <div className="flex items-center gap-5 mb-6 relative z-10">
-                                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-oro/20 to-oro/5 border border-oro/20 flex items-center justify-center text-oro shrink-0">
-                                        <FiTarget size={24} />
+                                        <div className="glass p-8 rounded-[2.5rem] border border-white/5 hover:border-oro/30 transition-all group relative overflow-hidden">
+                                            <div className="absolute top-0 right-0 w-48 h-48 bg-oro/5 rounded-full blur-3xl group-hover:bg-oro/10 transition-colors" />
+                                            <div className="flex items-center gap-5 mb-6 relative z-10">
+                                                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-oro/20 to-oro/5 border border-oro/20 flex items-center justify-center text-oro shrink-0">
+                                                    <FiStar size={24} />
+                                                </div>
+                                                <h3 className="text-2xl font-black tracking-tight">Il Capitano</h3>
+                                            </div>
+                                            <p className="text-gray-400 leading-relaxed font-medium relative z-10 text-lg">Tra i tuoi 5 artisti, uno dovrà essere nominato <strong className="text-oro">Capitano</strong>. Sceglilo con cura: tutti i punti totalizzati dal Capitano, inclusi i malus, verranno <strong className="text-white">raddoppiati</strong>.</p>
+                                        </div>
+
+                                        <div className="glass p-8 rounded-[2.5rem] border border-white/5 hover:border-oro/30 transition-all group relative overflow-hidden">
+                                            <div className="absolute top-0 right-0 w-48 h-48 bg-oro/5 rounded-full blur-3xl group-hover:bg-oro/10 transition-colors" />
+                                            <div className="flex items-center gap-5 mb-6 relative z-10">
+                                                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-oro/20 to-oro/5 border border-oro/20 flex items-center justify-center text-oro shrink-0">
+                                                    <FiTarget size={24} />
+                                                </div>
+                                                <h3 className="text-2xl font-black tracking-tight">Assegnazione Punteggi</h3>
+                                            </div>
+                                            <p className="text-gray-400 leading-relaxed font-medium relative z-10 text-lg">I punteggi vengono attribuiti durante le serate dal vivo. Fa fede esclusivamente l'elenco dei <strong className="text-white">Bonus & Malus</strong>. Il giudizio dello staff di FantArte sui punteggi è inappellabile.</p>
+                                        </div>
                                     </div>
-                                    <h3 className="text-2xl font-black tracking-tight">Assegnazione Punteggi</h3>
-                                </div>
-                                <p className="text-gray-400 leading-relaxed font-medium relative z-10 text-lg">I punteggi vengono attribuiti durante le serate dal vivo. Fa fede esclusivamente l'elenco dei <strong className="text-white">Bonus & Malus</strong>. Il giudizio dello staff di FantArte sui punteggi è inappellabile.</p>
-                            </div>
-                        </div>
                                 </div>
                             </motion.div>
                         ) : (
@@ -198,65 +198,65 @@ export default function RegolePage() {
                                 transition={{ duration: 0.4 }}
                             >
 
-                    {/* Rules Grid Section */}
-                    <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8">
-                        <div>
-                            <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-4">Bonus & <span className="text-oro">Malus</span></h2>
-                            <p className="text-gray-500 font-medium max-w-md">Consulta la legenda ufficiale dei punteggi assegnati durante le performance.</p>
-                        </div>
+                                {/* Rules Grid Section */}
+                                <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8">
+                                    <div>
+                                        <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-4">Bonus & <span className="text-oro">Malus</span></h2>
+                                        <p className="text-gray-500 font-medium max-w-md">Consulta la legenda ufficiale dei punteggi assegnati durante le performance.</p>
+                                    </div>
 
-                        {/* Filter Bar */}
-                        <div className="flex flex-wrap gap-2">
-                            {categories.map((cat) => (
-                                <button
-                                    key={cat}
-                                    onClick={() => setActiveFilter(cat)}
-                                    className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${activeFilter === cat
-                                            ? "bg-oro text-blunotte shadow-[0_0_20px_rgba(255,215,0,0.3)]"
-                                            : "bg-white/5 text-gray-500 hover:bg-white/10 hover:text-white"
-                                        }`}
-                                >
-                                    {cat === "SPECIALE" ? "Speciali" : cat === "BONUS" ? "Bonus" : cat === "MALUS" ? "Malus" : cat}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
+                                    {/* Filter Bar */}
+                                    <div className="flex flex-wrap gap-2">
+                                        {categories.map((cat) => (
+                                            <button
+                                                key={cat}
+                                                onClick={() => setActiveFilter(cat)}
+                                                className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${activeFilter === cat
+                                                    ? "bg-oro text-blunotte shadow-[0_0_20px_rgba(255,215,0,0.3)]"
+                                                    : "bg-white/5 text-gray-500 hover:bg-white/10 hover:text-white"
+                                                    }`}
+                                            >
+                                                {cat === "SPECIALE" ? "Speciali" : cat === "BONUS" ? "Bonus" : cat === "MALUS" ? "Malus" : cat}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
 
-                    {/* Rules List */}
-                    {loading ? (
-                        <div className="flex items-center justify-center py-32">
-                            <div className="w-10 h-10 border-4 border-oro/20 border-t-oro rounded-full animate-spin" />
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <AnimatePresence mode="popLayout">
-                                {filteredRules.map((rule, idx) => (
-                                    <motion.div
-                                        key={rule.id}
-                                        layout
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, scale: 0.95 }}
-                                        transition={{ delay: idx * 0.05 }}
-                                        className={`glass p-6 rounded-3xl border transition-all duration-300 hover:scale-[1.02] ${getRuleColor(rule.category)}`}
-                                    >
-                                        <div className="flex items-center justify-between gap-6">
-                                            <div className="flex-1">
-                                                <div className="flex items-center gap-3 mb-2">
-                                                    <span className="text-[8px] font-black uppercase tracking-widest px-2 py-1 bg-white/5 rounded-md border border-white/5 text-gray-400">
-                                                        {rule.category}
-                                                    </span>
-                                                    <h3 className="text-lg font-black tracking-tight text-white">{rule.title}</h3>
-                                                </div>
-                                                <p className="text-gray-500 text-sm font-medium leading-relaxed">{rule.description}</p>
-                                            </div>
-                                            <div className="text-2xl font-black font-mono shrink-0">
-                                                {rule.points > 0 ? `+${rule.points}` : rule.points}
-                                            </div>
-                                        </div>
-                                    </motion.div>
-                                ))}
-                            </AnimatePresence>
+                                {/* Rules List */}
+                                {loading ? (
+                                    <div className="flex items-center justify-center py-32">
+                                        <div className="w-10 h-10 border-4 border-oro/20 border-t-oro rounded-full animate-spin" />
+                                    </div>
+                                ) : (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <AnimatePresence mode="popLayout">
+                                            {filteredRules.map((rule, idx) => (
+                                                <motion.div
+                                                    key={rule.id}
+                                                    layout
+                                                    initial={{ opacity: 0, y: 20 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    exit={{ opacity: 0, scale: 0.95 }}
+                                                    transition={{ delay: idx * 0.05 }}
+                                                    className={`glass p-6 rounded-3xl border transition-all duration-300 hover:scale-[1.02] ${getRuleColor(rule.category)}`}
+                                                >
+                                                    <div className="flex items-center justify-between gap-6">
+                                                        <div className="flex-1">
+                                                            <div className="flex items-center gap-3 mb-2">
+                                                                <span className="text-[8px] font-black uppercase tracking-widest px-2 py-1 bg-white/5 rounded-md border border-white/5 text-gray-400">
+                                                                    {rule.category}
+                                                                </span>
+                                                                <h3 className="text-lg font-black tracking-tight text-white">{rule.title}</h3>
+                                                            </div>
+                                                            <p className="text-gray-500 text-sm font-medium leading-relaxed">{rule.description}</p>
+                                                        </div>
+                                                        <div className="text-2xl font-black font-mono shrink-0">
+                                                            {rule.points > 0 ? `+${rule.points}` : rule.points}
+                                                        </div>
+                                                    </div>
+                                                </motion.div>
+                                            ))}
+                                        </AnimatePresence>
                                     </div>
                                 )}
                             </motion.div>

@@ -7,11 +7,15 @@ import { useState } from "react";
 const faqs = [
     {
         q: "Come si gioca a FantArte?",
-        a: "È semplice! Crea la tua squadra scegliendo 5 membri: 1 Presentatore, 1 Ospite e 3 Artisti. Hai a disposizione 100 Armoni. Ogni membro guadagnerà punti in base alle sue performance reali durante l'evento della Piazza dell'Arte."
+        a: "È semplice! Crea la tua squadra scegliendo 5 componenti: 1 Presentatore, 1 Ospite e 3 Artisti. Hai a disposizione 100 Armoni. Ogni membro guadagnerà punti in base alle sue performance reali durante l'evento della Piazza dell'Arte."
     },
     {
-        q: "Chi raddoppia i punti?",
-        a: "Il Capitano della tua squadra raddoppia esclusivamente i 'Punti Speciali'. I Bonus e i Malus standard vengono conteggiati normalmente."
+        q: "Qual è il ruolo del Capitano?",
+        a: "Tra i tuoi 5 partecipanti, uno deve essere nominato Capitano. Sceglilo bene: tutti i punti (sia i Bonus che i Malus) totalizzati dal Capitano durante la serata verranno raddoppiati nel conteggio della tua squadra."
+    },
+    {
+        q: "I bonus e i malus sono cumulativi?",
+        a: "No, ogni singolo bonus o malus può essere assegnato a un partecipante una sola volta per serata. Se un artista compie la stessa azione meritevole di bonus più volte, il punteggio verrà conteggiato solo la prima volta."
     },
     {
         q: "Posso cambiare squadra dopo l'inizio?",
@@ -19,11 +23,7 @@ const faqs = [
     },
     {
         q: "Cosa sono gli Armoni?",
-        a: "Gli Armoni sono la valuta virtuale di FantArte. Ogni artista ha un costo in Armoni basato sulla sua popolarità e potenziale performance. Non puoi spendere più di 100 Armoni in totale."
-    },
-    {
-        q: "Chi gestisce il gioco?",
-        a: "FantArte è un progetto nato dalla collaborazione tra l'Associazione Morgana e l'Associazione Orum per animare la Piazza dell'Arte."
+        a: "Gli Armoni sono la valuta virtuale di FantArte. Ogni partecipante ha un costo in Armoni. Non puoi spendere più di 100 Armoni in totale per formare la tua squadra."
     }
 ];
 
