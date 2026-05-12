@@ -151,7 +151,7 @@ export default function RegolePage() {
                                                 </div>
                                                 <h3 className="text-2xl font-black tracking-tight">Composizione Squadra</h3>
                                             </div>
-                                            <p className="text-gray-400 leading-relaxed font-medium relative z-10 text-lg">Ogni partecipante deve formare la propria squadra selezionando esattamente <strong className="text-white">5 artisti</strong>. È obbligatorio schierare tutti e 5 i componenti per essere idonei a partecipare e ricevere punti.</p>
+                                            <p className="text-gray-400 leading-relaxed font-medium relative z-10 text-lg">Ogni partecipante deve formare la propria squadra selezionando esattamente <strong className="text-white">5 partecipanti</strong> (1 Presentatore, 1 Ospite e 3 Artisti). È obbligatorio schierare tutti e 5 i componenti per essere idonei a partecipare e ricevere punti.</p>
                                         </div>
 
                                         <div className="glass p-8 rounded-[2.5rem] border border-white/5 hover:border-oro/30 transition-all group relative overflow-hidden">
@@ -162,7 +162,7 @@ export default function RegolePage() {
                                                 </div>
                                                 <h3 className="text-2xl font-black tracking-tight">Budget e Armoni</h3>
                                             </div>
-                                            <p className="text-gray-400 leading-relaxed font-medium relative z-10 text-lg">Riceverai un budget iniziale di <strong className="text-white">100 Armoni</strong> (la valuta ufficiale). Il costo complessivo dei 5 artisti scelti non potrà in alcun modo superare i 100 Armoni disponibili.</p>
+                                            <p className="text-gray-400 leading-relaxed font-medium relative z-10 text-lg">Riceverai un budget iniziale di <strong className="text-white">100 Armoni</strong> (la valuta ufficiale). Il costo complessivo dei 5 partecipanti scelti non potrà in alcun modo superare i 100 Armoni disponibili.</p>
                                         </div>
 
                                         <div className="glass p-8 rounded-[2.5rem] border border-white/5 hover:border-oro/30 transition-all group relative overflow-hidden">

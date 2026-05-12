@@ -15,7 +15,7 @@ const faqs = [
     },
     {
         q: "I bonus e i malus sono cumulativi?",
-        a: "No, ogni singolo bonus o malus può essere assegnato a un partecipante una sola volta per serata. Se un artista compie la stessa azione meritevole di bonus più volte, il punteggio verrà conteggiato solo la prima volta."
+        a: "No, ogni singolo bonus o malus può essere assegnato a un partecipante una sola volta per serata. Se un partecipante compie la stessa azione meritevole di bonus più volte, il punteggio verrà conteggiato solo la prima volta."
     },
     {
         q: "Posso cambiare squadra dopo l'inizio?",

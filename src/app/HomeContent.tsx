@@ -116,7 +116,7 @@ export default function Home({
               <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-oro/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <FiTrendingUp className="text-oro text-5xl mb-10 group-hover:scale-110 transition-transform duration-500" />
               <h2 className="text-3xl md:text-5xl font-black tracking-tighter mb-6 uppercase">Scala la <span className="text-oro">Gloria</span></h2>
-              <p className="text-gray-400 text-lg max-w-md leading-relaxed">Accumula punti in base alle performance degli artisti sul palco. Bonus speciali per i Capitani e Malus inaspettati rendono ogni serata un&apos;incognita elettrizzante.</p>
+              <p className="text-gray-400 text-lg max-w-md leading-relaxed">Accumula punti in base alle performance dei partecipanti sul palco. Bonus speciali per i Capitani e Malus inaspettati rendono ogni serata un&apos;incognita elettrizzante.</p>
               <div className="absolute -bottom-20 -right-20 opacity-[0.03] group-hover:opacity-[0.08] group-hover:rotate-12 transition-all duration-700 pointer-events-none">
                 <FiAward size={400} />
               </div>
