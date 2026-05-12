@@ -43,13 +43,13 @@ export default function Home({ initialSponsors, initialDeadline }: { initialSpon
             className="w-full max-w-7xl flex flex-col items-center text-center relative z-10"
           >
             <motion.div variants={fadeIn} className="mb-10 relative">
-              <div className="absolute inset-0 bg-oro blur-[80px] opacity-10 scale-150 animate-pulse-soft" />
+              <div className="absolute inset-0 bg-oro blur-[80px] opacity-10 scale-150" />
               <Image
                 src="/fanta-logo.webp"
                 alt="FantArte Logo"
                 width={320}
                 height={120}
-                className="relative drop-shadow-2xl animate-float"
+                className="relative drop-shadow-2xl"
                 priority
               />
             </motion.div>

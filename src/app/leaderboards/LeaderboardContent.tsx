@@ -243,10 +243,7 @@ function PodiumCard({ rank, data, type, featured, onClick }: { rank: number, dat
     const image = isTeam ? data.team.image : data.image;
 
     return (
-        <motion.div 
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: rank * 0.1 }}
+        <div 
             onClick={onClick}
             className={`relative p-10 rounded-[3.5rem] border flex flex-col items-center text-center cursor-pointer group transition-all duration-500
                 ${featured 
@@ -280,7 +277,7 @@ function PodiumCard({ rank, data, type, featured, onClick }: { rank: number, dat
                 <span className="text-2xl font-black tracking-tighter">{score}</span>
                 <span className="text-[10px] font-black uppercase tracking-widest text-gray-500">Punti</span>
             </div>
-        </motion.div>
+        </div>
     );
 }
 
@@ -291,10 +288,7 @@ function RankRow({ index, data, type, onClick }: { index: number, data: any, typ
     const image = isTeam ? data?.team?.image : data?.image;
 
     return (
-        <motion.div 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true, margin: "-50px" }}
+        <div 
             onClick={onClick}
             className="flex items-center justify-between px-4 md:px-10 py-5 md:py-6 hover:bg-white/5 transition-all cursor-pointer group gap-4"
         >
@@ -319,7 +313,7 @@ function RankRow({ index, data, type, onClick }: { index: number, data: any, typ
                 <p className="font-black text-xl md:text-3xl tracking-tighter leading-none">{score}</p>
                 <p className="text-[7px] md:text-[8px] font-black uppercase tracking-widest text-gray-500 mt-1">Punti</p>
             </div>
-        </motion.div>
+        </div>
     );
 }
 
