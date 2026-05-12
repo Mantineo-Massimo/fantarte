@@ -26,7 +26,7 @@ export default function Home({ initialSponsors, initialDeadline }: { initialSpon
   const [deadline] = useState<string | null>(initialDeadline);
 
   return (
-    <main className="min-h-[100dvh] text-white overflow-hidden">
+    <main className="min-h-[100dvh] text-white overflow-x-hidden">
 
 
       <div className="relative z-10">

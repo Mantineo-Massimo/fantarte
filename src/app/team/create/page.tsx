@@ -266,7 +266,7 @@ export default function CreateTeamPage() {
     ];
 
     return (
-        <main className="min-h-screen bg-blunotte text-white pt-40 md:pt-44 pb-20 relative overflow-hidden">
+        <main className="min-h-screen bg-blunotte text-white pt-40 md:pt-44 pb-20 relative overflow-x-hidden">
             {/* Background Effects */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_50%_0%,rgba(255,215,0,0.06),transparent_70%)] pointer-events-none" />
 

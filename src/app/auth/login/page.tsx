@@ -193,7 +193,7 @@ function LoginForm() {
 
 export default function LoginPage() {
     return (
-        <main className="min-h-screen bg-blunotte text-white flex flex-col items-center justify-center p-6 relative overflow-hidden">
+        <main className="min-h-screen bg-blunotte text-white flex flex-col items-center justify-center p-6 relative overflow-x-hidden">
             <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(204,119,34,0.05),transparent_50%)] pointer-events-none" />
             
             <Link 

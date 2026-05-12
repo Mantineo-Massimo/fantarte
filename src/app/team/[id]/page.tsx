@@ -57,7 +57,7 @@ export default async function TeamProfilePage({ params }: { params: Promise<{ id
     const shareUrl = `${baseUrl}/team/${team.id}`;
 
     return (
-        <main className="min-h-screen text-white pt-56 md:pt-44 pb-32 relative overflow-hidden">
+        <main className="min-h-screen text-white pt-56 md:pt-44 pb-32 relative overflow-x-hidden">
             {/* Background Effects */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-oro/5 blur-[120px] rounded-full pointer-events-none"></div>
 
