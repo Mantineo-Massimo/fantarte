@@ -106,6 +106,60 @@ export default function RegolePage() {
                         />
                     </div>
 
+                    {/* Official Rules Section */}
+                    <div className="mb-32">
+                        <div className="mb-12 text-center md:text-left">
+                            <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-4">Regolamento <span className="text-oro">Ufficiale</span></h2>
+                            <p className="text-gray-500 font-medium max-w-2xl text-lg">Le direttive complete per partecipare, formare la squadra e trionfare nella Piazza dell'Arte.</p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="glass p-8 rounded-[2.5rem] border border-white/5 hover:border-oro/30 transition-all group relative overflow-hidden">
+                                <div className="absolute top-0 right-0 w-48 h-48 bg-oro/5 rounded-full blur-3xl group-hover:bg-oro/10 transition-colors" />
+                                <div className="flex items-center gap-5 mb-6 relative z-10">
+                                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-oro/20 to-oro/5 border border-oro/20 flex items-center justify-center text-oro shrink-0">
+                                        <FiUsers size={24} />
+                                    </div>
+                                    <h3 className="text-2xl font-black tracking-tight">Composizione Squadra</h3>
+                                </div>
+                                <p className="text-gray-400 leading-relaxed font-medium relative z-10 text-lg">Ogni partecipante deve formare la propria squadra selezionando esattamente <strong className="text-white">5 artisti</strong>. È obbligatorio schierare tutti e 5 i componenti per essere idonei a partecipare e ricevere punti.</p>
+                            </div>
+
+                            <div className="glass p-8 rounded-[2.5rem] border border-white/5 hover:border-oro/30 transition-all group relative overflow-hidden">
+                                <div className="absolute top-0 right-0 w-48 h-48 bg-oro/5 rounded-full blur-3xl group-hover:bg-oro/10 transition-colors" />
+                                <div className="flex items-center gap-5 mb-6 relative z-10">
+                                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-oro/20 to-oro/5 border border-oro/20 flex items-center justify-center text-oro shrink-0">
+                                        <FiZap size={24} />
+                                    </div>
+                                    <h3 className="text-2xl font-black tracking-tight">Budget e Armoni</h3>
+                                </div>
+                                <p className="text-gray-400 leading-relaxed font-medium relative z-10 text-lg">Riceverai un budget iniziale di <strong className="text-white">100 Armoni</strong> (la valuta ufficiale). Il costo complessivo dei 5 artisti scelti non potrà in alcun modo superare i 100 Armoni disponibili.</p>
+                            </div>
+
+                            <div className="glass p-8 rounded-[2.5rem] border border-white/5 hover:border-oro/30 transition-all group relative overflow-hidden">
+                                <div className="absolute top-0 right-0 w-48 h-48 bg-oro/5 rounded-full blur-3xl group-hover:bg-oro/10 transition-colors" />
+                                <div className="flex items-center gap-5 mb-6 relative z-10">
+                                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-oro/20 to-oro/5 border border-oro/20 flex items-center justify-center text-oro shrink-0">
+                                        <FiStar size={24} />
+                                    </div>
+                                    <h3 className="text-2xl font-black tracking-tight">Il Capitano</h3>
+                                </div>
+                                <p className="text-gray-400 leading-relaxed font-medium relative z-10 text-lg">Tra i tuoi 5 artisti, uno dovrà essere nominato <strong className="text-oro">Capitano</strong>. Sceglilo con cura: tutti i punti totalizzati dal Capitano, inclusi i malus, verranno <strong className="text-white">raddoppiati</strong>.</p>
+                            </div>
+
+                            <div className="glass p-8 rounded-[2.5rem] border border-white/5 hover:border-oro/30 transition-all group relative overflow-hidden">
+                                <div className="absolute top-0 right-0 w-48 h-48 bg-oro/5 rounded-full blur-3xl group-hover:bg-oro/10 transition-colors" />
+                                <div className="flex items-center gap-5 mb-6 relative z-10">
+                                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-oro/20 to-oro/5 border border-oro/20 flex items-center justify-center text-oro shrink-0">
+                                        <FiTarget size={24} />
+                                    </div>
+                                    <h3 className="text-2xl font-black tracking-tight">Assegnazione Punteggi</h3>
+                                </div>
+                                <p className="text-gray-400 leading-relaxed font-medium relative z-10 text-lg">I punteggi vengono attribuiti durante le serate dal vivo. Fa fede esclusivamente l'elenco dei <strong className="text-white">Bonus & Malus</strong>. Il giudizio dello staff di FantArte sui punteggi è inappellabile.</p>
+                            </div>
+                        </div>
+                    </div>
+
                     {/* Rules Grid Section */}
                     <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8">
                         <div>
