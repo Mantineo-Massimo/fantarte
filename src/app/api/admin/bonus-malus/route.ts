@@ -51,6 +51,39 @@ export async function POST(req: Request) {
         const pointCategory = category || "BONUS"; // Default to BONUS
 
         const { event, artistName, usersToNotify } = await prisma.$transaction(async (tx: any) => {
+            if (artistId === "ALL") {
+                const event = await tx.bonusMalusEvent.create({
+                    data: {
+                        artistId: null,
+                        points: pointVal,
+                        category: pointCategory,
+                        description,
+                        createdById: user.id,
+                        ruleId: ruleId || null
+                    }
+                });
+
+                const allTeams = await tx.team.findMany({
+                    select: { 
+                        id: true,
+                        user: { select: { email: true } }
+                    }
+                });
+
+                const allTeamIds = allTeams.map((t: any) => t.id);
+
+                if (allTeamIds.length > 0) {
+                    await tx.teamLeague.updateMany({
+                        where: { teamId: { in: allTeamIds } },
+                        data: { score: { increment: pointVal } }
+                    });
+                }
+
+                const usersToNotify = allTeams.map((t: any) => t.user?.email).filter(Boolean);
+
+                return { event, artistName: "Tutti i Giocatori", usersToNotify };
+            }
+
             const event = await tx.bonusMalusEvent.create({
                 data: {
                     artistId,
@@ -177,6 +210,13 @@ export async function DELETE(req: Request) {
         await prisma.$transaction(async (tx: any) => {
             // 1. Delete event
             await tx.bonusMalusEvent.delete({ where: { id } });
+
+            if (artistId === null) {
+                await tx.teamLeague.updateMany({
+                    data: { score: { decrement: points } }
+                });
+                return;
+            }
 
             // 2. Subtract points from artist
             await tx.artist.update({

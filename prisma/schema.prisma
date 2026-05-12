@@ -71,14 +71,14 @@ model TeamLeague {
 
 model BonusMalusEvent {
   id          String          @id @default(uuid())
-  artistId    String
+  artistId    String?
   points      Int
   category    PointCategory   @default(BONUS)
   description String
   createdAt   DateTime        @default(now())
   createdById String?
   ruleId      String?
-  artist      Artist          @relation(fields: [artistId], references: [id])
+  artist      Artist?         @relation(fields: [artistId], references: [id])
   createdBy   User?           @relation("AdminEvents", fields: [createdById], references: [id])
   rule        RuleDefinition? @relation(fields: [ruleId], references: [id])
 

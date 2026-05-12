@@ -916,6 +916,7 @@ export default function AdminDashboard() {
                                                 className="w-full bg-[#0a0f1c] border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-colors appearance-none"
                                             >
                                                 <option value="" disabled>-- Scegli un artista --</option>
+                                                <option value="ALL" className="font-bold text-oro">TUTTI I GIOCATORI</option>
                                                 {artists.map(a => (
                                                     <option key={a.id} value={a.id}>{a.name} (T.Score: {a.totalScore})</option>
                                                 ))}
@@ -1144,7 +1145,7 @@ export default function AdminDashboard() {
                                                         </div>
                                                         <div className="text-[10px] text-gray-600 font-mono">#{event.id.slice(0, 6)}</div>
                                                     </td>
-                                                    <td className="py-4 px-4 font-bold">{event.artist?.name || "Eliminato"}</td>
+                                                    <td className="py-4 px-4 font-bold">{event.artistId === null ? "TUTTI I GIOCATORI" : (event.artist?.name || "Eliminato")}</td>
                                                     <td className="py-4 px-4">
                                                         <div className={`font-mono font-black ${event.points >= 0 ? "text-green-400" : "text-red-500"}`}>
                                                             {event.points > 0 ? `+${event.points}` : event.points}
