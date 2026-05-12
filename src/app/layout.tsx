@@ -86,7 +86,7 @@ export default function RootLayout({
           {/* Center-ish Ocra Glow */}
           <div className="absolute top-[30%] left-[40%] w-[40%] h-[40%] bg-ocra opacity-[0.03] blur-[80px] rounded-full" />
           {/* Texture Overlay (Scalinata) */}
-          <div className="absolute inset-0 bg-[url('/background.webp')] bg-cover bg-center opacity-[0.06] mix-blend-overlay" />
+          <div className="absolute inset-0 bg-[url(/background.webp)] bg-cover bg-center opacity-[0.06] mix-blend-overlay" />
         </div>
 
         <NextAuthProvider>
