@@ -561,6 +561,7 @@ export default function AdminDashboard() {
 
             if (!res.ok) throw new Error("Errore salvataggio impostazioni");
             setSuccess("Impostazioni salvate con successo.");
+            loadSettings();
             setTimeout(() => setSuccess(""), 4000);
         } catch (err: any) {
             setError(err.message);

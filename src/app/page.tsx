@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import HomeContent from "./HomeContent";
 
-export const revalidate = 120; // Cache the whole home page for 120 seconds
+export const revalidate = 30; // Cache for 30 seconds for immediate responsiveness
 
 export default async function Page() {
     const sponsors = await prisma.sponsor.findMany({
