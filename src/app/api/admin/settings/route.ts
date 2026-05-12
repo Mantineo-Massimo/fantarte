@@ -21,7 +21,7 @@ export async function POST(req: Request) {
         }
 
         const body = await req.json();
-        const { draftDeadline } = body;
+        const { draftDeadline, registrationsOpen } = body;
 
         // We assume draftDeadline is either a valid ISO string or null
         let settings = await prisma.systemSettings.findFirst();
@@ -30,13 +30,15 @@ export async function POST(req: Request) {
             settings = await prisma.systemSettings.update({
                 where: { id: settings.id },
                 data: {
-                    draftDeadline: draftDeadline ? new Date(draftDeadline) : null
+                    draftDeadline: draftDeadline ? new Date(draftDeadline) : null,
+                    registrationsOpen: typeof registrationsOpen === 'boolean' ? registrationsOpen : true
                 }
             });
         } else {
             settings = await prisma.systemSettings.create({
                 data: {
-                    draftDeadline: draftDeadline ? new Date(draftDeadline) : null
+                    draftDeadline: draftDeadline ? new Date(draftDeadline) : null,
+                    registrationsOpen: typeof registrationsOpen === 'boolean' ? registrationsOpen : true
                 }
             });
         }

@@ -47,9 +47,12 @@ export async function POST(req: Request) {
             return new NextResponse("Il nome della squadra contiene parole non consentite.", { status: 400 });
         }
 
-        // --- Deadline Check ---
+        // --- Deadline & Status Check ---
         const settings = await prisma.systemSettings.findFirst();
-        if (settings?.draftDeadline && new Date() > settings.draftDeadline) {
+        const deadlinePassed = settings?.draftDeadline && new Date() > settings.draftDeadline;
+        const registrationsClosed = settings?.registrationsOpen === false;
+
+        if (deadlinePassed || registrationsClosed) {
             return new NextResponse("Le iscrizioni sono chiuse.", { status: 403 });
         }
 
@@ -201,7 +204,10 @@ export async function PUT(req: Request) {
         }
 
         const settings = await prisma.systemSettings.findFirst();
-        if (settings?.draftDeadline && new Date() > settings.draftDeadline) {
+        const deadlinePassed = settings?.draftDeadline && new Date() > settings.draftDeadline;
+        const registrationsClosed = settings?.registrationsOpen === false;
+
+        if (deadlinePassed || registrationsClosed) {
             return new NextResponse("Le iscrizioni sono chiuse.", { status: 403 });
         }
 

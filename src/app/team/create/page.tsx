@@ -72,10 +72,11 @@ export default function CreateTeamPage() {
         fetch("/api/settings")
             .then(res => res.json())
             .then(data => {
-                if (data?.draftDeadline) {
-                    if (new Date() > new Date(data.draftDeadline)) {
-                        setIsExpired(true);
-                    }
+                const deadlinePassed = data?.draftDeadline && new Date() > new Date(data.draftDeadline);
+                const registrationsClosed = data?.registrationsOpen === false;
+                if (deadlinePassed || registrationsClosed) {
+                    setIsExpired(true);
+                    setStep(5); // Force summary step
                 }
             })
             .catch(err => console.error("Failed to load settings", err));
@@ -206,6 +207,7 @@ export default function CreateTeamPage() {
     };
 
     const prevStep = () => {
+        if (isExpired) return;
         setError("");
         setStep(prev => Math.max(0, prev - 1));
     };
@@ -273,25 +275,27 @@ export default function CreateTeamPage() {
             <div className="max-w-5xl mx-auto px-4 md:px-6 relative z-10">
                 
                 {/* Stepper Header (Compact) */}
-                <div className="flex justify-between items-center mb-8 px-2 md:px-16">
-                    {steps.map((s, i) => (
-                        <div key={i} className="flex-1 flex flex-col items-center relative group">
-                            {i < steps.length - 1 && (
-                                <div className={`absolute top-4 md:top-5 left-[50%] w-full h-[1px] ${i < step ? "bg-oro" : "bg-white/5"} z-0`} />
-                            )}
-                            
-                            <div 
-                                className={`relative z-10 w-8 h-8 md:w-11 md:h-11 rounded-lg md:rounded-xl flex items-center justify-center border transition-all duration-500 
-                                ${i === step ? "bg-oro border-oro text-blunotte shadow-[0_0_20px_rgba(255,215,0,0.4)] scale-110" : i < step ? "bg-oro/10 border-oro/30 text-oro" : "bg-blunotte border-white/5 text-gray-700"}`}
-                            >
-                                <s.icon size={i === step ? 16 : 14} />
+                {!isExpired && (
+                    <div className="flex justify-between items-center mb-8 px-2 md:px-16">
+                        {steps.map((s, i) => (
+                            <div key={i} className="flex-1 flex flex-col items-center relative group">
+                                {i < steps.length - 1 && (
+                                    <div className={`absolute top-4 md:top-5 left-[50%] w-full h-[1px] ${i < step ? "bg-oro" : "bg-white/5"} z-0`} />
+                                )}
+                                
+                                <div 
+                                    className={`relative z-10 w-8 h-8 md:w-11 md:h-11 rounded-lg md:rounded-xl flex items-center justify-center border transition-all duration-500 
+                                    ${i === step ? "bg-oro border-oro text-blunotte shadow-[0_0_20px_rgba(255,215,0,0.4)] scale-110" : i < step ? "bg-oro/10 border-oro/30 text-oro" : "bg-blunotte border-white/5 text-gray-700"}`}
+                                >
+                                    <s.icon size={i === step ? 16 : 14} />
+                                </div>
+                                <span className={`mt-2 text-[6px] md:text-[8px] font-black uppercase tracking-widest text-center transition-colors ${i === step ? "text-oro" : "text-gray-700"}`}>
+                                    {s.title}
+                                </span>
                             </div>
-                            <span className={`mt-2 text-[6px] md:text-[8px] font-black uppercase tracking-widest text-center transition-colors ${i === step ? "text-oro" : "text-gray-700"}`}>
-                                {s.title}
-                            </span>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                )}
 
                 {/* Main Selection Container */}
                 <div className="glass rounded-[2rem] md:rounded-[3rem] border border-white/5 flex flex-col bg-white/[0.01] backdrop-blur-xl relative">
@@ -442,8 +446,12 @@ export default function CreateTeamPage() {
                                 {step === 5 && (
                                     <div className="max-w-3xl mx-auto space-y-8 px-2">
                                         <header className="text-center">
-                                            <h2 className="text-4xl md:text-6xl font-black tracking-tighter uppercase mb-2">Ultimo <span className="text-oro">Riepilogo</span></h2>
-                                            <p className="text-gray-500 text-xs md:text-sm font-medium italic">Pronto per la sfida?</p>
+                                            <h2 className="text-4xl md:text-6xl font-black tracking-tighter uppercase mb-2">
+                                                {isExpired ? "Tua " : "Ultimo "}<span className="text-oro">{isExpired ? "Squadra" : "Riepilogo"}</span>
+                                            </h2>
+                                            <p className="text-gray-500 text-xs md:text-sm font-medium italic">
+                                                {isExpired ? "Le iscrizioni sono chiuse. Ecco la tua formazione." : "Pronto per la sfida?"}
+                                            </p>
                                         </header>
 
                                         <div className="bg-white/[0.02] p-5 md:p-10 rounded-[2rem] md:rounded-[3rem] border border-white/5 shadow-2xl space-y-8 relative overflow-hidden">
@@ -490,42 +498,53 @@ export default function CreateTeamPage() {
                     {/* Navigation Footer */}
                     <div className="p-3 md:p-8 border-t border-white/5 bg-white/[0.02]">
                         <div className="flex justify-between items-center gap-2 md:gap-4">
-                            <button
-                                onClick={prevStep}
-                                disabled={step === 0 || loading}
-                                className={`flex items-center gap-1.5 px-3 md:px-6 py-3 md:py-4 rounded-xl font-black text-[7px] md:text-[10px] uppercase tracking-widest transition-all ${step === 0 ? "opacity-0 invisible" : "text-gray-600 hover:text-white"}`}
-                            >
-                                <FiArrowLeft /> Indietro
-                            </button>
+                            {!isExpired && (
+                                <>
+                                    <button
+                                        onClick={prevStep}
+                                        disabled={step === 0 || loading}
+                                        className={`flex items-center gap-1.5 px-3 md:px-6 py-3 md:py-4 rounded-xl font-black text-[7px] md:text-[10px] uppercase tracking-widest transition-all ${step === 0 ? "opacity-0 invisible" : "text-gray-600 hover:text-white"}`}
+                                    >
+                                        <FiArrowLeft /> Indietro
+                                    </button>
 
-                            <div className="flex gap-2 md:gap-8 items-center bg-black/30 px-3 py-2 md:px-8 md:py-4 rounded-full border border-white/5">
-                                <div className="flex flex-col items-center">
-                                    <span className="text-[6px] font-black text-gray-700 uppercase tracking-widest mb-0.5">Budget</span>
-                                    <span className={`text-sm md:text-lg font-black ${remainingBudget < 0 ? "text-red-500" : "text-white"}`}>{remainingBudget}</span>
-                                </div>
-                                <div className="w-[1px] h-5 bg-white/10" />
-                                <div className="flex flex-col items-center">
-                                    <span className="text-[6px] font-black text-gray-700 uppercase tracking-widest mb-0.5">Team</span>
-                                    <span className="text-sm md:text-lg font-black text-white">{selectedArtists.length}/5</span>
-                                </div>
-                            </div>
+                                    <div className="flex gap-2 md:gap-8 items-center bg-black/30 px-3 py-2 md:px-8 md:py-4 rounded-full border border-white/5">
+                                        <div className="flex flex-col items-center">
+                                            <span className="text-[6px] font-black text-gray-700 uppercase tracking-widest mb-0.5">Budget</span>
+                                            <span className={`text-sm md:text-lg font-black ${remainingBudget < 0 ? "text-red-500" : "text-white"}`}>{remainingBudget}</span>
+                                        </div>
+                                        <div className="w-[1px] h-5 bg-white/10" />
+                                        <div className="flex flex-col items-center">
+                                            <span className="text-[6px] font-black text-gray-700 uppercase tracking-widest mb-0.5">Team</span>
+                                            <span className="text-sm md:text-lg font-black text-white">{selectedArtists.length}/5</span>
+                                        </div>
+                                    </div>
 
-                            {step === 5 ? (
-                                <button
-                                    onClick={saveTeam}
-                                    disabled={loading || isExpired}
-                                    className="flex items-center justify-center gap-1.5 px-4 py-3 md:px-10 md:py-5 bg-gradient-to-r from-oro to-ocra text-blunotte rounded-xl font-black text-[7px] md:text-[10px] uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all"
-                                >
-                                    {loading ? "..." : "Conferma"} <FiCheck />
-                                </button>
-                            ) : (
-                                <button
-                                    onClick={nextStep}
-                                    disabled={loading}
-                                    className="flex items-center justify-center gap-1.5 px-4 py-3 md:px-10 md:py-5 bg-oro text-blunotte rounded-xl font-black text-[7px] md:text-[10px] uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all"
-                                >
-                                    Prosegui <FiArrowRight />
-                                </button>
+                                    {step === 5 ? (
+                                        <button
+                                            onClick={saveTeam}
+                                            disabled={loading || isExpired}
+                                            className="flex items-center justify-center gap-1.5 px-4 py-3 md:px-10 md:py-5 bg-gradient-to-r from-oro to-ocra text-blunotte rounded-xl font-black text-[7px] md:text-[10px] uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all"
+                                        >
+                                            {loading ? "..." : "Conferma"} <FiCheck />
+                                        </button>
+                                    ) : (
+                                        <button
+                                            onClick={nextStep}
+                                            disabled={loading}
+                                            className="flex items-center justify-center gap-1.5 px-4 py-3 md:px-10 md:py-5 bg-oro text-blunotte rounded-xl font-black text-[7px] md:text-[10px] uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all"
+                                        >
+                                            Prosegui <FiArrowRight />
+                                        </button>
+                                    )}
+                                </>
+                            )}
+                            {isExpired && (
+                                <div className="w-full flex justify-center py-4">
+                                    <Link href="/" className="flex items-center justify-center gap-1.5 px-10 py-5 bg-oro text-blunotte rounded-xl font-black text-[10px] uppercase tracking-widest shadow-xl hover:scale-105 transition-all">
+                                        Torna alla Home
+                                    </Link>
+                                </div>
                             )}
                         </div>
                     </div>

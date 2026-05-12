@@ -21,9 +21,20 @@ const stagger = {
   }
 };
 
-export default function Home({ initialSponsors, initialDeadline }: { initialSponsors: any[], initialDeadline: string | null }) {
+export default function Home({ 
+  initialSponsors, 
+  initialDeadline, 
+  registrationsOpen: initialRegistrationsOpen 
+}: { 
+  initialSponsors: any[], 
+  initialDeadline: string | null,
+  registrationsOpen: boolean
+}) {
   const [sponsors] = useState<any[]>(initialSponsors);
   const [deadline] = useState<string | null>(initialDeadline);
+  const [regOpen] = useState<boolean>(initialRegistrationsOpen);
+
+  const isExpired = regOpen === false || (deadline ? new Date() > new Date(deadline) : false);
 
   return (
     <main className="min-h-screen text-white overflow-x-hidden">
@@ -66,13 +77,23 @@ export default function Home({ initialSponsors, initialDeadline }: { initialSpon
 
             <motion.div variants={fadeIn} className="w-full max-w-2xl glass-oro p-10 md:p-14 rounded-[3rem] border border-white/10 shadow-3xl mb-16 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-64 h-64 bg-oro opacity-[0.02] blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:opacity-5 transition-opacity" />
-              <p className="text-gray-500 font-bold uppercase tracking-[0.4em] text-[10px] mb-10">Inizio della Gara</p>
-              <CountdownTimer targetDate={deadline || "2026-05-18T18:00:00"} />
+              <p className="text-gray-500 font-bold uppercase tracking-[0.4em] text-[10px] mb-10">
+                {isExpired ? "Evento in Corso" : "Inizio della Gara"}
+              </p>
+              {isExpired ? (
+                <div className="py-6">
+                  <span className="text-4xl md:text-6xl font-black text-red-500 uppercase tracking-tighter drop-shadow-[0_0_15px_rgba(239,68,68,0.3)]">
+                    Iscrizioni Chiuse
+                  </span>
+                </div>
+              ) : (
+                <CountdownTimer targetDate={deadline || "2026-05-18T18:00:00"} />
+              )}
             </motion.div>
 
             <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-5 w-full sm:w-auto px-4 sm:px-0">
               <Link href="/team/create" className="px-10 md:px-14 py-5 md:py-6 bg-oro text-blunotte font-extrabold rounded-2xl text-lg uppercase tracking-wider shadow-[0_20px_50px_rgba(255,215,0,0.2)] hover:scale-105 hover:bg-white active:scale-95 transition-all text-center">
-                Crea la tua Squadra
+                {isExpired ? "Vedi la tua Squadra" : "Crea la tua Squadra"}
               </Link>
               <Link href="/regole" className="px-10 md:px-14 py-5 md:py-6 glass hover:bg-white/5 border border-white/10 rounded-2xl text-lg font-bold uppercase tracking-wider transition-all text-center">
                 Come si Gioca

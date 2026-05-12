@@ -12,6 +12,7 @@ export default async function Page() {
 
     const settings = await prisma.systemSettings.findFirst();
     const deadline = settings?.draftDeadline ? settings.draftDeadline.toISOString() : null;
+    const registrationsOpen = settings?.registrationsOpen ?? true;
 
-    return <HomeContent initialSponsors={sponsors} initialDeadline={deadline} />;
+    return <HomeContent initialSponsors={sponsors} initialDeadline={deadline} registrationsOpen={registrationsOpen} />;
 }

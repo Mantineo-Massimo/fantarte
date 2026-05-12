@@ -74,6 +74,7 @@ export default function AdminDashboard() {
 
     // Settings State
     const [deadline, setDeadline] = useState<string>("");
+    const [registrationsOpen, setRegistrationsOpen] = useState(true);
     const [settingsLoading, setSettingsLoading] = useState(false);
 
     // History State
@@ -138,6 +139,9 @@ export default function AdminDashboard() {
                     const offset = date.getTimezoneOffset() * 60000;
                     const localISOTime = (new Date(date.getTime() - offset)).toISOString().slice(0, 16);
                     setDeadline(localISOTime);
+                }
+                if (typeof data?.registrationsOpen === 'boolean') {
+                    setRegistrationsOpen(data.registrationsOpen);
                 }
             })
             .catch(err => console.error(err));
@@ -550,7 +554,8 @@ export default function AdminDashboard() {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    draftDeadline: deadline ? new Date(deadline).toISOString() : null
+                    draftDeadline: deadline ? new Date(deadline).toISOString() : null,
+                    registrationsOpen
                 })
             });
 
@@ -1337,6 +1342,28 @@ export default function AdminDashboard() {
                                         className="w-full bg-[#0a0f1c] border border-gray-800 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-red-500 transition-colors"
                                     />
                                     <p className="text-sm text-gray-500 italic">Oltre questa data, gli utenti non potranno più creare o modificare squadre.</p>
+                                </div>
+
+                                <div className="space-y-4 p-6 bg-[#0a0f1c] rounded-2xl border border-gray-800">
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <label className="text-sm font-bold text-gray-300 uppercase tracking-widest block mb-1">Stato Iscrizioni</label>
+                                            <p className="text-xs text-gray-500">Apri o chiudi manualmente le iscrizioni al gioco.</p>
+                                        </div>
+                                        <button
+                                            type="button"
+                                            onClick={() => setRegistrationsOpen(!registrationsOpen)}
+                                            className={`w-16 h-8 rounded-full relative transition-colors duration-300 ${registrationsOpen ? "bg-green-500" : "bg-red-500"}`}
+                                        >
+                                            <div className={`absolute top-1 w-6 h-6 bg-white rounded-full transition-all duration-300 ${registrationsOpen ? "left-9" : "left-1"}`} />
+                                        </button>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <div className={`w-2 h-2 rounded-full ${registrationsOpen ? "bg-green-500 animate-pulse" : "bg-red-500"}`} />
+                                        <span className={`text-[10px] font-black uppercase tracking-widest ${registrationsOpen ? "text-green-500" : "text-red-500"}`}>
+                                            {registrationsOpen ? "ISCRIZIONI APERTE" : "ISCRIZIONI CHIUSE"}
+                                        </span>
+                                    </div>
                                 </div>
                                 <button
                                     type="submit"
