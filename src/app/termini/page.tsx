@@ -8,7 +8,7 @@ export default function TerminiPage() {
     return (
         <main className="min-h-screen text-white pt-56 md:pt-44 pb-32 relative overflow-x-hidden">
             {/* Background Effects */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-oro/5 blur-[120px] rounded-full pointer-events-none" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-oro/5 blur-[80px] rounded-full pointer-events-none" />
             
             <div className="max-w-4xl mx-auto px-6 relative z-10">
                 <motion.div 

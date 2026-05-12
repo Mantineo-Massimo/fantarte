@@ -47,7 +47,7 @@ function VerifyContent() {
                 className="w-full max-w-md glass p-10 rounded-[3rem] border border-white/10 text-center relative overflow-hidden"
             >
                 {/* Background Glow */}
-                <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 blur-[100px] opacity-10 pointer-events-none transition-colors duration-1000 ${
+                <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 blur-[80px] opacity-10 pointer-events-none transition-colors duration-1000 ${
                     status === "loading" ? "bg-oro" : status === "success" ? "bg-green-500" : "bg-red-500"
                 }`} />
 

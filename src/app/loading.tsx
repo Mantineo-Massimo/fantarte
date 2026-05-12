@@ -7,7 +7,7 @@ export default function Loading() {
   return (
     <div className="fixed inset-0 z-[9999] bg-blunotte flex flex-col items-center justify-center overflow-hidden">
       {/* Background Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-oro/10 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-oro/10 blur-[80px] rounded-full pointer-events-none" />
       
       <div className="relative flex flex-col items-center">
         {/* Pulsing Logo */}

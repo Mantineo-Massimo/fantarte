@@ -26,15 +26,15 @@ export default function Home({ initialSponsors, initialDeadline }: { initialSpon
   const [deadline] = useState<string | null>(initialDeadline);
 
   return (
-    <main className="min-h-[100dvh] text-white overflow-x-hidden">
+    <main className="min-h-screen text-white overflow-x-hidden">
 
 
       <div className="relative z-10">
 
         {/* Hero Section */}
-        <section className="min-h-[100dvh] flex flex-col items-center justify-center pt-32 px-6 pb-20 relative overflow-hidden">
+        <section className="min-h-screen flex flex-col items-center justify-center pt-32 px-6 pb-20 relative overflow-x-hidden">
           {/* Background Decorations */}
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 bg-oro/5 blur-[120px] rounded-full pointer-events-none" />
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 bg-oro/5 blur-[80px] rounded-full pointer-events-none" />
           
           <motion.div
             initial="initial"
@@ -43,7 +43,7 @@ export default function Home({ initialSponsors, initialDeadline }: { initialSpon
             className="w-full max-w-7xl flex flex-col items-center text-center relative z-10"
           >
             <motion.div variants={fadeIn} className="mb-10 relative">
-              <div className="absolute inset-0 bg-oro blur-[100px] opacity-10 scale-150 animate-pulse-soft" />
+              <div className="absolute inset-0 bg-oro blur-[80px] opacity-10 scale-150 animate-pulse-soft" />
               <Image
                 src="/fanta-logo.webp"
                 alt="FantArte Logo"

@@ -8,7 +8,7 @@ export default function NotFound() {
     return (
         <main className="min-h-screen bg-[#0a0f1c] flex items-center justify-center p-6 relative overflow-x-hidden">
             {/* Background Effects */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-oro/10 blur-[120px] rounded-full" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-oro/10 blur-[80px] rounded-full" />
             
             <div className="relative z-10 text-center space-y-8 max-w-lg">
                 <motion.div

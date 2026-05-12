@@ -10,8 +10,8 @@ export default function Footer() {
         <footer className="w-full bg-[#0a0f1c] relative z-20 overflow-hidden border-t border-white/5">
             
             {/* Background Orbs */}
-            <div className="absolute bottom-0 left-0 w-[40%] h-[60%] bg-viola opacity-[0.05] blur-[150px] rounded-full" />
-            <div className="absolute bottom-0 right-0 w-[30%] h-[50%] bg-oro opacity-[0.03] blur-[150px] rounded-full" />
+            <div className="absolute bottom-0 left-0 w-[40%] h-[60%] bg-viola opacity-[0.05] blur-[80px] rounded-full" />
+            <div className="absolute bottom-0 right-0 w-[30%] h-[50%] bg-oro opacity-[0.03] blur-[80px] rounded-full" />
 
             <div className="max-w-7xl mx-auto px-8 pt-32 pb-16 relative">
                 

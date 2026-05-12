@@ -75,22 +75,22 @@ export default function RootLayout({
   return (
     <html lang="it">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased text-white min-h-[100dvh] relative overflow-x-hidden`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased text-white min-h-screen relative`}
       >
         {/* Cinematic Fixed Background (Static & Cross-page) */}
         <div className="fixed inset-0 z-0 pointer-events-none">
           {/* Top Left Viola Glow */}
-          <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-viola opacity-[0.08] blur-[150px] rounded-full" />
+          <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-viola opacity-[0.08] blur-[80px] rounded-full" />
           {/* Bottom Right Oro Glow */}
-          <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-oro opacity-[0.05] blur-[150px] rounded-full" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-oro opacity-[0.05] blur-[80px] rounded-full" />
           {/* Center-ish Ocra Glow */}
-          <div className="absolute top-[30%] left-[40%] w-[40%] h-[40%] bg-ocra opacity-[0.03] blur-[120px] rounded-full" />
+          <div className="absolute top-[30%] left-[40%] w-[40%] h-[40%] bg-ocra opacity-[0.03] blur-[80px] rounded-full" />
           {/* Texture Overlay (Scalinata) */}
           <div className="absolute inset-0 bg-[url('/background.webp')] bg-cover bg-center opacity-[0.06] mix-blend-overlay" />
         </div>
 
         <NextAuthProvider>
-          <div className="relative font-sans flex flex-col min-h-[100dvh]">
+          <div className="relative font-sans flex flex-col min-h-screen">
             <Navbar />
             <div className="flex-grow">
               {children}

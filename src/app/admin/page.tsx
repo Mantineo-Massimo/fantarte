@@ -887,7 +887,7 @@ export default function AdminDashboard() {
                     {activeTab === "points" && (
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                             <div className="bg-[#131d36] p-8 rounded-3xl border border-gray-800 shadow-xl relative overflow-hidden">
-                                <div className="absolute -top-24 -right-24 w-80 h-80 bg-red-600/10 rounded-full blur-[100px]"></div>
+                                <div className="absolute -top-24 -right-24 w-80 h-80 bg-red-600/10 rounded-full blur-[80px]"></div>
                                 <h2 className="text-2xl font-bold mb-8">Assegna Bonus o Malus</h2>
 
                                 <form onSubmit={handlePointsSubmit} className="space-y-8 relative z-10">
