@@ -340,29 +340,29 @@ function TeamModal({ teamResult, onClose, onArtistClick }: { teamResult: TeamRes
                 <div className="absolute top-0 right-0 w-full h-[200px] bg-gradient-to-b from-oro/10 to-transparent pointer-events-none" />
                 
                 {/* Header Section */}
-                <div className="relative p-8 md:p-10 pb-4 flex flex-col md:flex-row items-center gap-8 text-center md:text-left">
+                <div className="relative p-6 md:p-10 pb-4 flex flex-col md:flex-row items-center gap-4 md:gap-8 text-center md:text-left">
                     <div className="relative group shrink-0">
-                        <div className="w-24 h-24 md:w-32 md:h-32 rounded-[2rem] bg-black border-2 border-oro/30 overflow-hidden relative z-10">
+                        <div className="w-16 h-16 md:w-32 md:h-32 rounded-2xl md:rounded-[2rem] bg-black border-2 border-oro/30 overflow-hidden relative z-10">
                             {teamResult.team.image ? (
                                 <Image 
                                     src={teamResult.team.image} 
                                     alt={teamResult.team.name} 
                                     fill 
                                     className="object-cover"
-                                    sizes="(max-width: 768px) 96px, 128px"
+                                    sizes="(max-width: 768px) 64px, 128px"
                                 />
                             ) : (
-                                <div className="w-full h-full flex items-center justify-center font-black text-4xl text-gray-800">
+                                <div className="w-full h-full flex items-center justify-center font-black text-2xl md:text-4xl text-gray-800">
                                     {teamResult.team.name.charAt(0)}
                                 </div>
                             )}
                         </div>
                     </div>
 
-                    <div className="flex-1 space-y-3">
+                    <div className="flex-1 space-y-2 md:space-y-3">
                         <div className="space-y-0.5">
                             <p className="text-oro font-black uppercase tracking-[0.4em] text-[8px]">Squadra Ufficiale</p>
-                            <h2 className="text-3xl md:text-4xl font-black tracking-tighter text-white leading-none">
+                            <h2 className="text-2xl md:text-4xl font-black tracking-tighter text-white leading-tight md:leading-none">
                                 {teamResult.team.name}
                             </h2>
                         </div>
@@ -379,14 +379,14 @@ function TeamModal({ teamResult, onClose, onArtistClick }: { teamResult: TeamRes
 
                     <button 
                         onClick={onClose} 
-                        className="absolute top-6 right-6 p-3 bg-white/5 hover:bg-red-500/10 hover:text-red-500 rounded-2xl transition-all"
+                        className="absolute top-4 right-4 md:top-6 md:right-6 p-2 md:p-3 bg-white/5 hover:bg-red-500/10 hover:text-red-500 rounded-xl md:rounded-2xl transition-all"
                     >
-                        <FiX size={20} />
+                        <FiX size={18} />
                     </button>
                 </div>
 
                 {/* Artists List - Scrollable */}
-                <div className="flex-1 overflow-y-auto px-8 md:px-10 pb-10 pt-4 custom-scrollbar">
+                <div className="flex-1 overflow-y-auto px-4 md:px-10 pb-6 md:pb-10 pt-4 custom-scrollbar">
                     <div className="space-y-6">
                         <div>
                             <h3 className="text-[9px] font-black uppercase tracking-[0.4em] text-gray-600 mb-4 ml-1">La Formazione</h3>
@@ -402,13 +402,13 @@ function TeamModal({ teamResult, onClose, onArtistClick }: { teamResult: TeamRes
                                             animate={{ opacity: 1, x: 0 }}
                                             transition={{ delay: idx * 0.05 }}
                                             onClick={() => onArtistClick(artist)}
-                                            className={`group/art relative flex items-center justify-between p-4 rounded-[1.5rem] border transition-all cursor-pointer overflow-hidden
+                                            className={`group/art relative flex items-center justify-between p-3 md:p-4 rounded-2xl md:rounded-[1.5rem] border transition-all cursor-pointer overflow-hidden
                                                 ${isTop ? "bg-oro/5 border-oro/20" : "bg-white/5 border-white/5 hover:border-white/10"}
                                             `}
                                         >
-                                            <div className="flex items-center gap-4 relative z-10">
+                                            <div className="flex items-center gap-3 md:gap-4 relative z-10">
                                                 <div className="relative">
-                                                    <div className={`w-12 h-12 rounded-xl bg-black border overflow-hidden transition-transform group-hover/art:scale-105 duration-500 relative
+                                                    <div className={`w-10 h-10 md:w-12 md:h-12 rounded-xl bg-black border overflow-hidden transition-transform group-hover/art:scale-105 duration-500 relative
                                                         ${isTop ? "border-oro/50" : "border-white/10"}
                                                     `}>
                                                         {artist.image ? (
@@ -417,10 +417,10 @@ function TeamModal({ teamResult, onClose, onArtistClick }: { teamResult: TeamRes
                                                                 alt={artist.name} 
                                                                 fill 
                                                                 className="object-cover"
-                                                                sizes="48px"
+                                                                sizes="(max-width: 768px) 40px, 48px"
                                                             />
                                                         ) : (
-                                                            <div className="w-full h-full flex items-center justify-center font-black text-xl text-gray-800">
+                                                            <div className="w-full h-full flex items-center justify-center font-black text-lg md:text-xl text-gray-800">
                                                                 {artist.name.charAt(0)}
                                                             </div>
                                                         )}
@@ -429,21 +429,22 @@ function TeamModal({ teamResult, onClose, onArtistClick }: { teamResult: TeamRes
                                                 
                                                 <div className="min-w-0">
                                                     <div className="flex items-center gap-2">
-                                                        <h4 className={`text-base font-black transition-colors truncate ${isTop ? "text-oro" : "text-white group-hover/art:text-oro"}`}>
+                                                        <h4 className={`text-sm md:text-base font-black transition-colors truncate max-w-[140px] md:max-w-none ${isTop ? "text-oro" : "text-white group-hover/art:text-oro"}`}>
                                                             {artist.name}
                                                         </h4>
                                                         {isCaptain && (
-                                                            <span className="px-2 py-0.5 rounded-md bg-oro text-blunotte text-[8px] font-black uppercase tracking-widest flex items-center gap-1">
+                                                            <span className="px-1.5 py-0.5 rounded-md bg-oro text-blunotte text-[7px] md:text-[8px] font-black uppercase tracking-widest flex items-center gap-1 shrink-0">
                                                                 <FiAward size={8} />
-                                                                Capitano
+                                                                <span className="hidden sm:inline">Capitano</span>
+                                                                <span className="sm:hidden">Cap</span>
                                                             </span>
                                                         )}
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <div className="text-right relative z-10 shrink-0">
-                                                <span className={`text-xl font-black tracking-tighter ${isTop ? "text-oro" : "text-white/60"}`}>
+                                            <div className="text-right relative z-10 shrink-0 ml-2">
+                                                <span className={`text-lg md:text-xl font-black tracking-tighter ${isTop ? "text-oro" : "text-white/60"}`}>
                                                     {artist.totalScore}
                                                 </span>
                                             </div>
@@ -456,7 +457,7 @@ function TeamModal({ teamResult, onClose, onArtistClick }: { teamResult: TeamRes
                 </div>
 
                 {/* Footer Actions */}
-                <div className="p-8 md:p-10 pt-6 bg-white/5 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-6 relative z-20">
+                <div className="p-5 md:p-10 pt-4 md:pt-6 bg-white/5 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 md:gap-6 relative z-20">
                     <div className="flex items-center gap-4">
                         <div className="text-center sm:text-left">
                             <p className="text-[8px] font-black uppercase tracking-widest text-gray-500 mb-0.5">Top Performer</p>
@@ -473,7 +474,7 @@ function TeamModal({ teamResult, onClose, onArtistClick }: { teamResult: TeamRes
                         </div>
                         <button 
                             onClick={onClose}
-                            className="flex-1 sm:flex-none px-6 py-3 bg-white text-blunotte font-black rounded-xl text-[9px] uppercase tracking-widest hover:bg-oro transition-all"
+                            className="flex-1 sm:flex-none px-6 py-2 md:py-3 bg-white text-blunotte font-black rounded-xl text-[9px] uppercase tracking-widest hover:bg-oro transition-all"
                         >
                             Chiudi
                         </button>
