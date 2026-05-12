@@ -44,6 +44,8 @@ export async function POST(req: Request) {
         }
 
         const { revalidatePath } = await import("next/cache");
+        revalidatePath("/");
+        revalidatePath("/team/create");
         revalidatePath("/api/settings");
 
         return NextResponse.json(settings);
