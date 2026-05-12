@@ -122,7 +122,7 @@ export async function POST(req: Request) {
                 .map((t: any) => t.id);
 
             // Update scores in leagues
-            const isSpecial = pointCategory === "SPECIALE";
+            const shouldDouble = pointCategory === "SPECIALE" || pointCategory === "MALUS";
 
             if (normalTeamIds.length > 0) {
                 await tx.teamLeague.updateMany({
@@ -132,7 +132,7 @@ export async function POST(req: Request) {
             }
 
             if (captainTeamIds.length > 0) {
-                const captainIncrement = isSpecial ? pointVal * 2 : pointVal;
+                const captainIncrement = shouldDouble ? pointVal * 2 : pointVal;
                 await tx.teamLeague.updateMany({
                     where: { teamId: { in: captainTeamIds } },
                     data: { score: { increment: captainIncrement } }
@@ -238,7 +238,7 @@ export async function DELETE(req: Request) {
                 .filter((t: any) => t.captainId === artistId)
                 .map((t: any) => t.id);
 
-            const isSpecial = category === "SPECIALE";
+            const shouldDouble = category === "SPECIALE" || category === "MALUS";
 
             if (normalTeamIds.length > 0) {
                 await tx.teamLeague.updateMany({
@@ -248,7 +248,7 @@ export async function DELETE(req: Request) {
             }
 
             if (captainTeamIds.length > 0) {
-                const captainDecrement = isSpecial ? points * 2 : points;
+                const captainDecrement = shouldDouble ? points * 2 : points;
                 await tx.teamLeague.updateMany({
                     where: { teamId: { in: captainTeamIds } },
                     data: { score: { decrement: captainDecrement } }

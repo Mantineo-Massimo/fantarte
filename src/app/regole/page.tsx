@@ -173,7 +173,7 @@ export default function RegolePage() {
                                                 </div>
                                                 <h3 className="text-2xl font-black tracking-tight">Il Capitano</h3>
                                             </div>
-                                            <p className="text-gray-400 leading-relaxed font-medium relative z-10 text-lg">Tra i tuoi 5 artisti, uno dovrà essere nominato <strong className="text-oro">Capitano</strong>. Sceglilo con cura: tutti i punti totalizzati dal Capitano, inclusi i malus, verranno <strong className="text-white">raddoppiati</strong>.</p>
+                                            <p className="text-gray-400 leading-relaxed font-medium relative z-10 text-lg">Tra i tuoi 5 partecipanti, uno dovrà essere nominato <strong className="text-oro">Capitano</strong>. Sceglilo con cura: tutti i <strong className="text-white">bonus speciali</strong> e i <strong className="text-white">malus</strong> totalizzati dal Capitano verranno <strong className="text-white">raddoppiati</strong>. I bonus standard rimangono invariati.</p>
                                         </div>
 
                                         <div className="glass p-8 rounded-[2.5rem] border border-white/5 hover:border-oro/30 transition-all group relative overflow-hidden">

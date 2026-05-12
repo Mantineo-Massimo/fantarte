@@ -11,7 +11,7 @@ const faqs = [
     },
     {
         q: "Qual è il ruolo del Capitano?",
-        a: "Tra i tuoi 5 partecipanti, uno deve essere nominato Capitano. Sceglilo bene: tutti i punti (sia i Bonus che i Malus) totalizzati dal Capitano durante la serata verranno raddoppiati nel conteggio della tua squadra."
+        a: "Tra i tuoi 5 partecipanti, uno deve essere nominato Capitano. Sceglilo bene: solo i Bonus Speciali e i Malus totalizzati dal Capitano durante la serata verranno raddoppiati. I bonus standard vengono conteggiati normalmente."
     },
     {
         q: "I bonus e i malus sono cumulativi?",
