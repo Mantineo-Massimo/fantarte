@@ -453,6 +453,38 @@ function TeamModal({ teamResult, onClose, onArtistClick }: { teamResult: TeamRes
                                 })}
                             </div>
                         </div>
+
+                        {/* Captain Bonus Section - EXPLAINER */}
+                        {(() => {
+                            const artistsSum = teamResult.team.artists.reduce((acc, art) => acc + art.totalScore, 0);
+                            const bonusCapitano = teamResult.score - artistsSum;
+                            
+                            if (bonusCapitano !== 0) {
+                                return (
+                                    <motion.div 
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="mt-6 p-4 rounded-2xl bg-oro/5 border border-oro/10 flex items-center justify-between"
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-10 h-10 rounded-xl bg-oro/10 flex items-center justify-center text-oro">
+                                                <FiAward size={20} />
+                                            </div>
+                                            <div>
+                                                <p className="text-[10px] font-black uppercase tracking-widest text-oro">Bonus Capitano</p>
+                                                <p className="text-gray-500 text-[11px] font-medium">Punti Speciali/Malus raddoppiati</p>
+                                            </div>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className={`text-xl font-black tracking-tighter ${bonusCapitano > 0 ? "text-oro" : "text-red-500"}`}>
+                                                {bonusCapitano > 0 ? `+${bonusCapitano}` : bonusCapitano}
+                                            </p>
+                                        </div>
+                                    </motion.div>
+                                );
+                            }
+                            return null;
+                        })()}
                     </div>
                 </div>
 
