@@ -75,9 +75,12 @@ export async function POST(req: Request) {
                 if (allTeamIds.length > 0) {
                     await tx.teamLeague.updateMany({
                         where: { teamId: { in: allTeamIds } },
-                        data: { score: { increment: pointVal } }
+                        data: { score: { increment: pointVal * 5 } } // Each of the 5 artists contributes pointVal
                     });
                 }
+                await tx.artist.updateMany({
+                    data: { totalScore: { increment: pointVal } }
+                });
 
                 const usersToNotify = allTeams.map((t: any) => t.user?.email).filter(Boolean);
 
@@ -213,7 +216,10 @@ export async function DELETE(req: Request) {
 
             if (artistId === null) {
                 await tx.teamLeague.updateMany({
-                    data: { score: { decrement: points } }
+                    data: { score: { decrement: points * 5 } }
+                });
+                await tx.artist.updateMany({
+                    data: { totalScore: { decrement: points } }
                 });
                 return;
             }

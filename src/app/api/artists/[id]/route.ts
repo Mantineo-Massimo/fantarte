@@ -11,21 +11,26 @@ export async function GET(
         const { id } = await params;
 
         const artist = await prisma.artist.findUnique({
-            where: { id },
-            include: {
-                events: {
-                    orderBy: {
-                        createdAt: 'desc'
-                    }
-                }
-            }
+            where: { id }
         });
 
         if (!artist) {
             return new NextResponse("Artist not found", { status: 404 });
         }
 
-        return NextResponse.json(artist);
+        const events = await prisma.bonusMalusEvent.findMany({
+            where: {
+                OR: [
+                    { artistId: id },
+                    { artistId: null }
+                ]
+            },
+            orderBy: {
+                createdAt: 'desc'
+            }
+        });
+
+        return NextResponse.json({ ...artist, events });
     } catch (error) {
         console.error("GET_ARTIST_DETAIL_ERROR", error);
         return new NextResponse("Internal Error", { status: 500 });
